@@ -32,7 +32,14 @@ Divided_Id  bigserial PRIMARY KEY,
 Id_Proyect  bigint    REFERENCES PROJECT(Id_Project),
 Stage_Id    bigint    REFERENCES STAGE(Stage_Id),
 Start_Date  date      NOT NULL,
-End_Date    date      NOT NULL
+End_Date    date      NOT NULL,
+Status      boolean   NOT NULL
+);
+
+CREATE TABLE COMMENTARY(
+Comment_Id bigserial PRIMARY KEY,
+Divided_Id bigint    REFERENCES DIVIDED_IN(Divided_Id),
+Commentary text
 );
 
 CREATE TABLE MATERIAL(
