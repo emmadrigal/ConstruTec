@@ -1,10 +1,6 @@
-CREATE DATABASE "EPATEC"
-    WITH 
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    CONNECTION LIMIT = -1;
+CREATE DATABASE "ConstruTec";
 	
-CREATE TABLE CLIENTE(
+CREATE TABLE CLIENT(
 Id_Number    bigint      PRIMARY KEY,
 Name         varchar(50) NOT NULL,
 Phone_Number integer
@@ -19,7 +15,7 @@ Phone_Number integer
 
 CREATE TABLE PROJECT(
 Id_Project  bigserial    PRIMARY KEY,
-Id_Client   bigint       REFERENCES CLIENTE(Id_Number),
+Id_Client   bigint       REFERENCES CLIENT(Id_Number),
 Id_Engineer bigint       REFERENCES ENGINEER(Id_Number), 
 Location    varchar(255) NOT NULL,
 Name        varchar      NOT NULL UNIQUE
@@ -36,8 +32,7 @@ Divided_Id  bigserial PRIMARY KEY,
 Id_Proyect  bigint    REFERENCES PROJECT(Id_Project),
 Stage_Id    bigint    REFERENCES STAGE(Stage_Id),
 Start_Date  date      NOT NULL,
-End_Date    date      NOT NULL,
-PRIMARY KEY(Divided_Id)
+End_Date    date      NOT NULL
 );
 
 CREATE TABLE MATERIAL(
@@ -48,10 +43,10 @@ Description varchar(255)
 );
 
 CREATE TABLE POSSESES(
-Posseses_Id bigserial    PRIMARY KEY,
-Id_Material bigint       REFERENCES MATERIAL(Id_Material),
-Stage_Id    bigint       REFERENCES STAGE(Stage_Id),
-Quantity    varchar(255) NOT NULL CHECK (Quantity > 0)
+Posseses_Id bigserial PRIMARY KEY,
+Id_Material bigint    REFERENCES MATERIAL(Id_Material),
+Stage_Id    bigint    REFERENCES STAGE(Stage_Id),
+Quantity    integer   NOT NULL CHECK (Quantity > 0)
 );
 
 
