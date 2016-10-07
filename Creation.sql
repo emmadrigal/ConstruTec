@@ -1,4 +1,8 @@
+CREATE USER tom WITH PASSWORD 'Password';
+
 CREATE DATABASE "ConstruTec";
+
+GRANT ALL PRIVILEGES ON DATABASE "ConstruTec" to tom;
 
 \c "ConstruTec"	
 
@@ -81,7 +85,7 @@ CREATE TRIGGER protectDefault
 CREATE FUNCTION stageOrder() RETURNS trigger AS $stageOrder$
     BEGIN            
         IF ( (SELECT COUNT(*) FROM DIVIDED_IN WHERE End_Date > NEW.Start_Date AND Status = 0 AND Id_Project = New.Id_Project) > 0 ) THEN
-			RAISE NOTICE "Previous stages must be finished before starting a new one";
+			RAISE NOTICE 'Previous stages must be finished before starting a new one';
 			RETURN NULL;
 		END IF;
     END;
@@ -93,39 +97,24 @@ CREATE TRIGGER stageOrder
   FOR EACH ROW
   EXECUTE PROCEDURE stageOrder();
 
-  Buscar todos los proyectos donde exista una etapa que inicie en los siguientes
-15 días con el fin de llamar y ofrecer los materiales.
   
 --Procedure that returns all projects that have a stage that begins on the next 15 days
-CREATE FUNCTION nextProyect() RETURNS PROJECT(
-	Id_Project  bigserial
-	Id_Client   bigint
-	Id_Engineer bigint
-	Location    varchar(255)
-	Name        varchar
-) 
-AS $$
+CREATE FUNCTION nextProyect() RETURNS SETOF PROJECT AS $$
     BEGIN            
-		RETURN QUERY SELECT
+		SELECT
 		p.Id_Project, p.Id_Client, p.Id_Engineer, p.Location, p.Name
 		FROM
 		PROJECT AS p JOIN DIVIDED_IN as d ON PROJECT.Id_Project = DIVIDED_IN.Id_Project
 		WHERE
 		d.Start_Date > current_date + interval '15' day;        
     END;
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 --Procedure that returns all projects that have a stage that begins in the next 15 days and need certain material
-CREATE FUNCTION nextProyectMaterial(material varchar(50)) RETURNS PROJECT(
-	Id_Project  bigserial
-	Id_Client   bigint
-	Id_Engineer bigint
-	Location    varchar(255)
-	Name        varchar
-) 
+CREATE FUNCTION nextProyectMaterial(IN material varchar(50)) RETURNS SETOF PROJECT
 AS $$
     BEGIN            
-		RETURN QUERY SELECT
+		SELECT
 		p.Id_Project, p.Id_Client, p.Id_Engineer, p.Location, p.Name
 		FROM
 		PROJECT AS p 
@@ -136,14 +125,14 @@ AS $$
 		d.Start_Date > current_date + interval '15' day
 		AND mat.Name = material;      
     END;
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 
 --Procedure that Deletes stages by Name
-CREATE FUNCTION deleteStage(StageName varchar(255)) RETURNS void AS $$
+CREATE FUNCTION deleteStage(IN StageName varchar(255)) RETURNS void AS $$
     BEGIN
-		IF ((SELECT 1 FROM STAGE WHERE Name = StageName) > 0)
-			IF( (SELECT Stage_Id FROM STAGE WHERE Name = StageName) < 18  )--This is also checked by a trigger
+		IF ((SELECT 1 FROM STAGE WHERE Name = StageName) > 0) THEN
+			IF( (SELECT Stage_Id FROM STAGE WHERE Name = StageName) < 18  ) THEN--This is also checked by a trigger
 				DELETE FROM COMMENTARY as c using DIVIDED_IN as d NATURAL JOIN STAGE s WHERE d.Divided_Id = c.Divided_Id AND s.Name = StageName;
 				DELETE FROM DIVIDED_IN as d using STAGE s WHERE d.Stage_Id = s.Stage_Id AND s.Name = StageName;
 				DELETE FROM POSSESES as p using STAGE s WHERE p.Stage_Id = s.Stage_Id AND s.Name = StageName;
@@ -151,41 +140,30 @@ CREATE FUNCTION deleteStage(StageName varchar(255)) RETURNS void AS $$
 			END IF;
 		END IF;
     END;
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 --Procedure that Projects by Name
-CREATE FUNCTION deleteProject(ProjectName varchar(255)) RETURNS void AS $$
+CREATE FUNCTION deleteProject(IN ProjectName varchar(255)) RETURNS void AS $$
     BEGIN
 		DELETE FROM COMMENTARY as c using DIVIDED_IN as d NATURAL JOIN PROJECT p WHERE d.Divided_Id = c.Divided_Id AND p.Name = ProjectName;
 		DELETE FROM DIVIDED_IN as d using PROJECT p WHERE d.Id_Project = p.Id_Project AND p.Name = ProjectName;
 		DELETE FROM PROJECT WHERE Name = ProjectName;
     END;
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 --Procedure that Clientes by Id
-CREATE FUNCTION deleteClient(Id bigint) RETURNS void AS $$
+CREATE FUNCTION deleteClient(IN Id bigint) RETURNS void AS $$
     BEGIN
-		SELECT * from deleteProject(SELECT 1 FROM PROJECT WHERE Id_Client = Id);
+		SELECT * from deleteProject((SELECT 1 FROM PROJECT WHERE Id_Client = Id));
 		DELETE FROM CLIENT WHERE Id_Number = Id;
     END;
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 
 --Procedure that Engineers by ID
-CREATE FUNCTION deleteEngineer(Id bigint) RETURNS void AS $$
+CREATE FUNCTION deleteEngineer(IN Id bigint) RETURNS void AS $$
     BEGIN
-		SELECT * from deleteProject(SELECT 1 FROM PROJECT WHERE Id_Engineer = Id);
+		SELECT * from deleteProject((SELECT 1 FROM PROJECT WHERE Id_Engineer = Id));
 		DELETE FROM ENGINEER WHERE Id_Number = Id;
     END;
-LANGUAGE plpgsql;
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
+$$ LANGUAGE plpgsql;
