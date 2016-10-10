@@ -1,0 +1,48 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+    	<div class="navbar-header">
+      		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
+    	</div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      	<ul class="nav navbar-nav navbar-right">
+		        <li><a href="#search">SEARCH</a></li>
+		        <li><a href="#register">REGISTER</a></li>
+		        <li><a href="#login">LOGIN</a></li>
+	      	</ul>
+	    </div>
+  	</div>
+</nav>
+
+<div id="search" class="jumbotron text-center">
+	<h1>CONSTRU-TEC</h1>
+
+	<form class="form-inline">
+		<input input class="form-control" type="text" ng-model="userSearch" placeholder="Search...">
+	</form>
+
+    <div class="container">
+  		<table class="table table-hover">
+    		<thead>
+		    	<tr>
+		    		<th>ID</th>
+		    		<th>Firstname</th>
+			        <th>Lastname</th>
+			        <th>Address</th>
+		        </tr>
+            </thead>
+            <tbody>
+			    <tr ng-repeat="cust in customers | filter: userSearch">
+			    	<td>{{cust.ID}}</td>
+			    	<td>{{cust.name}}</td>
+			    	<td>{{cust.lastName}}</td>
+			    	<td>{{cust.address}}</td>
+			    </tr>
+			</tbody>
+  		</table>
+	</div>
+</div>
+
+<div id="register" class="container-fluid text-center">
+	<h1>REGISTER NEW CLIENT</h1>
+  	<p>We specialize in blablabla</p>
+</div>
