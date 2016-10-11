@@ -548,7 +548,7 @@ namespace DatabaseConnection
         }
 
         //Crea un nuevo Proovedor y lo agrega a la base de datos
-        public void crear_Provedor(Proovedor provedor)
+        public void crear_Proveedor(Proovedor provedor)
         {
             SqlParameter[] myparm = new SqlParameter[5];
             myparm[0] = new SqlParameter("@Cedula", provedor.Cedula_Proveedor);
@@ -564,7 +564,7 @@ namespace DatabaseConnection
             ExecuteCommandWrite(command, myparm);
         }
 
-        public void update_Nombre_Proovedor(int cedula, string Nombre)
+        public void update_Nombre_Proveedor(int cedula, string Nombre)
         {
             SqlParameter[] myparm = new SqlParameter[2];
             myparm[0] = new SqlParameter("@Nombre", Nombre);
@@ -575,7 +575,7 @@ namespace DatabaseConnection
             ExecuteCommandWrite(command, myparm);
         }
 
-        public void update_Apellidos_Proovedor(int cedula, string Apellidos)
+        public void update_Apellidos_Proveedor(int cedula, string Apellidos)
         {
             SqlParameter[] myparm = new SqlParameter[2];
             myparm[0] = new SqlParameter("@Apellidos", Apellidos);
@@ -586,7 +586,7 @@ namespace DatabaseConnection
             ExecuteCommandWrite(command, myparm);
         }
 
-        public void update_Nacimiento_Proovedor(int cedula, string Nacimiento)
+        public void update_Nacimiento_Proveedor(int cedula, string Nacimiento)
         {
             SqlParameter[] myparm = new SqlParameter[2];
             myparm[0] = new SqlParameter("@Nacimiento", SqlDbType.DateTime);
@@ -600,7 +600,7 @@ namespace DatabaseConnection
             ExecuteCommandWrite(command, myparm);
         }
 
-        public void update_Residencia_Proovedor(int cedula, string Residencia)
+        public void update_Residencia_Proveedor(int cedula, string Residencia)
         {
             SqlParameter[] myparm = new SqlParameter[2];
             myparm[0] = new SqlParameter("@Residencia", Residencia);
@@ -611,7 +611,7 @@ namespace DatabaseConnection
             ExecuteCommandWrite(command, myparm);
         }
 
-        public Proovedor get_Provedor(int cedula)
+        public Proovedor get_Proveedor(int cedula)
         {
             SqlParameter myparm = new SqlParameter("@Cedula", cedula);
 
@@ -646,7 +646,7 @@ namespace DatabaseConnection
         }
 
         //Elimina un producto de la base de datos basado en su nombre
-        public void eliminar_Proovedor(int cedula_Proovedor)
+        public void eliminar_Proveedor(int cedula_Proovedor)
         {
 
             SqlParameter cedula1 = new SqlParameter("@Cedula", cedula_Proovedor);

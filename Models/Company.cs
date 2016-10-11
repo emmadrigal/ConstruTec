@@ -212,7 +212,6 @@ namespace EPATEC2.Company
         private string hora;
         private List<ProductoPedido> Productos;
 
-
         /// Propiedad de Cedula
         public long id_Pedido
         {

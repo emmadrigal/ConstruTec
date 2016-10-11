@@ -60,6 +60,13 @@ namespace EPATEC2.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public IHttpActionResult postCliente([FromBody]Company.Cliente cliente)
+        {
+            Connection.Instance.crear_Cliente(cliente);
+            return Ok();
+        }
+
         [Route("{id}")]
         [HttpDelete]
         public IHttpActionResult deleteCliente(int id)
@@ -131,6 +138,13 @@ namespace EPATEC2.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public IHttpActionResult postProducto([FromBody]Company.Producto producto)
+        {
+            Connection.Instance.crear_Producto(producto);
+            return Ok();
+        }
+
         [Route("{id}")]
         [HttpDelete]
         public IHttpActionResult deleteProducto(string id)
@@ -171,6 +185,13 @@ namespace EPATEC2.Controllers
             {
                 Connection.Instance.update_Descripcion_Categoria(id, newValue);
             }
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult postProducto([FromBody]Company.Categoria categoria)
+        {
+            Connection.Instance.crear_Categoria(categoria);
             return Ok();
         }
 
@@ -225,6 +246,13 @@ namespace EPATEC2.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public IHttpActionResult postProducto([FromBody]Company.Empleado empleado)
+        {
+            Connection.Instance.crear_Empleado(empleado);
+            return Ok();
+        }
+
         [Route("{id}")]
         [HttpDelete]
         public IHttpActionResult deleteEmpleado(int id)
@@ -241,7 +269,7 @@ namespace EPATEC2.Controllers
         [HttpGet]
         public IHttpActionResult getProveedor(int id)
         {
-            var product = Connection.Instance.get_Provedor(id);
+            var product = Connection.Instance.get_Proveedor(id);
             if (product == null)
             {
                 return NotFound();
@@ -263,20 +291,27 @@ namespace EPATEC2.Controllers
         {
             if (campo == "nombre")
             {
-                Connection.Instance.update_Nombre_Empleado(id, newValue);
+                Connection.Instance.update_Nombre_Proveedor(id, newValue);
             }
             else if (campo == "apellido")
             {
-                Connection.Instance.update_Apellidos_Proovedor(id, newValue);
+                Connection.Instance.update_Apellidos_Proveedor(id, newValue);
             }
             else if (campo == "residencia")
             {
-                Connection.Instance.update_Residencia_Proovedor(id, newValue);
+                Connection.Instance.update_Residencia_Proveedor(id, newValue);
             }
             else if (campo == "nacimiento")
             {
-                Connection.Instance.update_Nacimiento_Proovedor(id, newValue);
+                Connection.Instance.update_Nacimiento_Proveedor(id, newValue);
             }
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult postProducto([FromBody]Company.Proovedor proveedor)
+        {
+            Connection.Instance.crear_Proveedor(proveedor);
             return Ok();
         }
 
@@ -284,7 +319,7 @@ namespace EPATEC2.Controllers
         [HttpDelete]
         public IHttpActionResult deleteProveedor(int id)
         {
-            Connection.Instance.eliminar_Proovedor(id);
+            Connection.Instance.eliminar_Proveedor(id);
             return Ok();
         }
     }
@@ -318,6 +353,13 @@ namespace EPATEC2.Controllers
         {
             var products = Connection.Instance.get_PedidoCliente(id);
             return Ok(products);
+        }
+
+        [HttpPost]
+        public IHttpActionResult postProducto([FromBody]Company.Pedido pedido)
+        {
+            Connection.Instance.crear_Pedido(pedido);
+            return Ok();
         }
 
 
