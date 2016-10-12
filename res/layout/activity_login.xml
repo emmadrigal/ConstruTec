@@ -11,82 +11,66 @@
     tools:context="construtec.mobile.LoginActivity">
 
     <!-- Login progress -->
-    <EditText
-        android:id="@+id/userName"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:hint="@string/user_name"
-        android:inputType="text"
-        android:maxLines="1"/>
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:hint="@string/user_name"
+            android:inputType="text"
+            android:layout_weight="0"
+            android:maxLines="1"/>
+        <EditText
+            android:id="@+id/userId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:hint="@string/user_id"
+            android:inputType="number"
+            android:maxLines="1"/>
 
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/login_form"
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_height="0dp"
+            android:layout_width="fill_parent"
+            android:layout_weight="0.55"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/SignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="SignUp"
+                android:layout_weight="1" android:text="Sign up">
+            </Button>
+            <Button
+                android:id="@+id/LogIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="LogIn"
+                android:text="Log In">
+            </Button>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </android.support.design.widget.TextInputLayout>
-
-                <EditText
-                    android:id="@+id/userId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/user_id"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>
 
 
 
-            <LinearLayout
-                android:id="@+id/LinearLayout02"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_alignParentBottom="true">
-                <Button
-                    android:id="@+id/SignUp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="LogIn"
-                    android:layout_weight="1" android:text="Sign up">
-                </Button>
-                <Button
-                    android:id="@+id/LogIn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="SignUp"
-                    android:text="Log In">
-                </Button>
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

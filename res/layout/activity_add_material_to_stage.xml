@@ -5,30 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="construtec.mobile.AddMaterialToStage">
+    tools:context="construtec.mobile.AddStageToProject">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_top"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:theme="@style/AppTheme" >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="match_parent"
+            android:text="Select new Material to Add to Stage"
+            android:textSize="20dp"
+            android:textColor="@color/colorClear"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title" />
 
-    </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_add_material_to_stage" />
+    </android.support.v7.widget.Toolbar>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Filter"
+            android:textSize="25sp"
+            android:textColor="@color/colorClear"
+            android:layout_gravity="center"
+            android:id="@+id/filter" />
+        <ListView
+            android:id="@+id/List"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

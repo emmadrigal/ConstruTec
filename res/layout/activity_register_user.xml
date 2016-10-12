@@ -1,13 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register_user"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="construtec.mobile.RegisterUser">
+    tools:context="construtec.mobile.RegisterUser"
+    android:gravity="top"
+    android:weightSum="1">
 
-</RelativeLayout>
+
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:hint="@string/user_name"
+        android:inputType="text"
+        android:maxLines="1"/>
+    <EditText
+        android:id="@+id/userId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:hint="@string/user_id"
+        android:inputType="number"
+        android:maxLines="1"/>
+
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:inputType="phone"
+        android:hint="Phone Number"
+        android:ems="10" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="fill_horizontal">
+        <TextView
+            android:id="@+id/day"
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:hint="Day"
+            android:focusableInTouchMode="false"
+            android:gravity="center"
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/month"
+            android:layout_width="116dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Month"
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="116dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:hint="Year"
+            android:padding="5dp"/>
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/Role"
+        android:layout_width="fill_parent"
+        android:layout_weight="0"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:visibility="invisible"
+        android:hint="Code"
+        android:inputType="text"
+        android:maxLines="1"/>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:gravity="bottom">
+        <Button
+            android:id="@+id/Register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="LogIn"
+            android:text="Sign Up"/>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
