@@ -8,7 +8,22 @@ construtecAPP.config(function ($routeProvider) {
 			controller: 'AppController',
 			templateUrl: 'Partials/login.html'
 		})
-		.otherwise({ redirectTo: '/login' });
+		.when('/register',
+		{
+			controller: 'AppController',
+			templateUrl: 'Partials/register.html'
+		})
+		.when('/search',
+		{
+			controller: 'AppController',
+			templateUrl: 'Partials/search.html'
+		})
+		.when('/architect',
+		{
+			controller: 'AppController',
+			templateUrl: 'Partials/architect.html'
+		})
+		.otherwise({ redirectTo: '/search' });
 });
 
 construtecAPP.controller('AppController', function SimpleController($scope, $location, $http){
@@ -17,4 +32,8 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
 		{ ID: 187197, name: 'Andrea',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '6-10-2016'},
 		{ ID: 187196, name: 'Pedro',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '8-10-2016'}
 	];
+
+	$scope.goTo = function ( path ) {
+    	$location.path( path );
+    };
 });
