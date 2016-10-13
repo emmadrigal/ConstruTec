@@ -119,7 +119,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Basetablas.cs" />
+    <Compile Include="Models\Commentary.cs" />
+    <Compile Include="Models\Divided_in.cs" />
+    <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\Posseses.cs" />
+    <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\Stage.cs" />
+    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
