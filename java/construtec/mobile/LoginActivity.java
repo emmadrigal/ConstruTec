@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import org.json.*;
 
@@ -45,11 +43,13 @@ public class LoginActivity extends AppCompatActivity{
         String userName = mUserName.getText().toString();
         String userId = mUserId.getText().toString();
 
-        if(userExists(userName, Integer.parseInt(userId))){
-            intent.putExtra("UserId", userId);
-            startActivity(intent);
-        }else{
-            mUserName.setError("User Name and Id don't match");
+        if(!userId.equals("")){
+            if(userExists(userName, Integer.parseInt(userId))){
+                intent.putExtra("UserId", userId);
+                startActivity(intent);
+            }else{
+                mUserName.setError("User Name and Id don't match");
+            }
         }
     }
 

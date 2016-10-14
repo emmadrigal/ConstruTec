@@ -24,9 +24,8 @@
             android:textColor="@color/colorClear"
             android:layout_gravity="center"
             android:id="@+id/toolbar_title" />
-
-
     </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"

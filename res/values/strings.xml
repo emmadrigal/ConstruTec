@@ -20,4 +20,9 @@
     <string name="title_activity_add_stage_to_project">AddStageToProject</string>
     <string name="title_activity_view_materials_for_stage">ViewMaterialsForStage</string>
     <string name="title_activity_add_material_to_stage">AddMaterialToStage</string>
+    <string name="title_activity_test">test</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_project">projectActivity</string>
+    <string name="title_activity_text">textActivity</string>
 </resources>

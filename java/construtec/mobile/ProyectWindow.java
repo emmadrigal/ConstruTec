@@ -18,8 +18,9 @@ import java.util.List;
 /**
  * Show a screen with all the available proyects
  */
-public class ProyectWindow extends AppCompatActivity {
+public class  ProyectWindow extends AppCompatActivity {
 
+    private String userId;
     private ListView list;
 
     @Override
@@ -27,33 +28,31 @@ public class ProyectWindow extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proyect_window);
 
-        Intent intent = getIntent();
-        String id = intent.getStringExtra("UserId");
-
         list = (ListView) findViewById(R.id.List);
+
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("UserId");
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                getProjects(id) );
+                getProjects(userId) );
 
         list.setAdapter(arrayAdapter);
 
-        list.setOnItemClickListener(new ListClickHandler());
-    }
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String data = (String) list.getItemAtPosition(position);
+                // create intent to start another activity
+                Intent intent = new Intent(ProyectWindow.this, ProjectInformation.class);
+                // add the selected text item to our intent.
+                intent.putExtra("projectName", data);
+                intent.putExtra("userID", userId);
 
-    public class ListClickHandler implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> adapter, View view, int position, long arg3) {
-            String data = (String)adapter.getItemAtPosition(position);
-            // create intent to start another activity
-            Intent intent = new Intent(ProyectWindow.this, ViewAllStages.class);
-            // add the selected text item to our intent.
-            intent.putExtra("selected-item", data);
-            startActivity(intent);
-        }
-
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -79,5 +78,14 @@ public class ProyectWindow extends AppCompatActivity {
         }
         catch (JSONException e) {}
         return projects;
+    }
+
+    public void createProject(View view){
+        //TODO make a call to the WebService to create project, check existance before exiting
+        // create intent to start another activity
+        Intent intent = new Intent(ProyectWindow.this, CreateNewProject.class);
+        // add the selected text item to our intent.
+        intent.putExtra("selected-item", userId);
+        startActivity(intent);
     }
 }

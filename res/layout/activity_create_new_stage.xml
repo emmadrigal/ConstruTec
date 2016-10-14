@@ -15,30 +15,20 @@
 
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:hint="Project Name"
+        android:hint="Stage Name"
         android:inputType="text"
         android:maxLines="1"/>
     <EditText
-        android:id="@+id/location"
+        android:id="@+id/userId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_weight="0"
-        android:hint="Location"
-        android:inputType="text"
-        android:maxLines="1"/>
-
-    <EditText
-        android:id="@+id/ClientId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:inputType="number"
-        android:hint="ClientId"
-        android:ems="10" />
+        android:hint="Description"
+        android:inputType="number" />
 
 
     <LinearLayout
@@ -50,9 +40,8 @@
             android:id="@+id/Register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="createProject"
-            android:text="Create Project"/>
-
+            android:onClick="createStage"
+            android:text="Create New Stage"/>
     </LinearLayout>
 
 </LinearLayout>

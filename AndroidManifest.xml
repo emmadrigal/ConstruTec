@@ -17,14 +17,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterUser" />
+        <activity android:name=".RegisterUser" android:noHistory="true"/>
         <activity android:name=".ProyectWindow" />
         <activity
             android:name=".CreateNewProject"
             android:label="@string/title_activity_create_new_project"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ViewAllStages"
+            android:name=".ProjectInformation"
             android:label="@string/title_activity_view_all_stages"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -32,12 +32,17 @@
             android:label="@string/title_activity_add_stage_to_project"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ViewMaterialsForStage"
+            android:name=".StageInformation"
             android:label="@string/title_activity_view_materials_for_stage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddMaterialToStage"
             android:label="@string/title_activity_add_material_to_stage"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CreateNewStage" />
+        <activity
+            android:name=".textActivity"
+            android:label="@string/title_activity_text"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
