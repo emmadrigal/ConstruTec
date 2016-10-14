@@ -33,7 +33,25 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
 		{ ID: 187196, name: 'Pedro',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '8-10-2016'}
 	];
 
+	$scope.projects = [
+		{ ID: 187199, name: 'Carlos', address: 'Cartago', clientID: '123', architectID: '126'},
+		{ ID: 187197, name: 'Andrea', address: 'Cartago', clientID: '122', architectID: '129'},
+		{ ID: 187196, name: 'Pedro', address: 'Cartago', clientID: '121', architectID: '127'}
+	];
+
 	$scope.goTo = function ( path ) {
     	$location.path( path );
     };
+
+    $scope.addNewProject = function(){
+    	console.log("HOLA");
+    	var newFile = {
+			ID: $scope.newProjectID,
+			name: $scope.newProjectName,
+			address: $scope.newProjectLoc,
+			clientID: $scope.newProjectClientID,
+			architectID: "1"
+		};
+		$scope.customers.push(newFile);
+    }
 });
