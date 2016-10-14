@@ -1,7 +1,9 @@
 package construtec.mobile;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,7 @@ import java.util.Map;
 public class StageInformation extends AppCompatActivity {
     public static String currentProject;
     public static String currentUser;
+    public static String currentStage;
     public static SimpleAdapter adapter;
 
     static String startDate;
@@ -59,6 +64,7 @@ public class StageInformation extends AppCompatActivity {
         Intent intent = getIntent();
         currentProject = intent.getStringExtra("projectName");
         currentUser = intent.getStringExtra("currentUser");
+        currentStage = intent.getStringExtra("stageName");
 
         adapter = new SimpleAdapter(this, getMaterials(),
                 android.R.layout.simple_list_item_2,
@@ -67,6 +73,14 @@ public class StageInformation extends AppCompatActivity {
                         android.R.id.text2});
 
         title.setText(currentProject);
+
+        /*
+        String role = intent.getStringExtra("role");
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addMaterial);
+        if(!role.equals("Engineer")){
+            fab.setVisibility(View.GONE);
+        }
+        */
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -158,17 +172,111 @@ public class StageInformation extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            Date date = new Date();
+            final int dia = date.getDay() + 9;
+            final int mes = date.getMonth();
+            final int año = date.getYear() + 1900;
+
             View rootView = inflater.inflate(R.layout.stage_project_information, container, false);
             TextView name  = (TextView) rootView.findViewById(R.id.projectName);
             TextView stage = (TextView) rootView.findViewById(R.id.stageName);
-            TextView startDate = (TextView) rootView.findViewById(R.id.startDate);
-            TextView endDate = (TextView) rootView.findViewById(R.id.endDate);
+            final TextView startDate = (TextView) rootView.findViewById(R.id.startDate);
+            final TextView endDate = (TextView) rootView.findViewById(R.id.endDate);
+
+
+
+            //Controls the click for the date
+            View.OnClickListener startDateChooser = new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+                        public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                            String newDate = "";
+                            switch(selectedmonth){
+                                case 0 : newDate = Integer.toString(selectedday) +  "/jan/" + Integer.toString(selectedyear);
+                                    break;
+                                case 1 : newDate = Integer.toString(selectedday) +  "/feb/" + Integer.toString(selectedyear);
+                                    break;
+                                case 2 : newDate = Integer.toString(selectedday) +  "/mar/" + Integer.toString(selectedyear);
+                                    break;
+                                case 3 : newDate = Integer.toString(selectedday) +  "/apr/" + Integer.toString(selectedyear);
+                                    break;
+                                case 4 : newDate = Integer.toString(selectedday) +  "/may/" + Integer.toString(selectedyear);
+                                    break;
+                                case 5 : newDate = Integer.toString(selectedday) +  "/jun/" + Integer.toString(selectedyear);
+                                    break;
+                                case 6 : newDate = Integer.toString(selectedday) +  "/jul/" + Integer.toString(selectedyear);
+                                    break;
+                                case 7 : newDate = Integer.toString(selectedday) +  "/aug/" + Integer.toString(selectedyear);
+                                    break;
+                                case 8 : newDate = Integer.toString(selectedday) +  "/sep/" + Integer.toString(selectedyear);
+                                    break;
+                                case 9 : newDate = Integer.toString(selectedday) +  "/oct/" + Integer.toString(selectedyear);
+                                    break;
+                                case 10 : newDate = Integer.toString(selectedday) +  "/nov/" + Integer.toString(selectedyear);
+                                    break;
+                                case 11 : newDate = Integer.toString(selectedday) +  "/dec/" + Integer.toString(selectedyear);
+                                    break;
+                            }
+                            startDate.setText(newDate);
+                        }
+
+                    },
+                            año, mes, dia);
+                    mDatePicker.show();  }
+            };
+
+            View.OnClickListener endDateChooser = new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+                        public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                            String newDate = "";
+                            switch(selectedmonth){
+                                case 0 : newDate = Integer.toString(selectedday) +  "/jan/" + Integer.toString(selectedyear);
+                                    break;
+                                case 1 : newDate = Integer.toString(selectedday) +  "/feb/" + Integer.toString(selectedyear);
+                                    break;
+                                case 2 : newDate = Integer.toString(selectedday) +  "/mar/" + Integer.toString(selectedyear);
+                                    break;
+                                case 3 : newDate = Integer.toString(selectedday) +  "/apr/" + Integer.toString(selectedyear);
+                                    break;
+                                case 4 : newDate = Integer.toString(selectedday) +  "/may/" + Integer.toString(selectedyear);
+                                    break;
+                                case 5 : newDate = Integer.toString(selectedday) +  "/jun/" + Integer.toString(selectedyear);
+                                    break;
+                                case 6 : newDate = Integer.toString(selectedday) +  "/jul/" + Integer.toString(selectedyear);
+                                    break;
+                                case 7 : newDate = Integer.toString(selectedday) +  "/aug/" + Integer.toString(selectedyear);
+                                    break;
+                                case 8 : newDate = Integer.toString(selectedday) +  "/sep/" + Integer.toString(selectedyear);
+                                    break;
+                                case 9 : newDate = Integer.toString(selectedday) +  "/oct/" + Integer.toString(selectedyear);
+                                    break;
+                                case 10 : newDate = Integer.toString(selectedday) +  "/nov/" + Integer.toString(selectedyear);
+                                    break;
+                                case 11 : newDate = Integer.toString(selectedday) +  "/dec/" + Integer.toString(selectedyear);
+                                    break;
+                            }
+                            endDate.setText(newDate);
+                        }
+
+                    },
+                            año, mes, dia);
+                    mDatePicker.show();  }
+            };
 
             setStageInfo();
             name.setText(currentProject);
-            stage.setText(currentUser);
+            stage.setText(currentStage);
             startDate.setText(StageInformation.startDate);
+            startDate.setOnClickListener(startDateChooser);
             endDate.setText(StageInformation.endDate);
+            endDate.setOnClickListener(endDateChooser);
 
             return rootView;
         }

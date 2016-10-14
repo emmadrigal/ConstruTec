@@ -1,6 +1,7 @@
 package construtec.mobile;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,20 +19,29 @@ import java.util.List;
 /**
  * Show a screen with all the available proyects
  */
-public class  ProyectWindow extends AppCompatActivity {
+public class ViewAllProjects extends AppCompatActivity {
 
     private String userId;
+    private String role;
     private ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_proyect_window);
+        setContentView(R.layout.activity_view_all_projects);
 
         list = (ListView) findViewById(R.id.List);
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("UserId");
+
+        role = intent.getStringExtra("role");
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addProject);
+        if(!role.equals("1")) {
+            fab.setVisibility(View.GONE);
+        }else{
+            fab.setVisibility(View.VISIBLE);
+        }
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
@@ -45,10 +55,11 @@ public class  ProyectWindow extends AppCompatActivity {
                                     int position, long id) {
                 String data = (String) list.getItemAtPosition(position);
                 // create intent to start another activity
-                Intent intent = new Intent(ProyectWindow.this, ProjectInformation.class);
+                Intent intent = new Intent(ViewAllProjects.this, ProjectInformation.class);
                 // add the selected text item to our intent.
                 intent.putExtra("projectName", data);
                 intent.putExtra("userID", userId);
+                intent.putExtra("role", role);
 
                 startActivity(intent);
             }
@@ -83,7 +94,7 @@ public class  ProyectWindow extends AppCompatActivity {
     public void createProject(View view){
         //TODO make a call to the WebService to create project, check existance before exiting
         // create intent to start another activity
-        Intent intent = new Intent(ProyectWindow.this, CreateNewProject.class);
+        Intent intent = new Intent(ViewAllProjects.this, CreateNewProject.class);
         // add the selected text item to our intent.
         intent.putExtra("selected-item", userId);
         startActivity(intent);

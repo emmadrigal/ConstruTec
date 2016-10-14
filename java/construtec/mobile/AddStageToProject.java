@@ -1,5 +1,6 @@
 package construtec.mobile;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -16,19 +18,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AddStageToProject extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
 
+    private int dia;
+    private int mes;
+    private int año;
+
     private String userID;
     private String projectName;
+
+    static String startDate = "";
+    static String endDate = "";
+    String data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_stage_to_project);
+
+        Date date = new Date();
+        dia = date.getDay() + 9;
+        mes = date.getMonth();
+        año = date.getYear() + 1900;
 
         Intent intent = getIntent();
         projectName = intent.getStringExtra("projectName");
@@ -46,13 +62,42 @@ public class AddStageToProject extends AppCompatActivity {
 
         list.setAdapter(arrayAdapter);
 
+        final DatePickerDialog endDatePicker = new DatePickerDialog(AddStageToProject.this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                endDate = selectedmonth + "-" + selectedday + "-" + selectedyear;
+
+                addStageToProject(data, startDate, endDate);
+
+                //TODO check if add is succesfull before proceding
+                Intent intent = new Intent(getBaseContext(), StageInformation.class);
+                intent.putExtra("stageName",   data);
+                intent.putExtra("projectName", projectName);
+                intent.putExtra("userID",      userID);
+                startActivity(intent);
+            }
+        },
+                año, mes, dia);
+
+        endDatePicker.setTitle("Choose finish date for your project");
+
+        final DatePickerDialog startDatePicker = new DatePickerDialog(AddStageToProject.this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                startDate = selectedmonth + "-" + selectedday + "-" + selectedyear;
+                endDatePicker.show();
+            }
+
+        },
+                año, mes, dia);
+
+        startDatePicker.setTitle("Choose start Date for your project");
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                String data = (String) list.getItemAtPosition(position);
-                addStageToProject(data);
-                // create intent to start another activity
-                finish();
+                startDatePicker.show();
+                data = (String) list.getItemAtPosition(position);
             }
         });
 
@@ -60,25 +105,18 @@ public class AddStageToProject extends AppCompatActivity {
         filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                // TODO Auto-generated method stub
                 AddStageToProject.this.arrayAdapter.getFilter().filter(arg0);
             }
 
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                // TODO Auto-generated method stub
-            }
-
+                                          int arg3){}
             @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-
-            }
+            public void afterTextChanged(Editable arg0){}
         });
     }
 
-    private void addStageToProject(String data){
+    private void addStageToProject(String datam, String startDate, String endDate){
         //TODO make call to web service
     }
 

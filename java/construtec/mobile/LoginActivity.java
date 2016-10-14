@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity{
      * @param view
      */
     public void LogIn(View view){
-        Intent intent = new Intent(this, ProyectWindow.class);
+        Intent intent = new Intent(this, ViewAllProjects.class);
         String userName = mUserName.getText().toString();
         String userId = mUserId.getText().toString();
 

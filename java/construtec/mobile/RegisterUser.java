@@ -1,27 +1,16 @@
 package construtec.mobile;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.Date;
 
@@ -29,11 +18,6 @@ import java.util.Date;
  * Screen that allows a user to create a new account in the database
  */
 public class RegisterUser extends AppCompatActivity {
-
-    private EditText name;
-    private EditText id;
-    private EditText Birth;
-    private EditText phoneNumber;
     private EditText code;
     private TextView day;
     private TextView month;
@@ -41,7 +25,7 @@ public class RegisterUser extends AppCompatActivity {
     private int dia;
     private int mes;
     private int año;
-    private Date fecha = new Date();
+    private Spinner spinner;
 
     /**
      * Creates the view
@@ -62,7 +46,7 @@ public class RegisterUser extends AppCompatActivity {
         day = (TextView) findViewById(R.id.day);
         month = (TextView) findViewById(R.id.month);
         year = (TextView) findViewById(R.id.year);
-        final Spinner spinner = (Spinner) findViewById(R.id.Role);
+        spinner = (Spinner) findViewById(R.id.Role);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -104,7 +88,7 @@ public class RegisterUser extends AppCompatActivity {
                 DatePickerDialog mDatePicker = new DatePickerDialog(RegisterUser.this, new DatePickerDialog.OnDateSetListener() {
 
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        day.setText(Integer.toString(selectedyear));
+                        day.setText(Integer.toString(selectedday));
                         String mes = "";
                         switch(selectedmonth){
                             case 0 : mes = "January";
@@ -135,7 +119,7 @@ public class RegisterUser extends AppCompatActivity {
                                 break;
                         }
                         month.setText(mes);
-                        year.setText(Integer.toString(selectedday));
+                        year.setText(Integer.toString(selectedyear));
                     }
 
                 },
@@ -155,7 +139,16 @@ public class RegisterUser extends AppCompatActivity {
     public void LogIn(View view){
         RegisterUser();
 
-        Intent intent = new Intent(this, ProyectWindow.class);
+        Intent intent = new Intent(this, ViewAllProjects.class);
+        if(spinner.getSelectedItem().equals("Engineer")) {
+            intent.putExtra("role", "1");
+        }else if(spinner.getSelectedItem().equals("Client")) {
+            intent.putExtra("role", "0");
+        }
+        else{
+            intent.putExtra("role", "2");
+        }
+
         startActivity(intent);
     }
 

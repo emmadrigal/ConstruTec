@@ -1,7 +1,6 @@
 package construtec.mobile;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -117,7 +116,7 @@ public class AddMaterialToStage extends AppCompatActivity {
     {
         final Dialog d = new Dialog(AddMaterialToStage.this);
         d.setTitle("Choose the quantity");
-        d.setContentView(R.layout.dialog);
+        d.setContentView(R.layout.number_picker_dialog);
         Button setValue = (Button) d.findViewById(R.id.set);
         Button cancelAction = (Button) d.findViewById(R.id.cancel);
 
@@ -144,7 +143,6 @@ public class AddMaterialToStage extends AppCompatActivity {
             }
         });
         d.show();
-
     }
 
 

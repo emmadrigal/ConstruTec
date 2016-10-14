@@ -1,7 +1,9 @@
 package construtec.mobile;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,12 +32,14 @@ import java.util.List;
 public class ProjectInformation extends AppCompatActivity {
     public static String currentProject;
     public static String currentUser;
+    public static String role;
     public static ArrayAdapter<String> arrayAdapter;
 
     static String clientId;
     static String engineerId;
     static String Location;
 
+    static String newValue;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -59,6 +65,7 @@ public class ProjectInformation extends AppCompatActivity {
         Intent intent = getIntent();
         currentProject = intent.getStringExtra("projectName");
         currentUser = intent.getStringExtra("currentUser");
+        role = intent.getStringExtra("role");
 
         arrayAdapter = new ArrayAdapter<>(
                 this,
@@ -66,6 +73,14 @@ public class ProjectInformation extends AppCompatActivity {
                 getStages(currentProject) );
 
         title.setText(currentProject);
+
+        String role = intent.getStringExtra("role");
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addStage);
+        if(!role.equals("1")){
+            fab.setVisibility(View.GONE);
+        }else{
+            fab.setVisibility(View.VISIBLE);
+        }
 
         mSectionsPagerAdapter = new ProjectInformation.SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -138,6 +153,8 @@ public class ProjectInformation extends AppCompatActivity {
                     // add the selected text item to our intent.
                     intent.putExtra("projectName", currentProject);
                     intent.putExtra("currentUser", currentUser);
+                    intent.putExtra("stageName", data);
+                    intent.putExtra("role", role);
                     startActivity(intent);
                 }
             });
@@ -179,13 +196,46 @@ public class ProjectInformation extends AppCompatActivity {
             TextView name  = (TextView) rootView.findViewById(R.id.projectName);
             TextView client = (TextView) rootView.findViewById(R.id.clientId);
             TextView engineer = (TextView) rootView.findViewById(R.id.engineerId);
-            TextView location = (TextView) rootView.findViewById(R.id.location);
+            final TextView location = (TextView) rootView.findViewById(R.id.location);
+
+            View.OnClickListener updateLocation = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog d = new Dialog(getContext());
+                    d.setContentView(R.layout.text_popup);
+                    Button setValue = (Button) d.findViewById(R.id.set);
+                    Button cancelAction = (Button) d.findViewById(R.id.cancel);
+
+                    final EditText np = (EditText) d.findViewById(R.id.newValue);
+
+                    setValue.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            newValue = np.getText().toString();
+                            location.setText(newValue);
+                            //TODO make a call to the database to update the value
+                            // create intent to start another activity
+                            d.dismiss();
+                        }
+                    });
+                    cancelAction.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                        }
+                    });
+                    d.show();
+                }
+            };
 
             setProjectInfo();
             name.setText(currentProject);
             client.setText(clientId);
             engineer.setText(engineerId);
             location.setText(Location);
+            location.setOnClickListener(updateLocation);
 
             return rootView;
         }
@@ -262,6 +312,8 @@ public class ProjectInformation extends AppCompatActivity {
         // add the selected text item to our intent.
         intent.putExtra("userID", currentUser);
         intent.putExtra("projectName", currentProject);
+        intent.putExtra("role", role);
+
         startActivity(intent);
     }
 }
