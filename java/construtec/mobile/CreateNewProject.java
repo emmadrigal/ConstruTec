@@ -6,13 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+/**
+ * Screen that allows users to add a new project
+ */
 public class CreateNewProject extends AppCompatActivity {
-    private String userId;
-    private EditText name;
-    private EditText location;
-    private EditText clientId;
     private String engineerID;
 
+    /**
+     * Initializes the values in the screen
+     * @param savedInstanceState required by android
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,15 +26,17 @@ public class CreateNewProject extends AppCompatActivity {
         */
         Intent intent = getIntent();
         engineerID = intent.getStringExtra("userID");
-
-        name = (EditText) findViewById(R.id.name);
-        location = (EditText) findViewById(R.id.location);
-        clientId = (EditText) findViewById(R.id.ClientId);
-
     }
 
-
+    /**
+     * Called to create a new project
+     * @param view that calls this method
+     */
     public void createProject(View view){
+        EditText name = (EditText) findViewById(R.id.name);
+        EditText location = (EditText) findViewById(R.id.location);
+        EditText clientId = (EditText) findViewById(R.id.ClientId);
+
         addProject();
 
         //TODO check if add is succesfull before proceding
@@ -42,6 +47,9 @@ public class CreateNewProject extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Call to the database to add a new project
+     */
     public void addProject(){
         //TODO add call to the Web Service
     }

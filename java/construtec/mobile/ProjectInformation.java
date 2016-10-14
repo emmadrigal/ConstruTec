@@ -40,25 +40,15 @@ public class ProjectInformation extends AppCompatActivity {
     static String Location;
 
     static String newValue;
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * Populates the screen
+     * @param savedInstanceState required by android
      */
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.project_information);
+        setContentView(R.layout.user_project_information);
 
         TextView title = (TextView) findViewById(R.id.toolbar_title);
 
@@ -82,13 +72,16 @@ public class ProjectInformation extends AppCompatActivity {
             fab.setVisibility(View.VISIBLE);
         }
 
-        mSectionsPagerAdapter = new ProjectInformation.SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new ProjectInformation.SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
+    /**
+     * Call to the Webservice to get project Information
+     */
     static public void setProjectInfo(){
         //TODO make call to the webService to retrieve project Data
 
@@ -97,16 +90,7 @@ public class ProjectInformation extends AppCompatActivity {
         Location = "Ubicado en el Tecnológico de Costa Rica, Sede San Carlos, 18 kilómetros al norte de Ciudad Quesada, carretera a Fortuna, Santa Clara, San Carlos";
     }
 
-
-
-    /**
-     *
-     */
-    @Override
-    public void onResume(){
-        super.onResume();
-    }
-
+    //TODO on return to this screen data should be refreshed
 
     /**
      * A view containing a list of all the stages for the selected project
@@ -281,7 +265,11 @@ public class ProjectInformation extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Gets a list of the current stages associated to this projct
+     * @param Project that is currently on view
+     * @return list of stages associated to this project
+     */
     private List<String> getStages(String Project){
         String nameId = "Nombre";
 
@@ -306,6 +294,10 @@ public class ProjectInformation extends AppCompatActivity {
         return stages;
     }
 
+    /**
+     * Called to associate a new pro
+     * @param view that called this method
+     */
     public void addStage(View view){
         // create intent to start another activity
         Intent intent = new Intent(view.getContext(), AddStageToProject.class);
@@ -313,6 +305,27 @@ public class ProjectInformation extends AppCompatActivity {
         intent.putExtra("userID", currentUser);
         intent.putExtra("projectName", currentProject);
         intent.putExtra("role", role);
+
+        startActivity(intent);
+    }
+
+    /**
+     * Called whenever a user wishes to delete the current project
+     * @param view that called this method
+     */
+    public void delete(View view){
+        //TODO make call to the web service to delete the current project
+        //TODO confirmation before deleting
+        finish();
+    }
+
+    /**
+     * Calls a new screen showing the budget for the current project
+     * @param view that called this method
+     */
+    public void budget(View view){
+        Intent intent = new Intent(ProjectInformation.this, budget.class);
+        intent.putExtra("projectName", currentProject);
 
         startActivity(intent);
     }

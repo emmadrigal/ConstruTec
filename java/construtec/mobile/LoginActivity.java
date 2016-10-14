@@ -19,7 +19,7 @@ public class LoginActivity extends AppCompatActivity{
 
     /**
      * Creation activity
-     * @param savedInstanceState
+     * @param savedInstanceState required by Android
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +36,20 @@ public class LoginActivity extends AppCompatActivity{
 
     /**
      * Login method, it is called when the correct button is pressed and checks if the user is correct
-     * @param view
+     * @param view that calls this method
      */
     public void LogIn(View view){
         Intent intent = new Intent(this, ViewAllProjects.class);
         String userName = mUserName.getText().toString();
         String userId = mUserId.getText().toString();
+        //TODO get this information from the DB call
+        String role = "1";
 
         if(!userId.equals("")){
             if(userExists(userName, Integer.parseInt(userId))){
                 intent.putExtra("UserId", userId);
+                intent.putExtra("role", role);
+                intent.putExtra("userName", userName);
                 startActivity(intent);
             }else{
                 mUserName.setError("User Name and Id don't match");
@@ -65,8 +69,8 @@ public class LoginActivity extends AppCompatActivity{
 
     /**
      * Methods that checks if a user exists
-     * @param name
-     * @param userId
+     * @param name of the user that wishes to login
+     * @param userId of the user that wishes to login
      * @return boolean indicating if the user exists on the Database
      */
     //TODO: Checkear el tipo de usario y segun eso avanzar la interfaz

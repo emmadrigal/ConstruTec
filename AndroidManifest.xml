@@ -17,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterUser" android:noHistory="true"/>
+        <activity
+            android:name=".RegisterUser"
+            android:noHistory="true" />
         <activity android:name=".ViewAllProjects" />
         <activity
             android:name=".CreateNewProject"
@@ -42,6 +44,7 @@
             android:label="@string/title_activity_add_material_to_stage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CreateNewStage" />
+        <activity android:name=".budget"></activity>
     </application>
 
 </manifest>

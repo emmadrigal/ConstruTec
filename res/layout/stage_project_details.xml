@@ -40,9 +40,9 @@
             android:gravity="center_vertical"
             android:drawablePadding="5dp"
             android:layout_weight="1"
-            android:text="Client Id: " />
+            android:text="Stage Name: " />
         <TextView
-            android:id="@+id/clientId"
+            android:id="@+id/stageName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -64,9 +64,9 @@
             android:gravity="center_vertical"
             android:drawablePadding="5dp"
             android:layout_weight="1"
-            android:text="Engineer Id: " />
+            android:text="Start Date: " />
         <TextView
-            android:id="@+id/engineerId"
+            android:id="@+id/startDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="20sp"
@@ -88,12 +88,12 @@
             android:gravity="center_vertical"
             android:drawablePadding="5dp"
             android:layout_weight="1"
-            android:text="Location: " />
+            android:text="End Date: " />
         <TextView
-            android:id="@+id/location"
+            android:id="@+id/endDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:drawablePadding="5dp" />
@@ -103,14 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0"
-        android:orientation="vertical"
         android:gravity="bottom">
-        <Button
-            android:id="@+id/budget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="budget"
-            android:text="Budget"/>
         <Button
             android:id="@+id/delete"
             android:layout_width="match_parent"
@@ -118,5 +111,7 @@
             android:onClick="delete"
             android:text="Delete"/>
     </LinearLayout>
+
+
 
 </LinearLayout>

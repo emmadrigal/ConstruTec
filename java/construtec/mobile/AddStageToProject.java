@@ -21,13 +21,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Screen that show the available stages to be shwon to the project
+ */
 public class AddStageToProject extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
-
-    private int dia;
-    private int mes;
-    private int año;
 
     private String userID;
     private String projectName;
@@ -36,15 +35,19 @@ public class AddStageToProject extends AppCompatActivity {
     static String endDate = "";
     String data;
 
+    /**
+     * Called to initialize values inside the view
+     * @param savedInstanceState required by Android
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_stage_to_project);
 
         Date date = new Date();
-        dia = date.getDay() + 9;
-        mes = date.getMonth();
-        año = date.getYear() + 1900;
+        int dia = date.getDay() + 9;
+        int mes = date.getMonth();
+        int año = date.getYear() + 1900;
 
         Intent intent = getIntent();
         projectName = intent.getStringExtra("projectName");
@@ -67,7 +70,7 @@ public class AddStageToProject extends AppCompatActivity {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                 endDate = selectedmonth + "-" + selectedday + "-" + selectedyear;
 
-                addStageToProject(data, startDate, endDate);
+                addStageToProject(data, startDate, endDate, projectName);
 
                 //TODO check if add is succesfull before proceding
                 Intent intent = new Intent(getBaseContext(), StageInformation.class);
@@ -116,15 +119,30 @@ public class AddStageToProject extends AppCompatActivity {
         });
     }
 
-    private void addStageToProject(String datam, String startDate, String endDate){
+    /**
+     * Call to the webservice to get the acailable stages to be added
+     * @param stageName name of the stage to be added
+     * @param startDate start date of the stage
+     * @param endDate endDate of the stage
+     * @param projectName name of the project that is going to get a new stage
+     */
+    private void addStageToProject(String stageName, String startDate, String endDate, String projectName){
         //TODO make call to web service
     }
 
+    /**
+     * Called to the database
+     * @return json with the information from the database
+     */
     private String getAllStages(){
         //TODO: realizar la llamada a la base de datos para obtener esta informacion
         return "[{\"Nombre\":\"Escaleras\"}, {\"Nombre\":\"Cimientos\"}, {\"Nombre\":\"Ventanas\"}, {\"Nombre\":\"Muebles de Cocina\"}]";
     }
 
+    /**
+     * Called to populate the stage list
+     * @return list of stage names that are available to be added to the project
+     */
     private List<String> getStages(){
         String nameId = "Nombre";
 

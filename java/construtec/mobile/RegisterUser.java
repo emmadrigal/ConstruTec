@@ -29,7 +29,7 @@ public class RegisterUser extends AppCompatActivity {
 
     /**
      * Creates the view
-     * @param savedInstanceState
+     * @param savedInstanceState required by Android
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +74,7 @@ public class RegisterUser extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
         });
 
         //Controls the click for the date
@@ -134,18 +131,23 @@ public class RegisterUser extends AppCompatActivity {
 
     /**
      *Registers the user and changes screen
-     * @param view
+     * @param view that calls the method
      */
     public void LogIn(View view){
-        RegisterUser();
+        registerUserOnDB();
 
         Intent intent = new Intent(this, ViewAllProjects.class);
+        EditText userName = (EditText) findViewById(R.id.userName);
+        EditText userID = (EditText) findViewById(R.id.userId);
+
+        intent.putExtra("UserId", userName.getText());
+        intent.putExtra("userName", userID.getText());
+
         if(spinner.getSelectedItem().equals("Engineer")) {
             intent.putExtra("role", "1");
         }else if(spinner.getSelectedItem().equals("Client")) {
             intent.putExtra("role", "0");
-        }
-        else{
+        }else{
             intent.putExtra("role", "2");
         }
 
@@ -155,7 +157,7 @@ public class RegisterUser extends AppCompatActivity {
     /**
      * Makes the call to the Web Service and registers the user
      */
-    public void RegisterUser(){
+    public void registerUserOnDB(){
         //TODO: Realiza la llamada a la base de datos con los datos de la interfaz
     }
 }

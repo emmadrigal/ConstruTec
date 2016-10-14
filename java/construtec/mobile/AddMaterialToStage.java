@@ -20,6 +20,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Screen that allows a user to add a new material to a stage
+ */
 public class AddMaterialToStage extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
@@ -30,6 +33,10 @@ public class AddMaterialToStage extends AppCompatActivity {
 
     private String selectedMaterial;
 
+    /**
+     * Initializes the parameters inside the view, called when a new screen is created
+     * @param savedInstanceState required by Android
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,29 +67,31 @@ public class AddMaterialToStage extends AppCompatActivity {
         filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                // TODO Auto-generated method stub
                 AddMaterialToStage.this.arrayAdapter.getFilter().filter(arg0);
             }
 
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                // TODO Auto-generated method stub
-            }
+                                          int arg3) {}
 
             @Override
-            public void afterTextChanged(Editable arg0) {
-                // TODO Auto-generated method stub
-
-            }
+            public void afterTextChanged(Editable arg0) {}
         });
     }
 
+    /**
+     * Calls the web service to return all of the values
+     * @return json from the WebService
+     */
     private String getAllMaterials(){
         //TODO: realizar la llamada a la base de datos para obtener esta informacion
         return "[{\"Nombre\":\"Varillas\"}, {\"Nombre\":\"Cemento\"}, {\"Nombre\":\"Cerámica\"}, {\"Nombre\":\"Clavos\"}]";
     }
 
+    /**
+     * Calls to get a formated list of materials to be shown
+     * @return list of strings indicating a list of available materials
+     */
     public List<String> getMaterials(){
         String nameId = "Nombre";
 
@@ -106,12 +115,18 @@ public class AddMaterialToStage extends AppCompatActivity {
         return stages;
     }
 
+    /**
+     * Call to the WebService to perform call to the webService
+     * @param data name of the material
+     * @param value quantity of the material
+     */
     public void addMaterialToStage(String data, int value){
         //TODO add call to the web service
     }
 
-
-
+    /**
+     * Call to show the popup window that allows to select the quantity of desired materials
+     */
     public void show()
     {
         final Dialog d = new Dialog(AddMaterialToStage.this);
