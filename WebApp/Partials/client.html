@@ -12,13 +12,13 @@
 </nav>
 <div class="jumbotron container text-center">
 	<div>
-		<table class="table table-hover text-center">
+		<table class="table table-hover">
 	        <thead style="background-color: lightgray;">
 	          	<tr>
 		            <th>ID</th>
 		            <th>Name</th>
 					<th>LOCATION</th>
-			        <th>CLIENT ID</th>
+			        <th>ARCHITECT ID</th>
 			        <th>SHOW PHASES</th>
 	          	</tr>  
 	        </thead>
@@ -27,7 +27,7 @@
 	            	<td>{{proj.ID}}</td>
 				    <td>{{proj.name}}</td>
 				    <td>{{proj.address}}</td>
-				    <td>{{proj.clientID}}</td>
+				    <td>{{proj.architectID}}</td>
 				    <td>
 	              		<button ng-if="proj.expanded" ng-click="proj.expanded = false">-</button>
 	              		<button ng-if="!proj.expanded" ng-click="proj.expanded = true">+</button>
@@ -36,7 +36,7 @@
 	          	<tr ng-if="proj.expanded" ng-repeat-end="">
 	            	<td colspan="5" >
 	            		<div>
-	            			<table class="table table-hover text-center">
+	            			<table class="table table-hover">
 						        <thead>
 						          	<tr>
 							            <th>NAME</th>
@@ -58,7 +58,7 @@
 						          	<tr ng-if="p.expanded" ng-repeat-end="">
 						          		<td colspan="5" >
 						            		<div>
-						            			<table class="table table-hover text-center">
+						            			<table class="table table-hover">
 											        <thead>
 											          	<tr>
 												            <th>NAME</th>
