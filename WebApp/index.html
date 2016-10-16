@@ -95,6 +95,36 @@
             </div>
 	</script>
 
+	<script type="text/ng-template" id="MaterialForm.html">
+		<div class="modal-header">
+		    <h4 class="modal-title" id="myModalLabel"> NEW PROJECT INFORMATION </h4>
+            </div>  
+            <!-- Modal Body -->
+            <div class="modal-body">
+                
+                <form class="form-horizontal" role="form">
+                	<div class="form-group">
+	                	<div class="col-sm-4">
+		                	<select class="form-control" ng-model="newMaterialName">
+						        <option ng-repeat="mat in listMaterials">{{mat.name}}</option>
+	      					</select>
+	                	</div>
+                	</div>
+                    <div class="form-group">
+                    	<label  class="col-sm-2 control-label" for="newMaterialQuantity"> Quatity </label>
+	                    <div class="col-sm-10">
+	                        <input type="text" class="form-control" id="newMaterialQuantity" ng-model="newMaterialQuantity" placeholder="Quantity Of Material"/>
+	                    </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="addNewMaterial()"> SAVE MATERIAL </button>
+            </div>
+	</script>
+
 		<div>
 			<div ng-view=""></div>
 		</div>

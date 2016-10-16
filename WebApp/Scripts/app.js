@@ -59,6 +59,20 @@ construtecAPP.controller('PhaseFormController', function($scope, $uibModalInstan
 
 });
 
+construtecAPP.controller('MaterialFormController', function($scope, $uibModalInstance, listMaterials, materials) {
+	$scope.listMaterials = listMaterials;
+
+    $scope.addNewMaterial = function(){
+		var newFile = {
+			name: $scope.newMaterialName,
+			quantity: $scope.newMaterialQuantity
+		};
+		$scope.materials = materials.push(newFile);
+		$uibModalInstance.dismiss('cancel');
+    };
+
+});
+
 construtecAPP.controller('AppController', function SimpleController($scope, $location, $http, $uibModal){
 	$scope.customers = [
 		{ ID: 187199, name: 'Carlos',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '9-10-2016'},
@@ -76,6 +90,12 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
 
 	$scope.phases = [
 		{name: 'cimientos', start: '1', finish: '2'}
+	];
+
+	$scope.listMaterials = [{name: "martillo"}, {name: "clavos"}, {name: "cemento"}, {name: "argollas"}];
+
+	$scope.materials = [
+		{name: 'martillo', quantity: '30'}
 	];
 
 	$scope.openProjectForm = function () {
@@ -99,9 +119,25 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
         });
     }
 
+    $scope.openMaterialForm = function () {
+        var modalInstance = $uibModal.open({
+			controller: 'MaterialFormController',
+            templateUrl: 'MaterialForm.html',
+            resolve: {
+            	listMaterials: function() {return $scope.listMaterials;},
+            	materials: function() {return $scope.materials;}
+			}
+        });
+    }
+
     $scope.deletePhase = function (value){
     	$scope.phases.splice(value, 1);
     }
+
+    $scope.deleteMaterial = function (value){
+    	$scope.materials.splice(value, 1);
+    }
+
 	$scope.goTo = function ( path ) {
     	$location.path( path );
     };

@@ -49,7 +49,7 @@
 						          	</tr>  
 						        </thead>
 						        <tbody>
-						            <tr ng-repeat="p in phases" ng-class="{'selected':$index == selectedRow}">
+						            <tr ng-repeat-start="p in phases">
 						            	<td>{{p.name}}</td>
 									    <td>{{p.start}}</td>
 									    <td>{{p.finish}}</td>
@@ -58,6 +58,31 @@
 						              		<button ng-if="!p.expanded" ng-click="p.expanded = true">+</button>
 						            	</td>
 						            	<td><button ng-click="deletePhase('$index')">-</button></td>
+						          	</tr>
+						          	<tr ng-if="p.expanded" ng-repeat-end="">
+						          		<td colspan="5" >
+						            		<div>
+						            			<table class="table table-hover text-center">
+											        <thead>
+											          	<tr>
+												            <th>NAME</th>
+												            <th>Quatity</th>
+															<th>DELETE MATERIAL</th>
+											          	</tr>  
+											        </thead>
+											        <tbody>
+											            <tr ng-repeat="mat in materials">
+											            	<td>{{mat.name}}</td>
+														    <td>{{mat.quantity}}</td>
+											            	<td><button ng-click="deleteMaterial('$index')">-</button></td>
+											          	</tr>
+											        </tbody>
+											    </table>
+											    <button type="button" class="btn btn-default" ng-click="openMaterialForm()">
+													<span class="glyphicon glyphicon-plus"></span> ADD MATERIAL
+												</button>
+						            		</div>
+						            	</td>
 						          	</tr>
 						        </tbody>
 						    </table>
