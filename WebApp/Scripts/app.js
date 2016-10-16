@@ -28,6 +28,8 @@ construtecAPP.config(function ($routeProvider) {
 
 construtecAPP.controller('ArchitectController', function($scope, $uibModalInstance, projects) {
 
+	$scope.selectedRow = null;
+
     $scope.addNewProject = function(){
 		var newFile = {
 			ID: $scope.newProjectID,
@@ -37,12 +39,24 @@ construtecAPP.controller('ArchitectController', function($scope, $uibModalInstan
 			architectID: "1"
 		};
 		$scope.projects = projects.push(newFile);
-		$scope.cancel();
+		$uibModalInstance.dismiss('cancel');
     };
 
-    $scope.cancel = function () {
-    	$uibModalInstance.dismiss('cancel');
+});
+
+construtecAPP.controller('PhaseFormController', function($scope, $uibModalInstance, phases, listPhases) {
+	$scope.listPhases = listPhases;
+
+    $scope.addNewPhase = function(){
+		var newFile = {
+			name: $scope.newPhaseName,
+			start: $scope.newPhaseStart,
+			finish: $scope.newPhaseEnd
+		};
+		$scope.phases = phases.push(newFile);
+		$uibModalInstance.dismiss('cancel');
     };
+
 });
 
 construtecAPP.controller('AppController', function SimpleController($scope, $location, $http, $uibModal){
@@ -58,16 +72,36 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
 		{ ID: 187196, name: 'Pedro', address: 'Cartago', clientID: '121', architectID: '127'}
 	];
 
-	$scope.open = function () {
+	$scope.listPhases = [{name: "cimientos"}, {name: "paredes"}, {name: "concreto"}, {name: "Techos"}];
+
+	$scope.phases = [
+		{name: 'cimientos', start: '1', finish: '2'}
+	];
+
+	$scope.openProjectForm = function () {
         var modalInstance = $uibModal.open({
 			controller: 'ArchitectController',
-            templateUrl: 'ArchitectForm.html',
+            templateUrl: 'ProjectForm.html',
             resolve: {
             	projects: function() {return $scope.projects;}
 			}
         });
     }
 
+    $scope.openPhaseForm = function () {
+        var modalInstance = $uibModal.open({
+			controller: 'PhaseFormController',
+            templateUrl: 'PhaseForm.html',
+            resolve: {
+            	listPhases: function() {return $scope.listPhases;},
+            	phases: function() {return $scope.phases;}
+			}
+        });
+    }
+
+    $scope.deletePhase = function (value){
+    	$scope.phases.splice(value, 1);
+    }
 	$scope.goTo = function ( path ) {
     	$location.path( path );
     };

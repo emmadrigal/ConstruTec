@@ -15,28 +15,64 @@
 <div class="jumbotron container text-center">
 	<div>
 		<table class="table table-hover text-center">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-			        <th>LOCATION</th>
+	        <thead style="background-color: lightgray;">
+	          	<tr>
+		            <th>ID</th>
+		            <th>Name</th>
+					<th>LOCATION</th>
 			        <th>CLIENT ID</th>
 			        <th>EDIT</th>
-			    </tr>
-			</thead>
-			<tbody>
-			    <tr ng-repeat="proj in projects">
-			    	<td>{{proj.ID}}</td>
-			    	<td>{{proj.name}}</td>
-			    	<td>{{proj.address}}</td>
-			    	<td>{{proj.clientID}}</td>
-			    	<td><button type="button" data-id="1" class="btn btn-default editButton">Edit</button></td>
-			    </tr>
-			</tbody>
-		</table>
+	          	</tr>  
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat-start="proj in projects">
+	            	<td>{{proj.ID}}</td>
+				    <td>{{proj.name}}</td>
+				    <td>{{proj.address}}</td>
+				    <td>{{proj.clientID}}</td>
+				    <td>
+	              		<button ng-if="proj.expanded" ng-click="proj.expanded = false">-</button>
+	              		<button ng-if="!proj.expanded" ng-click="proj.expanded = true">+</button>
+	            	</td>
+	          	</tr>
+	          	<tr ng-if="proj.expanded" ng-repeat-end="">
+	            	<td colspan="5" >
+	            		<div>
+	            			<table class="table table-hover text-center">
+						        <thead>
+						          	<tr>
+							            <th>NAME</th>
+							            <th>START</th>
+										<th>FINISH</th>
+										<th>EDIT MATERIALS</th>
+										<th>DELETE PHASE</th>
+						          	</tr>  
+						        </thead>
+						        <tbody>
+						            <tr ng-repeat="p in phases" ng-class="{'selected':$index == selectedRow}">
+						            	<td>{{p.name}}</td>
+									    <td>{{p.start}}</td>
+									    <td>{{p.finish}}</td>
+									    <td>
+						              		<button ng-if="p.expanded" ng-click="p.expanded = false">-</button>
+						              		<button ng-if="!p.expanded" ng-click="p.expanded = true">+</button>
+						            	</td>
+						            	<td><button ng-click="deletePhase('$index')">-</button></td>
+						          	</tr>
+						        </tbody>
+						    </table>
+						    <button type="button" class="btn btn-default" ng-click="openPhaseForm()">
+								<span class="glyphicon glyphicon-plus"></span> ADD PHASE
+							</button>
+	            		</div>
+	            	</td>
+	          	</tr>
+	        </tbody>
+	    </table>
 	</div>
 	<div>
-		<button type="button" class="btn btn-default" ng-click="open()">
+		<button type="button" class="btn btn-default" ng-click="openProjectForm()">
 			<span class="glyphicon glyphicon-plus"></span> ADD PROJECT
+		</button>
 	</div>
 </div>
