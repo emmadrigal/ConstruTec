@@ -23,6 +23,11 @@ construtecAPP.config(function ($routeProvider) {
 			controller: 'AppController',
 			templateUrl: 'Partials/architect.html'
 		})
+		.when('/client',
+		{
+			controller: 'AppController',
+			templateUrl: 'Partials/client.html'
+		})
 		.otherwise({ redirectTo: '/search' });
 });
 

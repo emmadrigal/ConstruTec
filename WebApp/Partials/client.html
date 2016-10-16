@@ -1,0 +1,88 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+    	<div class="navbar-header">
+      		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
+    	</div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      	<ul class="nav navbar-nav navbar-right">
+		        <li><a href="#search">LOGOUT</a></li>
+	      	</ul>
+	    </div>
+  	</div>
+</nav>
+<div class="jumbotron container text-center">
+	<div>
+		<table class="table table-hover text-center">
+	        <thead style="background-color: lightgray;">
+	          	<tr>
+		            <th>ID</th>
+		            <th>Name</th>
+					<th>LOCATION</th>
+			        <th>CLIENT ID</th>
+			        <th>SHOW PHASES</th>
+	          	</tr>  
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat-start="proj in projects">
+	            	<td>{{proj.ID}}</td>
+				    <td>{{proj.name}}</td>
+				    <td>{{proj.address}}</td>
+				    <td>{{proj.clientID}}</td>
+				    <td>
+	              		<button ng-if="proj.expanded" ng-click="proj.expanded = false">-</button>
+	              		<button ng-if="!proj.expanded" ng-click="proj.expanded = true">+</button>
+	            	</td>
+	          	</tr>
+	          	<tr ng-if="proj.expanded" ng-repeat-end="">
+	            	<td colspan="5" >
+	            		<div>
+	            			<table class="table table-hover text-center">
+						        <thead>
+						          	<tr>
+							            <th>NAME</th>
+							            <th>START</th>
+										<th>FINISH</th>
+										<th>SHOW MATERIALS</th>
+						          	</tr>  
+						        </thead>
+						        <tbody>
+						            <tr ng-repeat-start="p in phases">
+						            	<td>{{p.name}}</td>
+									    <td>{{p.start}}</td>
+									    <td>{{p.finish}}</td>
+									    <td>
+						              		<button ng-if="p.expanded" ng-click="p.expanded = false">-</button>
+						              		<button ng-if="!p.expanded" ng-click="p.expanded = true">+</button>
+						            	</td>
+						          	</tr>
+						          	<tr ng-if="p.expanded" ng-repeat-end="">
+						          		<td colspan="5" >
+						            		<div>
+						            			<table class="table table-hover text-center">
+											        <thead>
+											          	<tr>
+												            <th>NAME</th>
+												            <th>Quatity</th>
+											          	</tr>  
+											        </thead>
+											        <tbody>
+											            <tr ng-repeat="mat in materials">
+											            	<td>{{mat.name}}</td>
+														    <td>{{mat.quantity}}</td>
+											          	</tr>
+											        </tbody>
+											    </table>
+						            		</div>
+						            	</td>
+						          	</tr>
+						        </tbody>
+						    </table>
+	            		</div>
+	            	</td>
+	          	</tr>
+	        </tbody>
+	    </table>
+	</div>
+	<div>
+	</div>
+</div>
