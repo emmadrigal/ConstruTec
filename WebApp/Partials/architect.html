@@ -21,6 +21,7 @@
 					<th>Name</th>
 			        <th>LOCATION</th>
 			        <th>CLIENT ID</th>
+			        <th>EDIT</th>
 			    </tr>
 			</thead>
 			<tbody>
@@ -29,64 +30,13 @@
 			    	<td>{{proj.name}}</td>
 			    	<td>{{proj.address}}</td>
 			    	<td>{{proj.clientID}}</td>
+			    	<td><button type="button" data-id="1" class="btn btn-default editButton">Edit</button></td>
 			    </tr>
 			</tbody>
 		</table>
 	</div>
 	<div>
-		<button type="button" class="btn btn-default" data-toggle="modal" data-target="#projectNewForm">
+		<button type="button" class="btn btn-default" ng-click="open()">
 			<span class="glyphicon glyphicon-plus"></span> ADD PROJECT
-		</button>
-
-				<!-- Modal -->
-		<div class="modal fade" id="projectNewForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		    <div class="modal-dialog">
-		        <div class="modal-content">
-		            <!-- Modal Header -->
-		            <div class="modal-header">
-		                <button type="button" class="close" data-dismiss="modal">
-		                       <span aria-hidden="true">&times;</span>
-		                       <span class="sr-only">Close</span>
-		                </button>
-		                <h4 class="modal-title" id="myModalLabel"> NEW PROJECT INFORMATION </h4>
-		            </div>  
-		            <!-- Modal Body -->
-		            <div class="modal-body">
-		                
-		                <form class="form-horizontal" role="form">
-		                    <div class="form-group">
-		                    	<label  class="col-sm-2 control-label" for="newProjectName"> Name </label>
-			                    <div class="col-sm-10">
-			                        <input type="text" class="form-control" id="newProjectName" ng-model="newProjectName" placeholder="Name"/>
-			                    </div>
-		                    </div>
-		                    <div class="form-group">
-		                    	<label class="col-sm-2 control-label" for="newProjectID"> PROJECT ID </label>
-		                    	<div class="col-sm-10">
-		                        	<input type="text" class="form-control" id="newProjectID" ng-model="newProjectID" placeholder="Project ID"/>
-		                    	</div>
-		                  	</div>
-		                  	<div class="form-group">
-		                    	<label class="col-sm-2 control-label" for="newProjectLoc"> Location </label>
-		                    	<div class="col-sm-10">
-		                        	<input type="text" class="form-control" id="newProjectLoc" ng-model="newProjectLoc" placeholder="Location"/>
-		                    	</div>
-		                  	</div>
-		                  	<div class="form-group">
-		                    	<label class="col-sm-2 control-label" for="newProjectClientID"> Client ID </label>
-		                    	<div class="col-sm-10">
-		                        	<input type="text" class="form-control" id="newProjectClientID" ng-model="newProjectClientID" placeholder="Client ID"/>
-		                    	</div>
-		                  	</div>
-		                </form>
-		            </div>
-		            
-		            <!-- Modal Footer -->
-		            <div class="modal-footer">
-		                <button type="button" class="btn btn-primary" ng-click="addNewProject()"> SAVE PROJECT </button>
-		            </div>
-		        </div>
-		    </div>
-		</div>
 	</div>
 </div>

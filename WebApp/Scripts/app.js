@@ -1,5 +1,5 @@
 //Creates the "Core"
-var construtecAPP = angular.module('construtecAPP', ['ngRoute']);
+var construtecAPP = angular.module('construtecAPP', ['ngRoute', 'ui.bootstrap']);
 
 construtecAPP.config(function ($routeProvider) {
 	$routeProvider
@@ -26,7 +26,26 @@ construtecAPP.config(function ($routeProvider) {
 		.otherwise({ redirectTo: '/search' });
 });
 
-construtecAPP.controller('AppController', function SimpleController($scope, $location, $http){
+construtecAPP.controller('ArchitectController', function($scope, $uibModalInstance, projects) {
+
+    $scope.addNewProject = function(){
+		var newFile = {
+			ID: $scope.newProjectID,
+			name: $scope.newProjectName,
+			address: $scope.newProjectLoc,
+			clientID: $scope.newProjectClientID,
+			architectID: "1"
+		};
+		$scope.projects = projects.push(newFile);
+		$scope.cancel();
+    };
+
+    $scope.cancel = function () {
+    	$uibModalInstance.dismiss('cancel');
+    };
+});
+
+construtecAPP.controller('AppController', function SimpleController($scope, $location, $http, $uibModal){
 	$scope.customers = [
 		{ ID: 187199, name: 'Carlos',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '9-10-2016'},
 		{ ID: 187197, name: 'Andrea',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '6-10-2016'},
@@ -39,19 +58,17 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
 		{ ID: 187196, name: 'Pedro', address: 'Cartago', clientID: '121', architectID: '127'}
 	];
 
+	$scope.open = function () {
+        var modalInstance = $uibModal.open({
+			controller: 'ArchitectController',
+            templateUrl: 'ArchitectForm.html',
+            resolve: {
+            	projects: function() {return $scope.projects;}
+			}
+        });
+    }
+
 	$scope.goTo = function ( path ) {
     	$location.path( path );
     };
-
-    $scope.addNewProject = function(){
-    	console.log("HOLA");
-    	var newFile = {
-			ID: $scope.newProjectID,
-			name: $scope.newProjectName,
-			address: $scope.newProjectLoc,
-			clientID: $scope.newProjectClientID,
-			architectID: "1"
-		};
-		$scope.customers.push(newFile);
-    }
 });
