@@ -290,32 +290,37 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE USUARIO SET (@attribute) = (@newValue) WHERE id_number = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
-
                 if (campo.Equals("Code"))
                 {
-                    attribute = "code";
+                    String query = "UPDATE USUARIO SET (code) = (@newValue) WHERE id_number = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = newValue;
-                    command.Parameters.AddWithValue("@newValue", newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
                 else if (campo.Equals("Name"))
                 {
-                    attribute = "name";
+                    String query = "UPDATE USUARIO SET (name) = (@newValue) WHERE id_number = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = newValue;
-                    command.Parameters.AddWithValue("@newValue", newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
                 else if (campo.Equals("Phone_Number"))
                 {
-                    attribute = "phone_number";
-                    var valor = newValue;
-                    command.Parameters.AddWithValue("@newValue", newValue);
+                    String query = "UPDATE USUARIO SET (phone_number) = (@newValue) WHERE id_number = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    var valor = Int32.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
+               
                 connection.Close();
             }
             catch (Exception e)

@@ -32,6 +32,7 @@
             </summary>
             <param name="id"> The id of the role that it is wanted to update</param>
             <param name="newValue">The new value of the attribute. </param>
+            <param name="campo">The attribute whose value will be update. </param>
         </member>
         <member name="M:ConstruTec.ConnectionDB.get_Roles(System.Int64)">
             <summary>
