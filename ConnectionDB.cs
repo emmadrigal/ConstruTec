@@ -494,20 +494,18 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE COMMENTARY SET (@attribute) = (@newValue) WHERE comment_id = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
-
+                
                 if (campo.Equals("Commentary"))
                 {
-                    attribute = "commentary";
+                    String query = "UPDATE COMMENTARY SET (commentary) = (@newValue) WHERE comment_id = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    
                     var valor = newValue;
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
@@ -718,7 +716,6 @@ namespace ConstruTec
         }//End od method
 
 
-
         /// <summary>
         /// Recovers the divided_in with the divided_id id.
         /// </summary>
@@ -882,26 +879,26 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE MATERIAL SET (@attribute) = (@newValue) WHERE id_material = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
-
                 if (campo.Equals("Price"))
                 {
-                    attribute = "price";
+                    String query = "UPDATE MATERIAL SET (price) = (@newValue) WHERE id_material = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = Int32.Parse(newValue);
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
                 else if (campo.Equals("Description"))
                 {
-                    attribute = "description";
-                    var valor = Int32.Parse(newValue);
+                    String query = "UPDATE MATERIAL SET (description) = (@newValue) WHERE id_material = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    var valor = newValue;
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
@@ -1074,20 +1071,17 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE Posseses SET (@attribute) = (@newValue) WHERE posseses_id = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
 
                 if (campo.Equals("Quantity"))
                 {
-                    attribute = "quantity";
+                    String query = "UPDATE Posseses SET (quantity) = (@newValue) WHERE posseses_id = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = Int32.Parse(newValue);
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
@@ -1261,26 +1255,27 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE Project SET (@attribute) = (@newValue) WHERE id_project = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
 
                 if (campo.Equals("Location"))
                 {
-                    attribute = "location";
+                    String query = "UPDATE Project SET (location) = (@newValue) WHERE id_project = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = newValue;
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
                 else if (campo.Equals("Name"))
                 {
-                    attribute = "name";
+                    String query = "UPDATE Project SET (name) = (@newValue) WHERE id_project = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = newValue;
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
@@ -1290,7 +1285,6 @@ namespace ConstruTec
             }//End catch
 
         }//End od method
-
 
 
         /// <summary>
@@ -1455,20 +1449,17 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE STAGE SET (@attribute) = (@newValue) WHERE stage_id = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
 
                 if (campo.Equals("Description"))
                 {
-                    attribute = "description";
+                    String query = "UPDATE STAGE SET (description) = (@newValue) WHERE stage_id = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
                     var valor = newValue;
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
