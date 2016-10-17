@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ConstruTec</name>
+    </assembly>
+    <members>
+        <member name="T:ConstruTec.ConnectionDB">
+            <summary>
+            Class is the responsible to the connection with the database.
+            </summary>
+        </member>
+        <member name="P:ConstruTec.ConnectionDB.Instance">
+            <summary>
+            Method is the constructor of the ConnectionDB class
+            </summary>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.crear_Roles(ConstruTec.Models.Roles)">
+            <summary>
+            This method add the role in the ConstruTec database.
+            </summary>
+            <param name="rol">The rol that will be added to the database</param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.eliminar_Roles(System.Int64)">
+            <summary>
+            This method delete the role whose id attribute is id. 
+            </summary>
+            <param name="id">The id of the role to delete.</param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.update_nombre_Roles(System.Int64,System.String)">
+            <summary>
+            Method allow to update an attribute of a specific role.
+            </summary>
+            <param name="id"> The id of the role that it is wanted to update</param>
+            <param name="newValue">The new value of the attribute. </param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Roles(System.Int64)">
+            <summary>
+            Recovers the role with the id_user id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_allRoles">
+            <summary>
+            Method return all the roles in the database.
+            </summary>
+            <returns>List of roles</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.crear_Usuario(ConstruTec.Models.Usuario)">
+            <summary>
+            This method add the user in the ConstruTec database.
+            </summary>
+            <param name="user">The user that will be added to the database</param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.eliminar_Usuario(System.Int64)">
+            <summary>
+            This method delete the user whose id attribute is id. 
+            </summary>
+            <param name="id">The id of the user to delete.</param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.update_nombre_Usuario(System.Int64,System.String)">
+            <summary>
+            Method allow to update an attribute of a specific user.
+            </summary>
+            <param name="id"> The id of the user that it is wanted to update</param>
+            <param name="newValue">The new value of the attribute. </param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Usuarios(System.Int64)">
+            <summary>
+            Recovers the user with the id_user id.
+            </summary>
+            <param name="id"></param>
+            <returns>Return the user who is being requested.</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_allUsuarios">
+            <summary>
+            Method return all the users in the database.
+            </summary>
+            <returns>List of user</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.crear_Commentary(ConstruTec.Models.Commentary)">
+            <summary>
+            This method add the commentary in the ConstruTec database.
+            </summary>
+            <param name="commentary">The commentary that will be added to the database</param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.eliminar_Commentary(System.Int64)">
+            <summary>
+            This method commentary the user whose id attribute is id. 
+            </summary>
+            <param name="id">The id of the commentary to delete.</param>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Commentary(System.Int64)">
+            <summary>
+            Recovers the commentary with the comment_id id.
+            </summary>
+            <param name="id"></param>
+            <returns>Return the commentary who is being requested.</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_allCommentaries">
+            <summary>
+            Method return all the commentaries in the database.
+            </summary>
+            <returns>List of commentaries</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.crear_Commentary(ConstruTec.Models.Divided_in)">
+            <summary>
+            This method add the divided_in in the ConstruTec database.
+            </summary>
+            <param name="divided_in">The divided_in that will be added to the database</param>
+        </member>
+    </members>
+</doc>

@@ -1,4 +1,4 @@
-﻿using ConnectionDB;
+﻿using ConstruTec;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +20,7 @@ namespace ConstruTec.Controllers
             {
                 return NotFound();
             }
+            System.Diagnostics.Debug.WriteLine("HOLI");
             return Ok(dato);
         }
 
@@ -37,14 +38,16 @@ namespace ConstruTec.Controllers
         {
             if (campo == "nombre")
             {
-                ConnectionDB.Instance.update_Nombre_Roles(id, newValue);
+                ConnectionDB.Instance.update_nombre_Roles(id, newValue);
             }
             return Ok();
         }
 
+        [Route ("")]
         [HttpPost]
         public IHttpActionResult postRoles([FromBody] Models.Roles roles )
         {
+            System.Diagnostics.Debug.WriteLine("ANTES LALALALA");
             ConnectionDB.Instance.crear_Roles(roles);
             return Ok();
         }
