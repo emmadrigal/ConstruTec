@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,16 +37,16 @@ import java.util.Map;
  * Screen used to display the information of a stage
  */
 public class StageInformation extends AppCompatActivity {
-    public static String currentProject;
-    public static String currentUser;
-    public static String currentStage;
-    public static SimpleAdapter adapter;
+    private static String currentProject;
+    private static String currentUser;
+    private static String currentStage;
+    private static SimpleAdapter adapter;
 
-    static String startDate;
-    static String endDate;
+    private static String startDate;
+    private static String endDate;
 
-    static String nameId = "Nombre";
-    static String quantityID = "Cantidad";
+    final private static String nameId = "Nombre";
+    final private static String quantityID = "Cantidad";
 
     private static String selectedMaterial;
 
@@ -52,8 +54,6 @@ public class StageInformation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stage_information);
-
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
 
         Intent intent = getIntent();
         currentProject = intent.getStringExtra("projectName");
@@ -66,16 +66,15 @@ public class StageInformation extends AppCompatActivity {
                 new int[] {android.R.id.text1,
                         android.R.id.text2});
 
-        title.setText(currentProject);
-
-
-        /*
         String role = intent.getStringExtra("role");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addMaterial);
-        if(!role.equals("Engineer")){
+        if(!role.equals("1")) {
             fab.setVisibility(View.GONE);
+        }else{
+            fab.setVisibility(View.VISIBLE);
         }
-        */
+
+        //TODO disable pay button when stage is already payed
 
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -89,7 +88,7 @@ public class StageInformation extends AppCompatActivity {
     /**
      * Makes a call to the database that gives the current stage information
      */
-    static public void setStageInfo(){
+    static private void setStageInfo(){
         //TODO make call to the webService to retrieve project Data
 
         startDate = "31/oct/2016";
@@ -200,11 +199,11 @@ public class StageInformation extends AppCompatActivity {
         }
     }
 
-    public static void updateMaterialStage(String material, int newValue){
+    private static void updateMaterialStage(String material, int newValue){
         //TODO call the database to update the value of the material
     }
 
-    public static void deleteMaterialStage(String material){
+    private static void deleteMaterialStage(String material){
         //TODO call the database to delete the material from this stage
     }
 
@@ -245,9 +244,12 @@ public class StageInformation extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             Date date = new Date();
-            final int dia = date.getDay() + 9;
-            final int mes = date.getMonth();
-            final int año = date.getYear() + 1900;
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+
+            final int dia = cal.get(Calendar.DAY_OF_MONTH);
+            final int mes = cal.get(Calendar.MONTH);
+            final int año = cal.get(Calendar.YEAR);
 
             View rootView = inflater.inflate(R.layout.stage_project_details, container, false);
             TextView name  = (TextView) rootView.findViewById(R.id.projectName);
@@ -388,9 +390,9 @@ public class StageInformation extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Project Details";
+                    return "Stage Details";
                 case 1:
-                    return "Stages";
+                    return "Materials";
             }
             return null;
         }
@@ -404,24 +406,25 @@ public class StageInformation extends AppCompatActivity {
         //TODO: realizar la llamada a la base de datos para obtener esta informacion
         String json = "[{\"Nombre\":\"Varillas\", \"Cantidad\" : 15}, {\"Nombre\":\"Cemento\", \"Cantidad\" : 4}, {\"Nombre\":\"Cerámica\", \"Cantidad\" : 200}, {\"Nombre\":\"Clavos\", \"Cantidad\" : 8000}, {\"Nombre\":\"Puertas\", \"Cantidad\" : 1}]";
 
-        List<Map<String, String>> allMaterials = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> allMaterials = new ArrayList<>();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
             JSONArray jsonArray = new JSONArray(json);
 
             //Iterate the jsonArray and print the info of JSONObjects
-            String nombre;
             for(int i=0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                Map<String, String> material = new HashMap<String, String>(2);
+                Map<String, String> material = new HashMap<>(2);
                 material.put(nameId, jsonObject.getString(nameId));
                 material.put(quantityID, jsonObject.getString(quantityID));
                 allMaterials.add(material);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");
+        }
         return allMaterials;
     }
 
@@ -443,6 +446,16 @@ public class StageInformation extends AppCompatActivity {
      * @param view to be shown
      */
     public void delete(View view){
+        //TODO make call to the web service to delete the current stage
+        //TODO ask for confirmation before deleting
+        finish();
+    }
+
+    /**
+     * Called whenever the user wishes to pay for the material of a stage
+     * @param view to be shown
+     */
+    public void pay(View view){
         //TODO make call to the web service to delete the current stage
         //TODO ask for confirmation before deleting
         finish();

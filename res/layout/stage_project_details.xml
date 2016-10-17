@@ -102,14 +102,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_weight="0"
         android:gravity="bottom">
+        <Button
+            android:id="@+id/pay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="pay"
+            android:text="Pay for Stage"/>
         <Button
             android:id="@+id/delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="delete"
-            android:text="Delete"/>
+            android:text="Delete Stage"/>
     </LinearLayout>
 
 

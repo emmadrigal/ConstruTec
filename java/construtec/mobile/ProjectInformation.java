@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +31,16 @@ import java.util.List;
  * Shows a screen
  */
 public class ProjectInformation extends AppCompatActivity {
-    public static String currentProject;
-    public static String currentUser;
-    public static String role;
-    public static ArrayAdapter<String> arrayAdapter;
+    private static String currentProject;
+    private static String currentUser;
+    private static String role;
+    private static ArrayAdapter<String> arrayAdapter;
 
-    static String clientId;
-    static String engineerId;
-    static String Location;
+    private static String clientId;
+    private static String engineerId;
+    private static String Location;
 
-    static String newValue;
+    private static String newValue;
 
     /**
      * Populates the screen
@@ -50,8 +51,6 @@ public class ProjectInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_project_information);
 
-        TextView title = (TextView) findViewById(R.id.toolbar_title);
-
         Intent intent = getIntent();
         currentProject = intent.getStringExtra("projectName");
         currentUser = intent.getStringExtra("currentUser");
@@ -61,8 +60,6 @@ public class ProjectInformation extends AppCompatActivity {
                 this,
                 android.R.layout.simple_list_item_1,
                 getStages(currentProject) );
-
-        title.setText(currentProject);
 
         String role = intent.getStringExtra("role");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addStage);
@@ -82,7 +79,7 @@ public class ProjectInformation extends AppCompatActivity {
     /**
      * Call to the Webservice to get project Information
      */
-    static public void setProjectInfo(){
+    static private void setProjectInfo(){
         //TODO make call to the webService to retrieve project Data
 
         clientId = "304960478";
@@ -276,7 +273,7 @@ public class ProjectInformation extends AppCompatActivity {
         //TODO: realizar la llamada a la base de datos para obtener esta informacion
         String json = "[{\"Nombre\":\"Escaleras\"}, {\"Nombre\":\"Cimientos\"}, {\"Nombre\":\"Ventanas\"}, {\"Nombre\":\"Muebles de Cocina\"}]";
 
-        List<String> stages = new ArrayList<String>();
+        List<String> stages = new ArrayList<>();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
@@ -290,7 +287,9 @@ public class ProjectInformation extends AppCompatActivity {
                 stages.add(nombre);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");
+        }
         return stages;
     }
 

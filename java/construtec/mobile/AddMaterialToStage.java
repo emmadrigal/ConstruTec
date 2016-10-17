@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -48,7 +49,7 @@ public class AddMaterialToStage extends AppCompatActivity {
 
         list.setTextFilterEnabled(true);
 
-        arrayAdapter = new ArrayAdapter<String>(
+        arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 getMaterials() );
@@ -92,12 +93,12 @@ public class AddMaterialToStage extends AppCompatActivity {
      * Calls to get a formated list of materials to be shown
      * @return list of strings indicating a list of available materials
      */
-    public List<String> getMaterials(){
+    private List<String> getMaterials(){
         String nameId = "Nombre";
 
         String json = getAllMaterials();
 
-        List<String> stages = new ArrayList<String>();
+        List<String> stages = new ArrayList<>();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
@@ -111,7 +112,9 @@ public class AddMaterialToStage extends AppCompatActivity {
                 stages.add(nombre);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");
+        }
         return stages;
     }
 
@@ -120,14 +123,14 @@ public class AddMaterialToStage extends AppCompatActivity {
      * @param data name of the material
      * @param value quantity of the material
      */
-    public void addMaterialToStage(String data, int value){
+    private void addMaterialToStage(String data, int value){
         //TODO add call to the web service
     }
 
     /**
      * Call to show the popup window that allows to select the quantity of desired materials
      */
-    public void show()
+    private void show()
     {
         final Dialog d = new Dialog(AddMaterialToStage.this);
         d.setTitle("Choose the quantity");
@@ -145,7 +148,7 @@ public class AddMaterialToStage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addMaterialToStage(selectedMaterial, np.getValue());
-                // create intent to start another activity
+
                 d.dismiss();
                 finish();
             }

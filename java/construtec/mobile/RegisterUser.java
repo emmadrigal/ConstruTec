@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -37,16 +38,18 @@ public class RegisterUser extends AppCompatActivity {
         setContentView(R.layout.activity_register_user);
 
         Date date = new Date();
-        dia = date.getDay() + 9;
-        mes = date.getMonth();
-        año = date.getYear() + 1900;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
 
+        final int dia = cal.get(Calendar.DAY_OF_MONTH);
+        final int mes = cal.get(Calendar.MONTH);
+        final int año = cal.get(Calendar.YEAR);
 
-        code = (EditText) findViewById(R.id.code);
-        day = (TextView) findViewById(R.id.day);
-        month = (TextView) findViewById(R.id.month);
-        year = (TextView) findViewById(R.id.year);
-        spinner = (Spinner) findViewById(R.id.Role);
+        day     = (TextView) findViewById(R.id.day);
+        month   = (TextView) findViewById(R.id.month);
+        year    = (TextView) findViewById(R.id.year);
+        spinner = (Spinner)  findViewById(R.id.Role);
+        code    = (EditText) findViewById(R.id.code);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -86,7 +89,7 @@ public class RegisterUser extends AppCompatActivity {
 
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                         day.setText(Integer.toString(selectedday));
-                        String mes = "";
+                        String mes;
                         switch(selectedmonth){
                             case 0 : mes = "January";
                                 break;
@@ -136,7 +139,7 @@ public class RegisterUser extends AppCompatActivity {
     public void LogIn(View view){
         registerUserOnDB();
 
-        Intent intent = new Intent(this, ViewAllProjects.class);
+        Intent intent = new Intent(this, UserInformation.class);
         EditText userName = (EditText) findViewById(R.id.userName);
         EditText userID = (EditText) findViewById(R.id.userId);
 
@@ -150,14 +153,13 @@ public class RegisterUser extends AppCompatActivity {
         }else{
             intent.putExtra("role", "2");
         }
-
         startActivity(intent);
     }
 
     /**
      * Makes the call to the Web Service and registers the user
      */
-    public void registerUserOnDB(){
+    private void registerUserOnDB(){
         //TODO: Realiza la llamada a la base de datos con los datos de la interfaz
     }
 }

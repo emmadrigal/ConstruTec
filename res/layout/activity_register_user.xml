@@ -68,7 +68,6 @@
             android:layout_height="wrap_content"
             android:hint="Year"
             android:padding="5dp"/>
-
     </LinearLayout>
 
     <Spinner
@@ -86,9 +85,6 @@
         android:hint="Code"
         android:inputType="text"
         android:maxLines="1"/>
-
-
-
 
     <LinearLayout
         android:layout_width="match_parent"

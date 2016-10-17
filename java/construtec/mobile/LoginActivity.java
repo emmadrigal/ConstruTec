@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity{
      * @param view that calls this method
      */
     public void LogIn(View view){
-        Intent intent = new Intent(this, ViewAllProjects.class);
         String userName = mUserName.getText().toString();
         String userId = mUserId.getText().toString();
         //TODO get this information from the DB call
@@ -47,6 +46,7 @@ public class LoginActivity extends AppCompatActivity{
 
         if(!userId.equals("")){
             if(userExists(userName, Integer.parseInt(userId))){
+                Intent intent = new Intent(this, UserInformation.class);
                 intent.putExtra("UserId", userId);
                 intent.putExtra("role", role);
                 intent.putExtra("userName", userName);
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity{
 
     /**
      * Sign up method, it calls the correspoding window and for the activity
-     * @param view
+     * @param view that calls this function
      */
     public void SignUp(View view){
         Intent intent = new Intent(this, RegisterUser.class);
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity{
      * @return boolean indicating if the user exists on the Database
      */
     //TODO: Checkear el tipo de usario y segun eso avanzar la interfaz
-    public boolean userExists(String name, int userId){
+    private boolean userExists(String name, int userId){
         //TODO: realizar la llamada a la base de datos para obtener esta informacion
         String json = "{\"Nombre\" : \"Emmanuel\", \"Cedula\": 304960478}";
 

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Select new stage to add to project"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="@color/colorClear"
             android:layout_gravity="center"
             android:id="@+id/toolbar_title" />
@@ -45,8 +45,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </ListView>
-
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newStage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:scaleType="center"
+        android:onClick="createNewStage"
+        app:fabSize="auto"
+        app:srcCompat="@mipmap/ic_add"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="500dp"/>
 
 
 

@@ -1,14 +1,19 @@
 package construtec.mobile;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,13 +33,14 @@ import java.util.List;
 public class AddStageToProject extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
+    final Context context = this;
 
     private String userID;
     private String projectName;
 
-    static String startDate = "";
-    static String endDate = "";
-    String data;
+    private static String startDate = "";
+    private static String endDate = "";
+    private String data;
 
     /**
      * Called to initialize values inside the view
@@ -45,9 +52,12 @@ public class AddStageToProject extends AppCompatActivity {
         setContentView(R.layout.activity_add_stage_to_project);
 
         Date date = new Date();
-        int dia = date.getDay() + 9;
-        int mes = date.getMonth();
-        int año = date.getYear() + 1900;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        int dia = cal.get(Calendar.DAY_OF_MONTH);
+        int mes = cal.get(Calendar.MONTH);
+        int año = cal.get(Calendar.YEAR);
 
         Intent intent = getIntent();
         projectName = intent.getStringExtra("projectName");
@@ -58,7 +68,7 @@ public class AddStageToProject extends AppCompatActivity {
 
         list.setTextFilterEnabled(true);
 
-        arrayAdapter = new ArrayAdapter<String>(
+        arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 getStages() );
@@ -77,6 +87,7 @@ public class AddStageToProject extends AppCompatActivity {
                 intent.putExtra("stageName",   data);
                 intent.putExtra("projectName", projectName);
                 intent.putExtra("userID",      userID);
+                intent.putExtra("role", "1");
                 startActivity(intent);
             }
         },
@@ -104,6 +115,42 @@ public class AddStageToProject extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.newStage);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog d = new Dialog(context);
+                d.setContentView(R.layout.new_stage_screen);
+                Button setValue = (Button) d.findViewById(R.id.set);
+                Button cancelAction = (Button) d.findViewById(R.id.cancel);
+
+                final EditText stageName = (EditText) d.findViewById(R.id.stageName);
+                final EditText description = (EditText) d.findViewById(R.id.description);
+
+                setValue.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO make a call to the database to create new stage
+                        //TODO refresh stage list after creation
+                        d.dismiss();
+                    }
+                });
+                cancelAction.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v) {
+                        d.dismiss();
+                    }
+                });
+                d.show();
+            }
+        });
+
+
+
+
 
         filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,6 +164,10 @@ public class AddStageToProject extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable arg0){}
         });
+
+
+
+
     }
 
     /**
@@ -148,7 +199,7 @@ public class AddStageToProject extends AppCompatActivity {
 
         String json = getAllStages();
 
-        List<String> stages = new ArrayList<String>();
+        List<String> stages = new ArrayList<>();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
@@ -162,7 +213,9 @@ public class AddStageToProject extends AppCompatActivity {
                 stages.add(nombre);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");
+        }
         return stages;
     }
 

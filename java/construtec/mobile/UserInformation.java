@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +36,7 @@ import static android.text.InputType.TYPE_CLASS_NUMBER;
 /**
  * Show a screen with all the available proyects
  */
-public class ViewAllProjects extends AppCompatActivity {
+public class UserInformation extends AppCompatActivity {
     private static String userId;
     private static String userName;
     private static String role;
@@ -43,8 +45,10 @@ public class ViewAllProjects extends AppCompatActivity {
     private static String phone;
     private static String birth;
 
+    private static List<String> projectList = new ArrayList<>();
 
-    public static ArrayAdapter adapter;
+    private static ArrayAdapter myProjectAdapter;
+    private static ArrayAdapter projectsAdapter;
 
     /**
      * Called when a new screen is created, it intializes the values
@@ -53,13 +57,14 @@ public class ViewAllProjects extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_all_projects);
+        setContentView(R.layout.activity_main_screen);
 
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("UserId");
         role = intent.getStringExtra("role");
         userName = intent.getStringExtra("userName");
+        //TODO initialize rest of the information from the WebService
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addProject);
         if(!role.equals("1")) {
@@ -68,10 +73,15 @@ public class ViewAllProjects extends AppCompatActivity {
             fab.setVisibility(View.VISIBLE);
         }
 
-        adapter = new ArrayAdapter<String>(
+        myProjectAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 getProjects(userId) );
+        getNextProjects();
+        projectsAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                projectList);
 
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -123,15 +133,15 @@ public class ViewAllProjects extends AppCompatActivity {
 
             list = (ListView) rootView.findViewById(R.id.List);
 
-            list.setAdapter(adapter);
+            list.setAdapter(myProjectAdapter);
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     String data = (String) list.getItemAtPosition(position);
-                    // create intent to start another activity
+
                     Intent intent = new Intent(view.getContext(), ProjectInformation.class);
-                    // add the selected text item to our intent.
+
                     intent.putExtra("projectName", data);
                     intent.putExtra("userID", userId);
                     intent.putExtra("role", role);
@@ -180,9 +190,12 @@ public class ViewAllProjects extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             Date date = new Date();
-            final int dia = date.getDay() + 9;
-            final int mes = date.getMonth();
-            final int año = date.getYear() + 1900;
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+
+            final int dia = cal.get(Calendar.DAY_OF_MONTH);
+            final int mes = cal.get(Calendar.MONTH);
+            final int año = cal.get(Calendar.YEAR);
 
             View rootView = inflater.inflate(R.layout.user_details, container, false);
             //This need to final in order to be changed from the OnClick Listeners
@@ -363,7 +376,74 @@ public class ViewAllProjects extends AppCompatActivity {
         }
     }
 
-    public static void getUserInfo(){
+    public static class projectInspection extends Fragment{
+        private ListView list;
+
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public projectInspection() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static projectInspection newInstance(int sectionNumber) {
+            projectInspection fragment = new projectInspection();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        /**
+         * If a view of the stage list is created this is called
+         * @param inflater required by Android
+         * @param container required by Android
+         * @param savedInstanceState required by Android
+         * @return View to be displayed
+         */
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.activity_next_projects, container, false);
+
+            list = (ListView) rootView.findViewById(R.id.List);
+            list.setAdapter(projectsAdapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    String data = (String) list.getItemAtPosition(position);
+                    //TODO change to project view list
+                }
+            });
+
+            final EditText material = (EditText) rootView.findViewById(R.id.material);
+
+            Button boton = (Button) rootView.findViewById(R.id.search);
+            boton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if(material.getText().toString().equals("")){
+                        getNextProjects();
+                    }else{
+                        getNextProjectsByMaterial("");
+                        //TODO change instead of choosing material, give list of options
+                    }
+                    projectsAdapter.notifyDataSetChanged();
+                }
+            });
+
+            return rootView;
+        }
+    }
+
+
+
+    private static void getUserInfo(){
         //TODO make call to the database
     }
 
@@ -383,6 +463,8 @@ public class ViewAllProjects extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             if(position == 1){
                 return projectsList.newInstance(position + 1);
+            }else if(position == 2){
+                return projectInspection.newInstance(position + 1);
             }
             else{
                 return userInformation.newInstance(position+1);
@@ -391,9 +473,9 @@ public class ViewAllProjects extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            return 3;
         }
+
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -402,6 +484,8 @@ public class ViewAllProjects extends AppCompatActivity {
                     return "User Information";
                 case 1:
                     return "Projects";
+                case 2:
+                    return "Tracking construction";
             }
             return null;
         }
@@ -418,7 +502,7 @@ public class ViewAllProjects extends AppCompatActivity {
         //TODO: realizar la llamada a la base de datos para obtener esta informacion
         String json = "[{\"Nombre\": \"Casa de Marco\"}, {\"Nombre\": \"Carretera a Cartago\"},{\"Nombre\": \"Libero Consulting\"},{\"Nombre\": \"Consequat Incorporated\"},{\"Nombre\": \"Vitae Industries\"},{\"Nombre\": \"Nulla LLP\"},{\"Nombre\": \"Ffringilla Euismod Enim Consulting\"},{\"Nombre\": \"Yut Mi Foundation\"},{\"Nombre\": \"Tempor Diam Foundation\"},{\"Nombre\": \"Ipsum Corp\"}]";
 
-        List<String> projects = new ArrayList<String>();
+        List<String> projects = new ArrayList<>();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
@@ -432,8 +516,65 @@ public class ViewAllProjects extends AppCompatActivity {
                 projects.add(nombre);
             }
         }
-        catch (JSONException e) {}
+        catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");}
         return projects;
+    }
+
+    /**
+     *
+     */
+    private static void getNextProjects(){
+        String nameId = "Nombre";
+
+        //TODO: realizar la llamada a la base de datos para obtener esta informacion
+        String json = "[{\"Nombre\": \"Casa de Marco\"}, {\"Nombre\": \"Carretera a Cartago\"},{\"Nombre\": \"Libero Consulting\"},{\"Nombre\": \"Consequat Incorporated\"},{\"Nombre\": \"Vitae Industries\"},{\"Nombre\": \"Nulla LLP\"},{\"Nombre\": \"Ffringilla Euismod Enim Consulting\"},{\"Nombre\": \"Yut Mi Foundation\"},{\"Nombre\": \"Tempor Diam Foundation\"},{\"Nombre\": \"Ipsum Corp\"}]";
+
+        projectList.clear();
+
+        try {
+            //Get the instance of JSONArray that contains JSONObjects
+            JSONArray jsonArray = new JSONArray(json);
+
+            //Iterate the jsonArray and print the info of JSONObjects
+            String nombre;
+            for(int i=0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                nombre = jsonObject.getString(nameId);
+                projectList.add(nombre);
+            }
+        }
+        catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");
+        }
+    }
+
+    /**
+     *
+     * @param materialName of the next projects
+     */
+    private static void getNextProjectsByMaterial(String materialName) {
+        String nameId = "Nombre";
+
+        //TODO: realizar la llamada a la base de datos para obtener esta informacion
+        String json = "[{\"Nombre\": \"Consequat Incorporated\"},{\"Nombre\": \"Vitae Industries\"},{\"Nombre\": \"Nulla LLP\"},{\"Nombre\": \"Ffringilla Euismod Enim Consulting\"},{\"Nombre\": \"Yut Mi Foundation\"}]";
+
+        projectList.clear();
+
+        try {
+            //Get the instance of JSONArray that contains JSONObjects
+            JSONArray jsonArray = new JSONArray(json);
+
+            //Iterate the jsonArray and print the info of JSONObjects
+            String nombre;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                nombre = jsonObject.getString(nameId);
+                projectList.add(nombre);
+            }
+        } catch (JSONException e) {
+            Log.d("error", "incorrect json recieved");
+        }
     }
 
     /**
@@ -441,10 +582,8 @@ public class ViewAllProjects extends AppCompatActivity {
      * @param view that makes the call
      */
     public void createProject(View view){
-        //TODO make a call to the WebService to create project, check existance before exiting
-        // create intent to start another activity
-        Intent intent = new Intent(ViewAllProjects.this, CreateNewProject.class);
-        // add the selected text item to our intent.
+        Intent intent = new Intent(UserInformation.this, CreateNewProject.class);
+
         intent.putExtra("selected-item", userId);
         startActivity(intent);
     }

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Select new Material to Add to Stage"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="@color/colorClear"
             android:layout_gravity="center"
             android:id="@+id/toolbar_title" />

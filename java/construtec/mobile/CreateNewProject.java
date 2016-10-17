@@ -50,7 +50,7 @@ public class CreateNewProject extends AppCompatActivity {
     /**
      * Call to the database to add a new project
      */
-    public void addProject(){
+    private void addProject(){
         //TODO add call to the Web Service
     }
 
