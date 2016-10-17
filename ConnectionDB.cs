@@ -1106,6 +1106,200 @@ namespace ConstruTec
         }//End of
 
 
+        //#######  PROJECT METHODS #########
+
+        /// <summary>
+        /// This method add the project in the ConstruTec database.
+        /// </summary>
+        /// <param name="project">The project that will be added to the database</param>
+        public void crear_Project(Project project)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "INSERT INTO PROJECT VALUES (@id_project, @id_client, @id_engineer, @location, @name);";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the parameter of the command
+                command.Parameters.AddWithValue("@posseses_id", project.Id_Proyect);
+                command.Parameters.AddWithValue("@id_client", project.Id_Client);
+                command.Parameters.AddWithValue("@id_engineer", project.Id_Enginner);
+                command.Parameters.AddWithValue("@location", project.Location);
+                command.Parameters.AddWithValue("@name", project.Name);
+
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //Notifies an error in the output
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'crear_Project': " + e.Message);
+            }//End catch
+        }//End of post_Usuario 
+
+
+        /// <summary>
+        /// This method project the user whose id attribute is id. 
+        /// </summary>
+        /// <param name="id">The id of the project to delete.</param>
+        public void eliminar_Project(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "DELETE FROM PROJECT WHERE id_project = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'eliminar_Project': " + e.Message);
+            }//End catch
+        }//End of method
+
+
+        /// <summary>
+        /// Method allow to update an attribute of a specific project.
+        /// </summary>
+        /// <param name="id"> The id of the project that it is wanted to update</param>
+        /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The name of attribute that will be update. </param>
+        public void update_Project(long id, String campo, String newValue)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "UPDATE Project SET (@attribute) = (@newValue) WHERE id_project = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Location"))
+                {
+                    attribute = "location";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                else if (campo.Equals("Name"))
+                {
+                    attribute = "name";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Project: " + e.Message);
+            }//End catch
+
+        }//End od method
+
+
+
+        /// <summary>
+        /// Recovers the project with whose id_project is id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Return the project who is being requested.</returns>
+        public Project get_Project(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            //The output object is created
+            Project project = new Project();
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM PROJECT WHERE id_project = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //The query is executed
+                var reader = command.ExecuteReader();
+                //The values of the attributes are recovered
+                reader.Read();
+                project.Id_Proyect = reader.GetInt64(0);
+                project.Id_Client = reader.GetInt64(1);
+                project.Id_Enginner = reader.GetInt64(2);
+                project.Location = reader.GetString(3);
+                project.Name = reader.GetString(4);
+                //Close the connection
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_Material: " + e.Message);
+            }//End catch
+            return project;
+        }//End of method 
+
+
+        /// <summary>
+        /// Method return all the projects in the database.
+        /// </summary>
+        /// <returns>List of projects</returns>
+        public List<Project> get_allProject()
+        {
+            //The output object 
+            List<Project> list = new List<Project>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM PROJECT;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Project project = new Project();
+                    //The values of the attributes are recovered
+                    project.Id_Proyect = reader.GetInt64(0);
+                    project.Id_Client = reader.GetInt64(1);
+                    project.Id_Enginner = reader.GetInt64(2);
+                    project.Location = reader.GetString(3);
+                    project.Name = reader.GetString(4);
+                    //The object is added to the list
+                    list.Add(project);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allProject: " + e.Message);
+            }//End catch
+            return list;
+        }//End of
 
 
 
