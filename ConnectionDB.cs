@@ -103,6 +103,7 @@ namespace ConstruTec
         /// </summary>
         /// <param name="id"> The id of the role that it is wanted to update</param>
         /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The attribute whose value will be update. </param>
         public void update_Roles(long id, String campo, String newValue)
         {
             //The object responsible of the connection is created 
@@ -112,19 +113,17 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE ROLES SET (@attribute) = (@newValue) WHERE role_id = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
                 if (campo.Equals("nombre"))
                 {
-                    attribute = "rol_name";
-                    var valor = newValue;
-                    command.Parameters.AddWithValue("@newValue", newValue);
+                    String query = "UPDATE ROLES SET role_name = @newValue WHERE role_id = @id;"; ;
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    var valor =  newValue;
+                    command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
+                
                 connection.Close();
             }
             catch (Exception e)
@@ -538,9 +537,9 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                commentary.Comment_Id = reader.GetInt64(0);
-                commentary.Divided_Id = reader.GetInt64(1);
-                commentary.Comentary = reader.GetString(2);
+                commentary.Comment_Id = Int64.Parse(reader["comment_id"].ToString());
+                commentary.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                commentary.Comentary = reader["commentary"].ToString();
                 //Close the connection
                 connection.Close();
             }
@@ -578,9 +577,9 @@ namespace ConstruTec
                 {
                     Commentary commentary = new Commentary();
                     //The values of the attributes are recovered
-                    commentary.Comment_Id = reader.GetInt64(0);
-                    commentary.Divided_Id = reader.GetInt64(1);
-                    commentary.Comentary = reader.GetString(2);
+                    commentary.Comment_Id = Int64.Parse(reader["comment_id"].ToString());
+                    commentary.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                    commentary.Comentary = reader["commentary"].ToString();
                     //The rol is added to the list
                     list.Add(commentary);
                 }// end of while
@@ -932,10 +931,10 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                material.Id_Material = reader.GetInt64(0);
-                material.Name = reader.GetString(1);
-                material.Price = reader.GetInt32(2);
-                material.Description = reader.GetString(3);
+                material.Id_Material = Int64.Parse(reader["id_material"].ToString());
+                material.Name = reader["name"].ToString();
+                material.Price = Int32.Parse(reader["price"].ToString());
+                material.Description = reader["description"].ToString();
                 //Close the connection
                 connection.Close();
             }
@@ -973,10 +972,10 @@ namespace ConstruTec
                 {
                     Material material = new Material();
                     //The values of the attributes are recovered
-                    material.Id_Material = reader.GetInt64(0);
-                    material.Name = reader.GetString(1);
-                    material.Price = reader.GetInt32(2);
-                    material.Description = reader.GetString(3);
+                    material.Id_Material = Int64.Parse(reader["id_material"].ToString());
+                    material.Name = reader["name"].ToString();
+                    material.Price = Int32.Parse(reader["price"].ToString());
+                    material.Description = reader["description"].ToString();
                     //The rol is added to the list
                     list.Add(material);
                 }// end of while
@@ -1118,10 +1117,10 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                posseses.Posseses_Id = reader.GetInt64(0);
-                posseses.Id_Material = reader.GetInt64(1);
-                posseses.Divided_Id = reader.GetInt64(2);
-                posseses.Quantity = reader.GetInt32(3);
+                posseses.Posseses_Id = Int64.Parse(reader["posseses_id"].ToString());
+                posseses.Id_Material = Int64.Parse(reader["id_material"].ToString());
+                posseses.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                posseses.Quantity = Int32.Parse(reader["quantity"].ToString());
                 //Close the connection
                 connection.Close();
             }
@@ -1159,10 +1158,10 @@ namespace ConstruTec
                 {
                     Posseses posseses = new Posseses();
                     //The values of the attributes are recovered
-                    posseses.Posseses_Id = reader.GetInt64(0);
-                    posseses.Id_Material = reader.GetInt64(1);
-                    posseses.Divided_Id = reader.GetInt64(2);
-                    posseses.Quantity = reader.GetInt32(3);
+                    posseses.Posseses_Id = Int64.Parse(reader["posseses_id"].ToString());
+                    posseses.Id_Material = Int64.Parse(reader["id_material"].ToString());
+                    posseses.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                    posseses.Quantity = Int32.Parse(reader["quantity"].ToString());
                     //The object is added to the list
                     list.Add(posseses);
                 }// end of while
@@ -1312,11 +1311,11 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                project.Id_Proyect = reader.GetInt64(0);
-                project.Id_Client = reader.GetInt64(1);
-                project.Id_Enginner = reader.GetInt64(2);
-                project.Location = reader.GetString(3);
-                project.Name = reader.GetString(4);
+                project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
+                project.Id_Client = Int64.Parse(reader["id_client"].ToString());
+                project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
+                project.Location = reader["location"].ToString();
+                project.Name = reader["name"].ToString();
                 //Close the connection
                 connection.Close();
             }
@@ -1354,11 +1353,11 @@ namespace ConstruTec
                 {
                     Project project = new Project();
                     //The values of the attributes are recovered
-                    project.Id_Proyect = reader.GetInt64(0);
-                    project.Id_Client = reader.GetInt64(1);
-                    project.Id_Enginner = reader.GetInt64(2);
-                    project.Location = reader.GetString(3);
-                    project.Name = reader.GetString(4);
+                    project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
+                    project.Id_Client = Int64.Parse(reader["id_client"].ToString());
+                    project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
+                    project.Location = reader["location"].ToString();
+                    project.Name = reader["name"].ToString();
                     //The object is added to the list
                     list.Add(project);
                 }// end of while
@@ -1499,9 +1498,9 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                stage.Stage_Id = reader.GetInt64(0);
-                stage.Name = reader.GetString(1);
-                stage.Description = reader.GetString(2);
+                stage.Stage_Id = Int64.Parse(reader["stage_id"].ToString());
+                stage.Name = reader["name"].ToString();
+                stage.Description = reader["description"].ToString();
 
                 //Close the connection
                 connection.Close();
@@ -1540,9 +1539,9 @@ namespace ConstruTec
                 {
                     Stage stage = new Stage();
                     //The values of the attributes are recovered
-                    stage.Stage_Id = reader.GetInt64(0);
-                    stage.Name = reader.GetString(1);
-                    stage.Description = reader.GetString(2);
+                    stage.Stage_Id = Int64.Parse(reader["stage_id"].ToString());
+                    stage.Name = reader["name"].ToString();
+                    stage.Description = reader["description"].ToString();
 
                     //The object is added to the list
                     list.Add(stage);
