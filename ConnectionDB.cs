@@ -1258,7 +1258,7 @@ namespace ConstruTec
 
 
         /// <summary>
-        /// Method return all the projects in the database.
+        /// Method return all the projects in the database ConstruTec.
         /// </summary>
         /// <returns>List of projects</returns>
         public List<Project> get_allProject()
