@@ -1,0 +1,49 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+    	<div class="navbar-header">
+      		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
+    	</div>
+	    <div class="collapse navbar-collapse" id="myNavbar">
+	      	<ul class="nav navbar-nav navbar-right">
+	      		<li><a ng-click="goTo('/architect')">PROJECTS</a></li>
+		        <li><a href="#search">LOGOUT</a></li>
+	      	</ul>
+	    </div>
+  	</div>
+</nav>
+
+<div class="jumbotron container text-center">
+	<div>
+		<table class="table table-hover">
+	        <thead style="background-color: lightgray;">
+	          	<tr>
+		            <th>Name</th>
+		            <th>Show Info</th>
+		            <th>Delete</th>
+	          	</tr>  
+	        </thead>
+	        <tbody>
+	            <tr ng-repeat-start="phases in listPhases">
+	            	<td>{{phases.name}}</td>
+	            	<td>
+	              		<button ng-if="phases.expanded" ng-click="phases.expanded = false">-</button>
+	              		<button ng-if="!phases.expanded" ng-click="phases.expanded = true">+</button>
+	            	</td>
+	            	<td><button ng-click="deletePhaseList('$index')">-</button></td>
+	            </tr>
+	            <tr ng-if="phases.expanded" ng-repeat-end="">
+	            	<td colspan="1" >
+	            		<div>
+	            			{{phases.description}}
+	            		</div>
+	            	</td>
+	            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+    	<button type="button" class="btn btn-default" ng-click="openNewPhaseForm()">
+			<span class="glyphicon glyphicon-plus"></span> ADD PHASE
+		</button>
+    </div>
+</div>

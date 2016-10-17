@@ -18,6 +18,11 @@ construtecAPP.config(function ($routeProvider) {
 			controller: 'AppController',
 			templateUrl: 'Partials/client.html'
 		})
+		.when('/phase',
+		{
+			controller: 'AppController',
+			templateUrl: 'Partials/phase.html'
+		})
 		.otherwise({ redirectTo: '/search' });
 });
 
@@ -51,6 +56,22 @@ construtecAPP.controller('PhaseFormController', function($filter, $scope, $uibMo
 			finish: $filter('date')($scope.finishDate, "dd/MM/yyyy")
 		};
 		$scope.phases = phases.push(newFile);
+		$uibModalInstance.dismiss('cancel');
+
+    };
+});
+
+construtecAPP.controller('NewPhaseFormController', function($scope, $uibModalInstance, listPhases) {
+	$scope.listPhases = listPhases;
+
+    $scope.addNewPhase = function(){
+
+		var newFile = {
+			name: $scope.newPhaseName,
+			description: $scope.newPhaseDescription
+		};
+		console.log($scope.newPhaseName);
+		$scope.listPhases = listPhases.push(newFile);
 		$uibModalInstance.dismiss('cancel');
 
     };
@@ -95,7 +116,7 @@ construtecAPP.controller('AppController',  function SimpleController($scope, $lo
 		{ ID: 187196, name: 'Pedro', address: 'Cartago', clientID: '121', architectID: '127'}
 	];
 
-	$scope.listPhases = [{name: "cimientos"}, {name: "paredes"}, {name: "concreto"}, {name: "Techos"}];
+	$scope.listPhases = [{name: "Trabajo Preliminar", description: "A"}, {name: "Cimientos", description: "A"}, {name: "Paredes", description: "A"}, {name: "Concreto Reforzado", description: "A"}, {name: "Techos", description: "A"}, {name: "Cielos", description: "A"}, {name: "Repello", description: "A"}, {name: "Entrepisos", description: "A"}, {name: "Pisos", description: "A"}, {name: "Enchapes", description: "A"}, {name: "Instalación Pluvial", description: "A"}, {name: "Instalación Sanitaria", description: "A"}, {name: "Instalación Eléctrica", description: "A"} , {name: "Puertas", description: "A"}, {name: "Cerrajeria", description: "A"}, {name: "Ventanas", description: "A"}, {name: "Closets", description: "A"}, {name: "Mueble de Pintura", description: "A"}, {name: "Escaleras", description: "A"}];
 
 	$scope.phases = [
 		{name: 'cimientos', start: '1', finish: '2'}
@@ -153,8 +174,22 @@ construtecAPP.controller('AppController',  function SimpleController($scope, $lo
         });
     }
 
+    $scope.openNewPhaseForm = function () {
+        var modalInstance = $uibModal.open({
+			controller: 'NewPhaseFormController',
+            templateUrl: 'NewPhaseForm.html',
+            resolve: {
+            	listPhases: function() {return $scope.listPhases;}
+            }
+        });
+    }
+
     $scope.deletePhase = function (value){
     	$scope.phases.splice(value, 1);
+    }
+
+    $scope.deletePhaseList = function (value){
+    	$scope.listPhases.splice(value, 1);
     }
 
     $scope.deleteMaterial = function (value){
