@@ -730,6 +730,195 @@ namespace ConstruTec
         }//End of
 
 
+        //#######  MATERIAL METHODS #########
+
+        /// <summary>
+        /// This method add the material in the ConstruTec database.
+        /// </summary>
+        /// <param name="posseses">The material that will be added to the database</param>
+        public void crear_Material(Material material)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "INSERT INTO MATERIAL VALUES (@id_material, @name, @price, @description);";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the parameter of the command
+                command.Parameters.AddWithValue("@id_material", material.Id_Material);
+                command.Parameters.AddWithValue("@name", material.Name);
+                command.Parameters.AddWithValue("@price", material.Price);
+                command.Parameters.AddWithValue("@description", material.Description);
+
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //Notifies an error in the output
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'crear_Material': " + e.Message);
+            }//End catch
+        }//End of post_Usuario 
+
+
+        /// <summary>
+        /// This method material the user whose id attribute is id. 
+        /// </summary>
+        /// <param name="id">The id of the material to delete.</param>
+        public void eliminar_Material(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "DELETE FROM MATERIAL WHERE id_material = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'eliminar_Material': " + e.Message);
+            }//End catch
+        }//End of method
+
+        /// <summary>
+        /// Method allow to update an attribute of a specific Material.
+        /// </summary>
+        /// <param name="id"> The id of the Material that it is wanted to update</param>
+        /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The name of attribute that will be update. </param>
+        public void update_Material(long id, String campo, String newValue)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "UPDATE MATERIAL SET (@attribute) = (@newValue) WHERE id_material = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Price"))
+                {
+                    attribute = "price";
+                    var valor = Int32.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                else if (campo.Equals("Description"))
+                {
+                    attribute = "description";
+                    var valor = Int32.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Material: " + e.Message);
+            }//End catch
+
+        }//End od method
+
+
+        /// <summary>
+        /// Recovers the material with the material_id id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Return the material who is being requested.</returns>
+        public Material get_Material(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            //The output object is created
+            Material material = new Material();
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM MATERIAL WHERE id_material = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //The query is executed
+                var reader = command.ExecuteReader();
+                //The values of the attributes are recovered
+                reader.Read();
+                material.Id_Material = reader.GetInt64(0);
+                material.Name = reader.GetString(1);
+                material.Price = reader.GetInt32(2);
+                material.Description = reader.GetString(3);
+                //Close the connection
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_Material: " + e.Message);
+            }//End catch
+            return material;
+        }//End of method 
+
+
+        /// <summary>
+        /// Method return all the material in the database.
+        /// </summary>
+        /// <returns>List of material</returns>
+        public List<Material> get_allMaterial()
+        {
+            //The output object 
+            List<Material> list = new List<Material>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM MATERIAL;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Material material = new Material();
+                    //The values of the attributes are recovered
+                    material.Id_Material = reader.GetInt64(0);
+                    material.Name = reader.GetString(1);
+                    material.Price = reader.GetInt32(2);
+                    material.Description = reader.GetString(3);
+                    //The rol is added to the list
+                    list.Add(material);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allMaterial: " + e.Message);
+            }//End catch
+            return list;
+        }//End of
+
 
 
 
