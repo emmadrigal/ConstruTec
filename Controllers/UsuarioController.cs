@@ -34,6 +34,7 @@ namespace ConstruTec.Controllers
         [HttpPut]
         public IHttpActionResult PutUsuario(long id, string campo, string newValue)
         {
+            System.Diagnostics.Debug.WriteLine("Entra al if");
             if (campo == "Code" || campo == "Name" || campo== "Phone_Number")
             {
                 ConnectionDB.Instance.update_Usuario(id, campo , newValue);

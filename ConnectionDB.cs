@@ -159,8 +159,8 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                rol.Role_id = reader.GetInt64(0);
-                rol.Role_name = reader.GetString(1);
+                rol.Role_id = Int64.Parse(reader["role_id"].ToString());
+                rol.Role_name = reader["role_name"].ToString();
                 con.Close();
             }
             catch (Exception e)
@@ -197,8 +197,8 @@ namespace ConstruTec
                 {
                     Roles rol = new ConstruTec.Models.Roles();
                     //The values of the attributes are recovered
-                    rol.Role_id = reader.GetInt64(0);
-                    rol.Role_name = reader.GetString(1);
+                    rol.Role_id = Int64.Parse(reader["role_id"].ToString());
+                    rol.Role_name = reader["role_name"].ToString();
                     //The rol is added to the list
                     roles.Add(rol);
                 }// end of while
@@ -351,11 +351,11 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                user.Id_Number = reader.GetInt64(0);
-                user.Code = reader.GetString(1);
-                user.Name = reader.GetString(2);
-                user.Phone_Number = reader.GetInt32(3);
-                user.Role_usuario = reader.GetInt64(4);
+                user.Id_Number = Int64.Parse(reader["id_number"].ToString());
+                user.Code = reader["code"].ToString();
+                user.Name = reader["name"].ToString();
+                user.Phone_Number = Int32.Parse(reader["phone_number"].ToString());
+                user.Role_usuario = Int32.Parse(reader["role_id"].ToString());
                 //Close the connection
                 connection.Close();
             }
@@ -393,11 +393,11 @@ namespace ConstruTec
                 {
                     Usuario user = new Usuario();
                     //The values of the attributes are recovered
-                    user.Id_Number = reader.GetInt64(0);
-                    user.Code = reader.GetString(1);
-                    user.Name = reader.GetString(2);
-                    user.Phone_Number = reader.GetInt32(3);
-                    user.Role_usuario = reader.GetInt64(4);
+                    user.Id_Number = Int64.Parse(reader["id_number"].ToString());
+                    user.Code = reader["code"].ToString();
+                    user.Name = reader["name"].ToString();
+                    user.Phone_Number = Int32.Parse(reader["phone_number"].ToString());
+                    user.Role_usuario = Int64.Parse(reader["role_id"].ToString());
                     //The rol is added to the list
                     list.Add(user);
                 }// end of while
@@ -433,7 +433,7 @@ namespace ConstruTec
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
                 command.Parameters.AddWithValue("@comment_id", commentary.Comment_Id);
-                command.Parameters.AddWithValue("@divided_in", commentary.Divided_Id);
+                command.Parameters.AddWithValue("@divided_id", commentary.Divided_Id);
                 command.Parameters.AddWithValue("@commentary", commentary.Comentary);
 
                 //Executes the command
