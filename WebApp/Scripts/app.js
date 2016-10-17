@@ -3,16 +3,6 @@ var construtecAPP = angular.module('construtecAPP', ['ngRoute', 'ui.bootstrap'])
 
 construtecAPP.config(function ($routeProvider) {
 	$routeProvider
-		.when('/login',
-		{
-			controller: 'AppController',
-			templateUrl: 'Partials/login.html'
-		})
-		.when('/register',
-		{
-			controller: 'AppController',
-			templateUrl: 'Partials/register.html'
-		})
 		.when('/search',
 		{
 			controller: 'AppController',
@@ -43,25 +33,27 @@ construtecAPP.controller('ArchitectController', function($scope, $uibModalInstan
 			clientID: $scope.newProjectClientID,
 			architectID: "1"
 		};
+
 		$scope.projects = projects.push(newFile);
 		$uibModalInstance.dismiss('cancel');
     };
 
 });
 
-construtecAPP.controller('PhaseFormController', function($scope, $uibModalInstance, phases, listPhases) {
+construtecAPP.controller('PhaseFormController', function($filter, $scope, $uibModalInstance, phases, listPhases) {
 	$scope.listPhases = listPhases;
 
     $scope.addNewPhase = function(){
+
 		var newFile = {
 			name: $scope.newPhaseName,
-			start: $scope.newPhaseStart,
-			finish: $scope.newPhaseEnd
+			start: $filter('date')($scope.startDate, "dd/MM/yyyy"),
+			finish: $filter('date')($scope.finishDate, "dd/MM/yyyy")
 		};
 		$scope.phases = phases.push(newFile);
 		$uibModalInstance.dismiss('cancel');
-    };
 
+    };
 });
 
 construtecAPP.controller('MaterialFormController', function($scope, $uibModalInstance, listMaterials, materials) {
@@ -78,85 +70,19 @@ construtecAPP.controller('MaterialFormController', function($scope, $uibModalIns
 
 });
 
-construtecAPP.controller('DTController', function($scope) {
-	$scope.open2 = function() {
-    	$scope.popup2.opened = true;
-  	};
+construtecAPP.controller('LoginFormController', function($scope, $location, $uibModalInstance) {
 
-  	$scope.today = function() {
-    	$scope.dt = new Date();
-  	};
-  	$scope.today();
+	$scope.goTo = function ( path ) {
+    	$location.path( path );
+    };
 
-  	$scope.clear = function() {
-    	$scope.dt = null;
-  	};
-
-  	$scope.inlineOptions = {
-    	customClass: getDayClass,
-    	minDate: new Date(),
-    	showWeeks: true
-  	};
-
-  	$scope.dateOptions = {
-    	dateDisabled: disabled,
-    	formatYear: 'yy',
-    	maxDate: new Date(2020, 5, 22),
-    	minDate: new Date(),
-    	startingDay: 1
-  	};
-
-  	// Disable weekend selection
-  	function disabled(data) {
-    	var date = data.date,
-      	mode = data.mode;
-    	return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
-  	};
-
-  	$scope.toggleMin = function() {
-    	$scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
-    	$scope.dateOptions.minDate = $scope.inlineOptions.minDate;
-  	};
-
-  	$scope.toggleMin();
-
-  	$scope.setDate = function(year, month, day) {
-    	$scope.dt = new Date(year, month, day);
-  	};
-
-  	$scope.popup2 = {
-    	opened: false
-  	};
-
-  	var tomorrow = new Date();
-  	tomorrow.setDate(tomorrow.getDate() + 1);
-  	var afterTomorrow = new Date();
-  	afterTomorrow.setDate(tomorrow.getDate() + 1);
-  	$scope.events = [
-    	{date: tomorrow, status: 'full'},
-    	{date: afterTomorrow, status: 'partially'}
-    ];
-
-  	function getDayClass(data) {
-    	var date = data.date,
-      	mode = data.mode;
-    	if (mode === 'day') {
-      	var dayToCheck = new Date(date).setHours(0,0,0,0);
-
-	      	for (var i = 0; i < $scope.events.length; i++) {
-	        	var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
-	        	if (dayToCheck === currentDay) {
-	          		return $scope.events[i].status;
-	        	}
-	      	}
-    	}
-
-    	return '';
-  	}
+	$scope.close = function(){
+		$uibModalInstance.dismiss('cancel');
+		$scope.goTo('/architect');
+	}
 });
 
-construtecAPP.controller('AppController', function SimpleController($scope, $location, $http, $uibModal){
+construtecAPP.controller('AppController',  function SimpleController($scope, $location, $http, $uibModal){
 	$scope.customers = [
 		{ ID: 187199, name: 'Carlos',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '9-10-2016'},
 		{ ID: 187197, name: 'Andrea',lastName: 'Quirós', address: 'Cartago', phoneNumber: 88888888, birthday: '6-10-2016'},
@@ -215,7 +141,7 @@ construtecAPP.controller('AppController', function SimpleController($scope, $loc
 
     $scope.openLoginForm = function () {
         var modalInstance = $uibModal.open({
-			controller: 'AppController',
+			controller: 'LoginFormController',
             templateUrl: 'LoginForm.html'
         });
     }
