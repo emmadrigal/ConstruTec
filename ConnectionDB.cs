@@ -45,7 +45,7 @@ namespace ConstruTec
         /// <param name="rol">The rol that will be added to the database</param>
         public void crear_Roles(Roles rol)
         {
-            
+
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
             connection.ConnectionString = connectionString;
@@ -103,7 +103,7 @@ namespace ConstruTec
         /// </summary>
         /// <param name="id"> The id of the role that it is wanted to update</param>
         /// <param name="newValue">The new value of the attribute. </param>
-        public void update_nombre_Roles(long id, String newValue)
+        public void update_Roles(long id, String campo, String newValue)
         {
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
@@ -112,17 +112,25 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE ROLES SET (role_name) = (@role_name) WHERE role_id = @id;";
+                String query = "UPDATE ROLES SET (@attribute) = (@newValue) WHERE role_id = @id;";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+                if (campo.Equals("nombre"))
+                {
+                    attribute = "rol_name";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                }
                 command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@role_name", newValue);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
                 command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
             {
                 //It is notified in the output that the connection failed 
-                System.Diagnostics.Debug.WriteLine("Failed Connection in update_nombre_roles: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_roles: " + e.Message);
             }//End catch
 
         }//End od method
@@ -205,9 +213,9 @@ namespace ConstruTec
             return roles;
         }//End of 
 
-        
 
-       //####### USERS METHODS #########
+
+        //####### USERS METHODS #########
 
         /// <summary>
         /// This method add the user in the ConstruTec database.
@@ -241,6 +249,7 @@ namespace ConstruTec
             }//End catch
         }//End of post_Usuario
 
+
         /// <summary>
         /// This method delete the user whose id attribute is id. 
         /// </summary>
@@ -273,7 +282,7 @@ namespace ConstruTec
         /// </summary>
         /// <param name="id"> The id of the user that it is wanted to update</param>
         /// <param name="newValue">The new value of the attribute. </param>
-        public void update_nombre_Usuario(long id, String newValue)
+        public void update_Usuario(long id, String campo, String newValue)
         {
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
@@ -282,17 +291,38 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE ROLES SET (role_name) = (@role_name) WHERE role_id = @id;";
+                String query = "UPDATE USUARIO SET (@attribute) = (@newValue) WHERE id_number = @id;";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Code"))
+                {
+                    attribute = "code";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                }
+                else if (campo.Equals("Name"))
+                {
+                    attribute = "name";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                }
+                else if (campo.Equals("Phone_Number"))
+                {
+                    attribute = "phone_number";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", newValue);
+                }
                 command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@role_name", newValue);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
                 command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
             {
                 //It is notified in the output that the connection failed 
-                System.Diagnostics.Debug.WriteLine("Failed Connection in update_nombre_roles: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Usuario: " + e.Message);
             }//End catch
 
         }//End od method
@@ -389,8 +419,9 @@ namespace ConstruTec
         /// This method add the commentary in the ConstruTec database.
         /// </summary>
         /// <param name="commentary">The commentary that will be added to the database</param>
-        public void crear_Commentary(Commentary commentary) { 
-     
+        public void crear_Commentary(Commentary commentary)
+        {
+
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
             connection.ConnectionString = connectionString;
@@ -404,7 +435,7 @@ namespace ConstruTec
                 command.Parameters.AddWithValue("@comment_id", commentary.Comment_Id);
                 command.Parameters.AddWithValue("@divided_in", commentary.Divided_Id);
                 command.Parameters.AddWithValue("@commentary", commentary.Comentary);
-       
+
                 //Executes the command
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -442,6 +473,46 @@ namespace ConstruTec
                 System.Diagnostics.Debug.WriteLine("Failed Connection in 'eliminar_Commentary': " + e.Message);
             }//End catch
         }//End of method
+
+
+        /// <summary>
+        /// Method allow to update an attribute of a specific commentary.
+        /// </summary>
+        /// <param name="id"> The id of the commentary that it is wanted to update</param>
+        /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The name of attribute that will be update. </param>
+        public void update_Commentary(long id, String campo, String newValue)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "UPDATE COMMENTARY SET (@attribute) = (@newValue) WHERE comment_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Commentary"))
+                {
+                    attribute = "commentary";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Commentary: " + e.Message);
+            }//End catch
+
+        }//End od method
 
 
         /// <summary>
@@ -487,42 +558,43 @@ namespace ConstruTec
         /// </summary>
         /// <returns>List of commentaries</returns>
         public List<Commentary> get_allCommentary()
-         {
-             //The output object 
-             List<Commentary> list = new List<Commentary>();
-             //The object responsible of the connection is created 
-             NpgsqlConnection connection = new NpgsqlConnection();
-             connection.ConnectionString = connectionString;
-             try
-             {
-                 connection.Open();
-                 //Write in the output window
-                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                 String query = "SELECT * FROM COMMENTARY;";
-                 //The query is executed
-                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                 var reader = command.ExecuteReader();
-                 //The roles are recovered from the reader object
-                 while (reader.Read())
-                 {
-                     Commentary commentary = new Commentary();
+        {
+            //The output object 
+            List<Commentary> list = new List<Commentary>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM COMMENTARY;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Commentary commentary = new Commentary();
                     //The values of the attributes are recovered
                     commentary.Comment_Id = reader.GetInt64(0);
                     commentary.Divided_Id = reader.GetInt64(1);
                     commentary.Comentary = reader.GetString(2);
                     //The rol is added to the list
                     list.Add(commentary);
-                 }// end of while
+                }// end of while
                  //The connection is closed
-                 connection.Close();
-             }
-             catch (Exception e)
-             {
-                 //It is notified in the output that the connection failed 
-                 System.Diagnostics.Debug.WriteLine("Failed Connection in get_allCommentaries: " + e.Message);
-             }//End catch
-             return list;
-         }//End of  
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allCommentaries: " + e.Message);
+            }//End catch
+            return list;
+        }//End of  
+
 
 
 
@@ -1302,6 +1374,189 @@ namespace ConstruTec
         }//End of
 
 
+        //#######  STAGE METHODS #########
+
+        /// <summary>
+        /// This method add the stage in the ConstruTec database.
+        /// </summary>
+        /// <param name="stage">The stage that will be added to the database</param>
+        public void crear_Stage(Stage stage)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "INSERT INTO STAGE VALUES (@stage_id, @name, @description);";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the parameter of the command
+                command.Parameters.AddWithValue("@stage_id", stage.Stage_Id);
+                command.Parameters.AddWithValue("@name", stage.Name);
+                command.Parameters.AddWithValue("@description", stage.Description);
+
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //Notifies an error in the output
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'crear_Stage': " + e.Message);
+            }//End catch
+        }//End of method
+
+
+        /// <summary>
+        /// This method delete the stage whose id attribute is id. 
+        /// </summary>
+        /// <param name="id">The id of the stage to delete.</param>
+        public void eliminar_Stage(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "DELETE FROM STAGE WHERE stage_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'eliminar_Stage': " + e.Message);
+            }//End catch
+        }//End of method
+
+
+        /// <summary>
+        /// Method allow to update an attribute of a specific stage.
+        /// </summary>
+        /// <param name="id"> The id of the stage that it is wanted to update</param>
+        /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The name of attribute that will be update. </param>
+        public void update_Stage(long id, String campo, String newValue)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "UPDATE STAGE SET (@attribute) = (@newValue) WHERE stage_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Description"))
+                {
+                    attribute = "description";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Stage: " + e.Message);
+            }//End catch
+
+        }//End od method
+
+
+        /// <summary>
+        /// Recovers the stage whose stage_id is id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Return the stage who is being requested.</returns>
+        public Stage get_Stage(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            //The output object is created
+            Stage stage = new Stage();
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM STAGE WHERE stage_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //The query is executed
+                var reader = command.ExecuteReader();
+                //The values of the attributes are recovered
+                reader.Read();
+                stage.Stage_Id = reader.GetInt64(0);
+                stage.Name = reader.GetString(1);
+                stage.Description = reader.GetString(2);
+
+                //Close the connection
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_Stage: " + e.Message);
+            }//End catch
+            return stage;
+        }//End of method 
+
+
+        /// <summary>
+        /// Method return all the stages in the database.
+        /// </summary>
+        /// <returns>List of stages</returns>
+        public List<Stage> get_allStage()
+        {
+            //The output object 
+            List<Stage> list = new List<Stage>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM STAGE;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Stage stage = new Stage();
+                    //The values of the attributes are recovered
+                    stage.Stage_Id = reader.GetInt64(0);
+                    stage.Name = reader.GetString(1);
+                    stage.Description = reader.GetString(2);
+
+                    //The object is added to the list
+                    list.Add(stage);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allStage: " + e.Message);
+            }//End catch
+            return list;
+        }//End of
 
 
 

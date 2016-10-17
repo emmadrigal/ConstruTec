@@ -37,7 +37,7 @@ namespace ConstruTec.Controllers
         {
             if (campo == "nombre")
             {
-                ConnectionDB.Instance.update_nombre_Roles(id, newValue);
+                ConnectionDB.Instance.update_Roles(id, campo, newValue);
             }
             return Ok();
         }
