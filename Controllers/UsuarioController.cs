@@ -34,8 +34,7 @@ namespace ConstruTec.Controllers
         [HttpPut]
         public IHttpActionResult PutUsuario(long id, string campo, string newValue)
         {
-            if (campo == "Code" || campo == "Name" || campo== "Phone_Number"
-                || campo == "Role_usuario")
+            if (campo == "Code" || campo == "Name" || campo== "Phone_Number")
             {
                 ConnectionDB.Instance.update_Usuario(id, campo , newValue);
             }

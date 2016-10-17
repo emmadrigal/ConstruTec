@@ -34,7 +34,7 @@ namespace ConstruTec.Controllers
         [HttpPut]
         public IHttpActionResult PutMaterial(long id, string campo, string newValue)
         {
-            if (campo == "Name " || campo== "Price" || campo== "Description")
+            if (campo== "Price" || campo== "Description")
             {
                 ConnectionDB.Instance.update_Material(id, campo , newValue);
             }
