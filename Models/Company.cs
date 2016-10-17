@@ -5,322 +5,137 @@ namespace EPATEC2.Company
 {
     public class Cliente
     {
-
-        private long cedula_Cliente;
-        private string nombre;
-        private string apellidos;
-        private int penalizacion;
-        private string residencia;
-        private string nacimiento;
-        private string telefono;
-
         /// Propiedad de Cedula
-        public long Cedula_Cliente
-        {
-            get { return cedula_Cliente; }
-            set { cedula_Cliente = value; }
-        }
+        public long Cedula_Cliente{ get; set; }
 
         /// Propiedad de Nombre
-        public string Nombre
-        {
-            get { return nombre; }
-            set { nombre = value; }
-        }
+        public string Nombre { get; set; }
 
         /// Propiedad de Apellidos
-        public string Apellidos
-        {
-            get { return apellidos; }
-            set { apellidos = value; }
-        }
+        public string Apellidos { get; set; }
 
         /// Propiedad de Nombre
-        public int Penalizacion
-        {
-            get { return penalizacion; }
-            set { penalizacion = value; }
-        }
+        public int Penalizacion { get; set; }
 
         /// Propiedad de Nombre
-        public string Residencia
-        {
-            get { return residencia; }
-            set { residencia = value; }
-        }
+        public string Residencia { get; set; }
 
         /// Propiedad de Nombre
-        public string Nacimiento
-        {
-            get { return nacimiento; }
-            set { nacimiento = value; }
-        }
+        public string Nacimiento { get; set; }
 
         /// Propiedad de Nombre
-        public string Telefono
-        {
-            get { return telefono; }
-            set { telefono = value; }
-        }
+        public string Telefono { get; set; }
 
     }
 
     public class Sucursal
     {
-
-        private int Id;
-
-        public Sucursal()
-        { }
-
         /// Propiedad de id
-        public int id
-        {
-            get { return Id; }
-            set { Id = value; }
-        }
+        public int id { get; set; }
     }
 
     public class Producto
     {
-        private string Nombre;
-        private long sucursal;
-        private long cedula_Provedor;
-        private string Categoria;
-        private string descripcion;
-        private bool exento;
-        private int cantidad_Disponible;
+         /// Propiedad de nombre
+        public string nombre { get; set; }
 
         /// Propiedad de nombre
-        public string nombre
-        {
-            get { return Nombre; }
-            set { Nombre = value; }
-        }
+        public long id_Sucursal { get; set; }
 
         /// Propiedad de nombre
-        public long id_Sucursal
-        {
-            get { return sucursal; }
-            set { sucursal = value; }
-        }
+        public long Cedula_Provedor { get; set; }
 
-        /// Propiedad de nombre
-        public long Cedula_Provedor
-        {
-            get { return cedula_Provedor; }
-            set { cedula_Provedor = value; }
-        }
+        public string Descripcion { get; set; }
 
-        public string Descripcion
-        {
-            get { return descripcion; }
-            set { descripcion = value; }
-        }
+        public bool Exento { get; set; }
 
-        public bool Exento
-        {
-            get { return exento; }
-            set { exento = value; }
-        }
+        public int Cantidad_Disponible { get; set; }
 
-        public int Cantidad_Disponible
-        {
-            get { return cantidad_Disponible; }
-            set { cantidad_Disponible = value; }
-        }
-
-        public string categoria
-        {
-            get { return Categoria; }
-            set { Categoria = value; }
-        }
+        public string categoria { get; set; }
 
     }
 
     public class Proovedor
     {
-        private long cedula_Provedor;
-        private string nombre;
-        private string apellidos;
-        private string residencia;
-        private string nacimiento;
-
-        public Proovedor()
-        { }
-
         /// Propiedad de Cedula
-        public long Cedula_Proveedor
-        {
-            get { return cedula_Provedor; }
-            set { cedula_Provedor = value; }
-        }
+        public long Cedula_Proveedor { get; set; }
 
         /// Propiedad de Nombre
-        public string Nombre
-        {
-            get { return nombre; }
-            set { nombre = value; }
-        }
+        public string Nombre { get; set; }
 
         /// Propiedad de Apellidos
-        public string Apellidos
-        {
-            get { return apellidos; }
-            set { apellidos = value; }
-        }
+        public string Apellidos { get; set; }
 
         /// Propiedad de Nombre
-        public string Residencia
-        {
-            get { return residencia; }
-            set { residencia = value; }
-        }
+        public string Residencia { get; set; }
 
         /// Propiedad de Nombre
-        public string Nacimiento
-        {
-            get { return nacimiento; }
-            set { nacimiento = value; }
-        }
+        public string Nacimiento { get; set; }
 
     }
 
     public class ProductoPedido
     {
-        private string name;
-        private int quantity;
-
-        public string nombre
-        {
-            get { return name; }
-            set { name = value; }
-        }
-        public int Quantity
-        {
-            get { return quantity; }
-            set { quantity = value; }
-        }
+        public string nombre { get; set; }
+        public int Quantity { get; set; }
     }
+
 
     public class Pedido
     {
-        private long id;
-        private long cedula;
-        private long sucursal;
-        private string telefono;
-        private string hora;
-        private List<ProductoPedido> Productos;
-
         /// Propiedad de Cedula
-        public long id_Pedido
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public long id_Pedido { get; set; }
 
         /// Propiedad de Nombre
-        public long Cedula_Cliente
-        {
-            get { return cedula; }
-            set { cedula = value; }
-        }
+        public long Cedula_Cliente { get; set; }
 
         /// Propiedad de Apellidos
-        public long id_Sucursal
-        {
-            get { return sucursal; }
-            set { sucursal = value; }
-        }
+        public long id_Sucursal { get; set; }
 
         /// Propiedad de Nombre
-        public string Telefono
-        {
-            get { return telefono; }
-            set { telefono = value; }
-        }
+        public string Telefono { get; set; }
 
         /// Propiedad de Nombre
-        public string Hora
-        {
-            get { return hora; }
-            set { hora = value; }
-        }
+        public string Hora { get; set; }
 
-        public List<ProductoPedido> productos
-        {
-            get { return Productos; }
-            set { Productos = value; }
-        }
-
+        public List<ProductoPedido> productos { get; set; }
     }
+   
 
     public class Empleado
     {
-        private long id;
-        private long sucursal;
-        private string nombre;
-        private string Puesto;
+        /// Propiedad de id
+        public long id_Empleado { get; set; }
 
         /// Propiedad de id
-        public long id_Empleado
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public long id_Sucursal { get; set; }
 
         /// Propiedad de id
-        public long id_Sucursal
-        {
-            get { return sucursal; }
-            set { sucursal = value; }
-        }
+        public string Nombre { get; set; }
 
         /// Propiedad de id
-        public string Nombre
-        {
-            get { return nombre; }
-            set { nombre = value; }
-        }
-
-        /// Propiedad de id
-        public string puesto
-        {
-            get { return Puesto; }
-            set { Puesto = value; }
-        }
+        public string puesto { get; set; }
     }
 
     public class Categoria
     {
-        private string nombre;
-        private string descripcion;
+         /// Propiedad de id
+        public string Nombre { get; set; }
 
         /// Propiedad de id
-        public string Nombre
-        {
-            get { return nombre; }
-            set { nombre = value; }
-        }
-
-        /// Propiedad de id
-        public string Descripcion
-        {
-            get { return descripcion; }
-            set { descripcion = value; }
-        }
+        public string Descripcion { get; set; }
     }
 
     public class ProductosVentas
     {
-        public string Nombre;
-        public long Sucursal;
-        public int Cantidad;
+        public string Nombre { get; set; }
+        public long Sucursal { get; set; }
+        public int Cantidad { get; set; }
     }
 
     public class SucursalVentas
     {
-        public long Sucursal;
-        public int CantVentas;
+        public long Sucursal { get; set; }
+        public int CantVentas { get; set; }
     }
 }

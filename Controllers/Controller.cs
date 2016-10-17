@@ -61,10 +61,18 @@ namespace EPATEC2.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult postCliente([FromBody]Company.Cliente cliente)
+        [Route("")]
+        public IHttpActionResult postCliente(Company.Cliente cliente)
         {
-            Connection.Instance.crear_Cliente(cliente);
-            return Ok();
+            if (ModelState.IsValid && cliente != null)
+            {
+                Connection.Instance.crear_Cliente(cliente);
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [Route("{id}")]
@@ -139,6 +147,7 @@ namespace EPATEC2.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult postProducto([FromBody]Company.Producto producto)
         {
             Connection.Instance.crear_Producto(producto);
@@ -189,6 +198,7 @@ namespace EPATEC2.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult postProducto([FromBody]Company.Categoria categoria)
         {
             Connection.Instance.crear_Categoria(categoria);
@@ -247,6 +257,7 @@ namespace EPATEC2.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult postProducto([FromBody]Company.Empleado empleado)
         {
             Connection.Instance.crear_Empleado(empleado);
@@ -309,6 +320,7 @@ namespace EPATEC2.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult postProducto([FromBody]Company.Proovedor proveedor)
         {
             Connection.Instance.crear_Proveedor(proveedor);
@@ -356,6 +368,7 @@ namespace EPATEC2.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IHttpActionResult postProducto([FromBody]Company.Pedido pedido)
         {
             Connection.Instance.crear_Pedido(pedido);
