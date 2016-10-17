@@ -920,6 +920,191 @@ namespace ConstruTec
         }//End of
 
 
+        //#######  POSSESES METHODS #########
+
+        /// <summary>
+        /// This method add the posseses in the ConstruTec database.
+        /// </summary>
+        /// <param name="posseses">The posseses that will be added to the database</param>
+        public void crear_Posseses(Posseses posseses)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "INSERT INTO POSSESES VALUES (@posseses_id, @id_material, @divided_id, @quantity);";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the parameter of the command
+                command.Parameters.AddWithValue("@posseses_id", posseses.Posseses_Id);
+                command.Parameters.AddWithValue("@id_material", posseses.Id_Material);
+                command.Parameters.AddWithValue("@divided_id", posseses.Divided_Id);
+                command.Parameters.AddWithValue("@quantity", posseses.Quantity);
+
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //Notifies an error in the output
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'crear_Posseses': " + e.Message);
+            }//End catch
+        }//End of post_Usuario 
+
+
+        /// <summary>
+        /// This method posseses the user whose id attribute is id. 
+        /// </summary>
+        /// <param name="id">The id of the posseses to delete.</param>
+        public void eliminar_Posseses(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "DELETE FROM POSSESES WHERE posseses_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'eliminar_Posseses': " + e.Message);
+            }//End catch
+        }//End of method
+
+
+        /// <summary>
+        /// Method allow to update an attribute of a specific posseses.
+        /// </summary>
+        /// <param name="id"> The id of the posseses that it is wanted to update</param>
+        /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The name of attribute that will be update. </param>
+        public void update_Posseses(long id, String campo, String newValue)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "UPDATE Posseses SET (@attribute) = (@newValue) WHERE posseses_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Quantity"))
+                {
+                    attribute = "quantity";
+                    var valor = Int32.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Posseses: " + e.Message);
+            }//End catch
+
+        }//End od method
+
+
+        /// <summary>
+        /// Recovers the posseses with the posseses_id id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Return the posseses who is being requested.</returns>
+        public Posseses get_Posseses(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            //The output object is created
+            Posseses posseses = new Posseses();
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM POSSESES WHERE posseses_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //The query is executed
+                var reader = command.ExecuteReader();
+                //The values of the attributes are recovered
+                reader.Read();
+                posseses.Posseses_Id = reader.GetInt64(0);
+                posseses.Id_Material = reader.GetInt64(1);
+                posseses.Divided_Id = reader.GetInt64(2);
+                posseses.Quantity = reader.GetInt32(3);
+                //Close the connection
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_Material: " + e.Message);
+            }//End catch
+            return posseses;
+        }//End of method 
+
+
+        /// <summary>
+        /// Method return all the posseses in the database.
+        /// </summary>
+        /// <returns>List of posseses</returns>
+        public List<Posseses> get_allPosseses()
+        {
+            //The output object 
+            List<Posseses> list = new List<Posseses>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM POSSESES;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Posseses posseses = new Posseses();
+                    //The values of the attributes are recovered
+                    posseses.Posseses_Id = reader.GetInt64(0);
+                    posseses.Id_Material = reader.GetInt64(1);
+                    posseses.Divided_Id = reader.GetInt64(2);
+                    posseses.Quantity = reader.GetInt32(3);
+                    //The object is added to the list
+                    list.Add(posseses);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allPosseses: " + e.Message);
+            }//End catch
+            return list;
+        }//End of
+
 
 
 
