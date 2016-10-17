@@ -20,13 +20,12 @@ namespace ConstruTec.Controllers
             {
                 return NotFound();
             }
-            System.Diagnostics.Debug.WriteLine("HOLI");
             return Ok(dato);
         }
 
         [Route("~/getAllRoles")] 
         [HttpGet]
-        public IHttpActionResult getAllClients()
+        public IHttpActionResult getAllRoles()
         {
             var dato = ConnectionDB.Instance.get_allRoles();
             return Ok(dato);
@@ -47,7 +46,6 @@ namespace ConstruTec.Controllers
         [HttpPost]
         public IHttpActionResult postRoles([FromBody] Models.Roles roles )
         {
-            System.Diagnostics.Debug.WriteLine("ANTES LALALALA");
             ConnectionDB.Instance.crear_Roles(roles);
             return Ok();
         }

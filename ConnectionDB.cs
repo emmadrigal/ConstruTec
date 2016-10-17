@@ -303,7 +303,7 @@ namespace ConstruTec
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Return the user who is being requested.</returns>
-        public Usuario get_Usuarios(long id)
+        public Usuario get_Usuario(long id)
         {
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
@@ -342,7 +342,7 @@ namespace ConstruTec
         /// Method return all the users in the database.
         /// </summary>
         /// <returns>List of user</returns>
-        public List<Usuario> get_allUsuarios()
+        public List<Usuario> get_allUsuario()
         {
             //The output object 
             List<Usuario> list = new List<Usuario>();
