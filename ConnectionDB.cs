@@ -486,7 +486,7 @@ namespace ConstruTec
         /// Method return all the commentaries in the database.
         /// </summary>
         /// <returns>List of commentaries</returns>
-        public List<Commentary> get_allCommentaries()
+        public List<Commentary> get_allCommentary()
          {
              //The output object 
              List<Commentary> list = new List<Commentary>();
@@ -526,16 +526,14 @@ namespace ConstruTec
 
 
 
+        //####### DIVIDED_IN METHODS #########
 
-        //####### COMMENTARY METHODS #########
-        
         /// <summary>
         /// This method add the divided_in in the ConstruTec database.
         /// </summary>
         /// <param name="divided_in">The divided_in that will be added to the database</param>
-        public void crear_Commentary(Divided_in div)
+        public void crear_Divided_in(Divided_in div)
         {
-
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
             connection.ConnectionString = connectionString;
@@ -543,7 +541,7 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO DIVIDED_IN VALUES " + 
+                String query = "INSERT INTO DIVIDED_IN VALUES " +
                     "(@divided_id, @id_project, @stage_id, @start_date, @end_date, @status);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
@@ -563,6 +561,174 @@ namespace ConstruTec
                 System.Diagnostics.Debug.WriteLine("Failed Connection in 'crear_Commentary': " + e.Message);
             }//End catch
         }//End of post_Usuario 
+
+
+        /// <summary>
+        /// This method divided_in the user whose id attribute is id. 
+        /// </summary>
+        /// <param name="id">The id of the divided_in to delete.</param>
+        public void eliminar_Divided_in(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "DELETE FROM DIVIDED_IN WHERE divided_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in 'eliminar_Divided_in': " + e.Message);
+            }//End catch
+        }//End of method
+
+
+        /// <summary>
+        /// Method allow to update an attribute of a specific divided_in.
+        /// </summary>
+        /// <param name="id"> The id of the divided_in that it is wanted to update</param>
+        /// <param name="newValue">The new value of the attribute. </param>
+        /// <param name="campo">The name of attribute that will be update. </param>
+        public void update_Divided_in(long id, String campo, String newValue)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "UPDATE DIVIDED_IN SET (@attribute) = (@newValue) WHERE divided_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                String attribute = ""; //Attribute that will be updated
+
+                if (campo.Equals("Start_Date"))
+                {
+                    attribute = "start_date";
+                    var valor = NpgsqlTypes.NpgsqlDateTime.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                else if (campo.Equals("End_Date"))
+                {
+                    attribute = "end_date";
+                    var valor = NpgsqlTypes.NpgsqlDateTime.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                else if (campo.Equals("Status"))
+                {
+                    attribute = "status";
+                    var valor = newValue;
+                    command.Parameters.AddWithValue("@newValue", valor);
+                }
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@attribute", attribute);
+                //Executes the command
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in update_Divided_in: " + e.Message);
+            }//End catch
+
+        }//End od method
+
+
+
+        /// <summary>
+        /// Recovers the divided_in with the divided_id id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Return the divided_in who is being requested.</returns>
+        public Divided_in get_Divided_in(long id)
+        {
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            //The output object is created
+            Divided_in div = new Divided_in();
+            try
+            {
+                connection.Open();
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM DIVIDED_IN WHERE divided_id = @id;";
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                //The query is executed
+                var reader = command.ExecuteReader();
+                //The values of the attributes are recovered
+                reader.Read();
+                div.Divided_Id = reader.GetInt64(0);
+                div.Id_Project = reader.GetInt64(1);
+                div.Stage_Id = reader.GetInt64(2);
+                div.Start_Date = reader.GetTimeStamp(3);
+                div.End_Date = reader.GetTimeStamp(4);
+                div.Status = reader.GetBoolean(5);
+                //Close the connection
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_Divided_in: " + e.Message);
+            }//End catch
+            return div;
+        }//End of method 
+
+
+        /// <summary>
+        /// Method return all the divided_in in the database.
+        /// </summary>
+        /// <returns>List of divided_in</returns>
+        public List<Divided_in> get_allDivided_in()
+        {
+            //The output object 
+            List<Divided_in> list = new List<Divided_in>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM DIVIDED_IN;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Divided_in div = new Divided_in();
+                    //The values of the attributes are recovered
+                    div.Divided_Id = reader.GetInt64(0);
+                    div.Id_Project = reader.GetInt64(1);
+                    div.Stage_Id = reader.GetInt64(2);
+                    div.Start_Date = reader.GetTimeStamp(3);
+                    div.End_Date = reader.GetTimeStamp(4);
+                    div.Status = reader.GetBoolean(5);
+                    //The rol is added to the list
+                    list.Add(div);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allDivided_in: " + e.Message);
+            }//End catch
+            return list;
+        }//End of
+
 
 
 
