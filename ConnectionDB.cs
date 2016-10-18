@@ -622,8 +622,8 @@ namespace ConstruTec
                 command.Parameters.AddWithValue("@divided_id", div.Divided_Id);
                 command.Parameters.AddWithValue("@id_project", div.Id_Project);
                 command.Parameters.AddWithValue("@stage_id", div.Stage_Id);
-                command.Parameters.AddWithValue("@start_date", div.Start_Date);
-                command.Parameters.AddWithValue("@end_date", div.End_Date);
+                command.Parameters.AddWithValue("@start_date", NpgsqlTypes.NpgsqlDate.Parse(div.Start_Date));
+                command.Parameters.AddWithValue("@end_date", NpgsqlTypes.NpgsqlDate.Parse(div.End_Date));
                 command.Parameters.AddWithValue("@status", div.Status);
                 //Executes the command
                 command.ExecuteNonQuery();
@@ -679,32 +679,38 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "UPDATE DIVIDED_IN SET (@attribute) = (@newValue) WHERE divided_id = @id;";
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                String attribute = ""; //Attribute that will be updated
 
                 if (campo.Equals("Start_Date"))
                 {
-                    attribute = "start_date";
-                    var valor = NpgsqlTypes.NpgsqlDateTime.Parse(newValue);
-                    command.Parameters.AddWithValue("@newValue", valor);
+                    String query = "UPDATE DIVIDED_IN SET (start_date) = (@newValue) WHERE divided_id = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    var valor = NpgsqlTypes.NpgsqlDate.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", NpgsqlTypes.NpgsqlDate.Parse(newValue));
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
+
                 }
                 else if (campo.Equals("End_Date"))
                 {
-                    attribute = "end_date";
-                    var valor = NpgsqlTypes.NpgsqlDateTime.Parse(newValue);
-                    command.Parameters.AddWithValue("@newValue", valor);
+                    String query = "UPDATE DIVIDED_IN SET (end_date) = (@newValue) WHERE divided_id = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    var valor = NpgsqlTypes.NpgsqlDate.Parse(newValue);
+                    command.Parameters.AddWithValue("@newValue", NpgsqlTypes.NpgsqlDate.Parse(newValue));
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
                 else if (campo.Equals("Status"))
                 {
-                    attribute = "status";
-                    var valor = newValue;
+                    String query = "UPDATE DIVIDED_IN SET (status) = (@newValue) WHERE divided_id = @id;";
+                    NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                    var valor = Boolean.Parse(newValue);
                     command.Parameters.AddWithValue("@newValue", valor);
+                    command.Parameters.AddWithValue("@id", id);
+                    //Executes the command
+                    command.ExecuteNonQuery();
                 }
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@attribute", attribute);
-                //Executes the command
-                command.ExecuteNonQuery();
                 connection.Close();
             }
             catch (Exception e)
@@ -739,12 +745,17 @@ namespace ConstruTec
                 var reader = command.ExecuteReader();
                 //The values of the attributes are recovered
                 reader.Read();
-                div.Divided_Id = reader.GetInt64(0);
-                div.Id_Project = reader.GetInt64(1);
-                div.Stage_Id = reader.GetInt64(2);
-                div.Start_Date = reader.GetTimeStamp(3);
-                div.End_Date = reader.GetTimeStamp(4);
-                div.Status = reader.GetBoolean(5);
+                div.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                div.Id_Project = Int64.Parse(reader["id_project"].ToString());
+                div.Stage_Id = Int64.Parse(reader["stage_id"].ToString());
+                NpgsqlTypes.NpgsqlDate start_date = reader.GetDate(3);
+                NpgsqlTypes.NpgsqlDate end_date = reader.GetDate(4);
+                div.Start_Date = start_date.ToString();
+                div.End_Date = end_date.ToString();
+                div.Status = Boolean.Parse(reader["status"].ToString());
+
+                System.Diagnostics.Debug.WriteLine("DATEEE " + div.Start_Date.ToString());
+   
                 //Close the connection
                 connection.Close();
             }
@@ -782,13 +793,15 @@ namespace ConstruTec
                 {
                     Divided_in div = new Divided_in();
                     //The values of the attributes are recovered
-                    div.Divided_Id = reader.GetInt64(0);
-                    div.Id_Project = reader.GetInt64(1);
-                    div.Stage_Id = reader.GetInt64(2);
-                    div.Start_Date = reader.GetTimeStamp(3);
-                    div.End_Date = reader.GetTimeStamp(4);
-                    div.Status = reader.GetBoolean(5);
-                    //The rol is added to the list
+                    div.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                    div.Id_Project = Int64.Parse(reader["id_project"].ToString());
+                    div.Stage_Id = Int64.Parse(reader["stage_id"].ToString());
+                    NpgsqlTypes.NpgsqlDate start_date = reader.GetDate(3);
+                    NpgsqlTypes.NpgsqlDate end_date = reader.GetDate(4);
+                    div.Start_Date = start_date.ToString();
+                    div.End_Date = end_date.ToString();
+                    div.Status = Boolean.Parse(reader["status"].ToString());
+                    //The div is added to the list
                     list.Add(div);
                 }// end of while
                 //The connection is closed
