@@ -1194,7 +1194,7 @@ namespace ConstruTec
                 String query = "INSERT INTO PROJECT VALUES (@id_project, @id_client, @id_engineer, @location, @name);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
-                command.Parameters.AddWithValue("@posseses_id", project.Id_Proyect);
+                command.Parameters.AddWithValue("@id_project", project.Id_Proyect);
                 command.Parameters.AddWithValue("@id_client", project.Id_Client);
                 command.Parameters.AddWithValue("@id_engineer", project.Id_Enginner);
                 command.Parameters.AddWithValue("@location", project.Location);
@@ -1552,9 +1552,6 @@ namespace ConstruTec
             }//End catch
             return list;
         }//End of
-
-
-
 
 
     }//End of ConnectionDB class
