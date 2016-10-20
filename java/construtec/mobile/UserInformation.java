@@ -43,7 +43,6 @@ public class UserInformation extends AppCompatActivity {
 
     private static String codigo;
     private static String phone;
-    private static String birth;
 
     private static List<String> projectList = new ArrayList<>();
 
@@ -64,7 +63,8 @@ public class UserInformation extends AppCompatActivity {
         userId = intent.getStringExtra("UserId");
         role = intent.getStringExtra("role");
         userName = intent.getStringExtra("userName");
-        //TODO initialize rest of the information from the WebService
+        codigo = intent.getStringExtra("code");
+        phone = intent.getStringExtra("phone");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addProject);
         if(!role.equals("1")) {
@@ -189,13 +189,6 @@ public class UserInformation extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            Date date = new Date();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-
-            final int dia = cal.get(Calendar.DAY_OF_MONTH);
-            final int mes = cal.get(Calendar.MONTH);
-            final int año = cal.get(Calendar.YEAR);
 
             View rootView = inflater.inflate(R.layout.user_details, container, false);
             //This need to final in order to be changed from the OnClick Listeners
@@ -204,51 +197,6 @@ public class UserInformation extends AppCompatActivity {
             final TextView phoneNumber = (TextView) rootView.findViewById(R.id.phoneNumber);
             final TextView rol = (TextView) rootView.findViewById(R.id.role);
             final TextView code = (TextView) rootView.findViewById(R.id.code);
-            final TextView birthDate = (TextView) rootView.findViewById(R.id.birthDate);
-
-
-
-            //Controls the click for the date
-            View.OnClickListener birthChooser = new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-
-                        public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                            String newDate = "";
-                            switch(selectedmonth){
-                                case 0 : newDate = Integer.toString(selectedday) +  "/jan/" + Integer.toString(selectedyear);
-                                    break;
-                                case 1 : newDate = Integer.toString(selectedday) +  "/feb/" + Integer.toString(selectedyear);
-                                    break;
-                                case 2 : newDate = Integer.toString(selectedday) +  "/mar/" + Integer.toString(selectedyear);
-                                    break;
-                                case 3 : newDate = Integer.toString(selectedday) +  "/apr/" + Integer.toString(selectedyear);
-                                    break;
-                                case 4 : newDate = Integer.toString(selectedday) +  "/may/" + Integer.toString(selectedyear);
-                                    break;
-                                case 5 : newDate = Integer.toString(selectedday) +  "/jun/" + Integer.toString(selectedyear);
-                                    break;
-                                case 6 : newDate = Integer.toString(selectedday) +  "/jul/" + Integer.toString(selectedyear);
-                                    break;
-                                case 7 : newDate = Integer.toString(selectedday) +  "/aug/" + Integer.toString(selectedyear);
-                                    break;
-                                case 8 : newDate = Integer.toString(selectedday) +  "/sep/" + Integer.toString(selectedyear);
-                                    break;
-                                case 9 : newDate = Integer.toString(selectedday) +  "/oct/" + Integer.toString(selectedyear);
-                                    break;
-                                case 10 : newDate = Integer.toString(selectedday) +  "/nov/" + Integer.toString(selectedyear);
-                                    break;
-                                case 11 : newDate = Integer.toString(selectedday) +  "/dec/" + Integer.toString(selectedyear);
-                                    break;
-                            }
-                            //TODO make call to database to perform update
-                            birthDate.setText(newDate);
-                        }
-                    },año, mes, dia);
-                    mDatePicker.show();  }
-            };
 
             View.OnClickListener updateName = new View.OnClickListener() {
                 @Override
@@ -265,8 +213,9 @@ public class UserInformation extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             String newValue = np.getText().toString();
+                            httpConnection.getConnection().sendPut("Usuario", userId, "Name", newValue);
                             name.setText(newValue);
-                            //TODO make a call to the database to update the value
+
                             // create intent to start another activity
                             d.dismiss();
                         }
@@ -347,15 +296,12 @@ public class UserInformation extends AppCompatActivity {
                 }
             };
 
-
             getUserInfo();
             name.setText(userName);
             name.setOnClickListener(updateName);
             id.setText(userId);
             phoneNumber.setText(phone);
             phoneNumber.setOnClickListener(updatePhone);
-            birthDate.setText(birth);
-            birthDate.setOnClickListener(birthChooser);
             code.setText(codigo);
             code.setOnClickListener(updateCode);
 
@@ -584,7 +530,7 @@ public class UserInformation extends AppCompatActivity {
     public void createProject(View view){
         Intent intent = new Intent(UserInformation.this, CreateNewProject.class);
 
-        intent.putExtra("selected-item", userId);
+        intent.putExtra("userID", userId);
         startActivity(intent);
     }
 
@@ -593,7 +539,7 @@ public class UserInformation extends AppCompatActivity {
      * @param view that makes the call
      */
     public void delete(View view){
-        //TODO make call to the web service to delete the users Account
+        httpConnection.getConnection().sendDelete("Usuario", userId);
         finish();
     }
 }

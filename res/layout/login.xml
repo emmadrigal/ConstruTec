@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="39dp"
             android:hint="@string/user_name"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:layout_weight="0"
             android:maxLines="1"/>
         <EditText

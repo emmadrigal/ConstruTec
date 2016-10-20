@@ -85,8 +85,7 @@ public class AddMaterialToStage extends AppCompatActivity {
      * @return json from the WebService
      */
     private String getAllMaterials(){
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        return "[{\"Nombre\":\"Varillas\"}, {\"Nombre\":\"Cemento\"}, {\"Nombre\":\"Cerámica\"}, {\"Nombre\":\"Clavos\"}]";
+        return httpConnection.getConnection().sendGet("getAllMaterial");
     }
 
     /**
@@ -94,7 +93,7 @@ public class AddMaterialToStage extends AppCompatActivity {
      * @return list of strings indicating a list of available materials
      */
     private List<String> getMaterials(){
-        String nameId = "Nombre";
+        String nameId = "Name";
 
         String json = getAllMaterials();
 

@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -20,12 +23,6 @@ import java.util.Date;
  */
 public class RegisterUser extends AppCompatActivity {
     private EditText code;
-    private TextView day;
-    private TextView month;
-    private TextView year;
-    private int dia;
-    private int mes;
-    private int año;
     private Spinner spinner;
 
     /**
@@ -37,17 +34,6 @@ public class RegisterUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
-        Date date = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-
-        final int dia = cal.get(Calendar.DAY_OF_MONTH);
-        final int mes = cal.get(Calendar.MONTH);
-        final int año = cal.get(Calendar.YEAR);
-
-        day     = (TextView) findViewById(R.id.day);
-        month   = (TextView) findViewById(R.id.month);
-        year    = (TextView) findViewById(R.id.year);
         spinner = (Spinner)  findViewById(R.id.Role);
         code    = (EditText) findViewById(R.id.code);
 
@@ -80,56 +66,6 @@ public class RegisterUser extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> arg0) {}
         });
 
-        //Controls the click for the date
-        View.OnClickListener dateChooser = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog mDatePicker = new DatePickerDialog(RegisterUser.this, new DatePickerDialog.OnDateSetListener() {
-
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        day.setText(Integer.toString(selectedday));
-                        String mes;
-                        switch(selectedmonth){
-                            case 0 : mes = "January";
-                                break;
-                            case 1 : mes = "February";
-                                break;
-                            case 2 : mes = "March";
-                                break;
-                            case 3 : mes = "April";
-                                break;
-                            case 4 : mes = "May";
-                                break;
-                            case 5 : mes = "June";
-                                break;
-                            case 6 : mes = "July";
-                                break;
-                            case 7 : mes = "August";
-                                break;
-                            case 8 : mes = "September";
-                                break;
-                            case 9 : mes = "October";
-                                break;
-                            case 10 : mes = "November";
-                                break;
-                            case 11 : mes = "December";
-                                break;
-                            default: mes = "";
-                                break;
-                        }
-                        month.setText(mes);
-                        year.setText(Integer.toString(selectedyear));
-                    }
-
-                },
-                        año, mes, dia);
-                mDatePicker.show();  }
-        };
-
-        day.setOnClickListener(dateChooser);
-        month.setOnClickListener(dateChooser);
-        year.setOnClickListener(dateChooser);
     }
 
     /**
@@ -141,10 +77,14 @@ public class RegisterUser extends AppCompatActivity {
 
         Intent intent = new Intent(this, UserInformation.class);
         EditText userName = (EditText) findViewById(R.id.userName);
-        EditText userID = (EditText) findViewById(R.id.userId);
+        EditText userID   = (EditText) findViewById(R.id.userId);
+        EditText code     = (EditText) findViewById(R.id.code);
+        EditText phone     = (EditText) findViewById(R.id.phoneNumber);
 
         intent.putExtra("UserId", userName.getText());
         intent.putExtra("userName", userID.getText());
+        intent.putExtra("code", code.getText());
+        intent.putExtra("phone", phone.getText());
 
         if(spinner.getSelectedItem().equals("Engineer")) {
             intent.putExtra("role", "1");
@@ -160,6 +100,28 @@ public class RegisterUser extends AppCompatActivity {
      * Makes the call to the Web Service and registers the user
      */
     private void registerUserOnDB(){
-        //TODO: Realiza la llamada a la base de datos con los datos de la interfaz
+        EditText userName = (EditText) findViewById(R.id.userName);
+        EditText userID = (EditText) findViewById(R.id.userId);
+        EditText code = (EditText) findViewById(R.id.code);
+        EditText phoneNumber = (EditText) findViewById(R.id.phoneNumber);
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("Id_Number", userID.getText());
+            json.put("Code", code.getText());
+            json.put("Name", userName.getText());
+            json.put("Phone_Number", phoneNumber.getText());
+            if(spinner.getSelectedItem().equals("Engineer")) {
+                json.put("Role_usuario", "1");
+            }else if(spinner.getSelectedItem().equals("Client")) {
+                json.put("Role_usuario", "0");
+            }else{
+                json.put("Role_usuario", "2");
+            }
+            httpConnection.getConnection().sendPost("Usuario", json.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

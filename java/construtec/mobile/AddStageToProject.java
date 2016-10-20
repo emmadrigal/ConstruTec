@@ -186,8 +186,7 @@ public class AddStageToProject extends AppCompatActivity {
      * @return json with the information from the database
      */
     private String getAllStages(){
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        return "[{\"Nombre\":\"Escaleras\"}, {\"Nombre\":\"Cimientos\"}, {\"Nombre\":\"Ventanas\"}, {\"Nombre\":\"Muebles de Cocina\"}]";
+        return httpConnection.getConnection().sendGet("getAllStage");
     }
 
     /**
