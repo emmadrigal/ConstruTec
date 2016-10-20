@@ -1,6 +1,5 @@
 package construtec.mobile;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,8 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
@@ -216,7 +212,6 @@ public class UserInformation extends AppCompatActivity {
                             httpConnection.getConnection().sendPut("Usuario", userId, "Name", newValue);
                             name.setText(newValue);
 
-                            // create intent to start another activity
                             d.dismiss();
                         }
                     });
@@ -248,8 +243,8 @@ public class UserInformation extends AppCompatActivity {
                         public void onClick(View v) {
                             String newValue = np.getText().toString();
                             phoneNumber.setText(newValue);
-                            //TODO make a call to the database to update the value
-                            // create intent to start another activity
+                            httpConnection.getConnection().sendPut("Usuario", userId, "Phone_Number", newValue);
+
                             d.dismiss();
                         }
                     });
@@ -280,8 +275,8 @@ public class UserInformation extends AppCompatActivity {
                         public void onClick(View v) {
                             String newValue = np.getText().toString();
                             code.setText(newValue);
-                            //TODO make a call to the database to update the value
-                            // create intent to start another activity
+                            httpConnection.getConnection().sendPut("Usuario", userId, "Code", newValue);
+
                             d.dismiss();
                         }
                     });

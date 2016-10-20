@@ -2,14 +2,6 @@ package construtec.mobile;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,8 +11,8 @@ import okhttp3.Response;
 public class httpConnection {
     private static httpConnection singleton;
     //TODO get this information from user
-    private String serviceIp = "192.168.42.180";
-    private String port      = "62801";
+    public static String serviceIp = "192.168.43.163";
+    public static  String port      = "62801";
     OkHttpClient client = new OkHttpClient();
 
     public static final MediaType JSON
