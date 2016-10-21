@@ -45,7 +45,6 @@ namespace ConstruTec
         /// <param name="rol">The rol that will be added to the database</param>
         public void crear_Roles(Roles rol)
         {
-
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
             connection.ConnectionString = connectionString;
@@ -53,10 +52,9 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO ROLES VALUES (@role_id, @role_name);";
+                String query = "SELECT insert_Roles(@role_name);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parametes of the command
-                command.Parameters.AddWithValue("@role_id", rol.Role_id);
                 command.Parameters.AddWithValue("@role_name", rol.Role_name);
                 //Executes the command
                 command.ExecuteNonQuery();
@@ -425,7 +423,6 @@ namespace ConstruTec
         /// <param name="commentary">The commentary that will be added to the database</param>
         public void crear_Commentary(Commentary commentary)
         {
-
             //The object responsible of the connection is created 
             NpgsqlConnection connection = new NpgsqlConnection();
             connection.ConnectionString = connectionString;
@@ -433,10 +430,9 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO COMMENTARY VALUES (@comment_id, @divided_id, @commentary);";
+                String query = "SELECT insert_Commentary(@divided_id, @commentary);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
-                command.Parameters.AddWithValue("@comment_id", commentary.Comment_Id);
                 command.Parameters.AddWithValue("@divided_id", commentary.Divided_Id);
                 command.Parameters.AddWithValue("@commentary", commentary.Comentary);
 
@@ -615,11 +611,9 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO DIVIDED_IN VALUES " +
-                    "(@divided_id, @id_project, @stage_id, @start_date, @end_date, @status);";
+                String query = "SELECT insert_Divided_in(@id_project, @stage_id, @start_date, @end_date, @status);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
-                command.Parameters.AddWithValue("@divided_id", div.Divided_Id);
                 command.Parameters.AddWithValue("@id_project", div.Id_Project);
                 command.Parameters.AddWithValue("@stage_id", div.Stage_Id);
                 command.Parameters.AddWithValue("@start_date", NpgsqlTypes.NpgsqlDate.Parse(div.Start_Date));
@@ -831,10 +825,9 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO MATERIAL VALUES (@id_material, @name, @price, @description);";
+                String query = "SELECT insert_Material(@name, @price, @description);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
-                command.Parameters.AddWithValue("@id_material", material.Id_Material);
                 command.Parameters.AddWithValue("@name", material.Name);
                 command.Parameters.AddWithValue("@price", material.Price);
                 command.Parameters.AddWithValue("@description", material.Description);
@@ -1021,10 +1014,9 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO POSSESES VALUES (@posseses_id, @id_material, @divided_id, @quantity);";
+                String query = "SELECT insert_Posseses(@id_material, @divided_id, @quantity);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
-                command.Parameters.AddWithValue("@posseses_id", posseses.Posseses_Id);
                 command.Parameters.AddWithValue("@id_material", posseses.Id_Material);
                 command.Parameters.AddWithValue("@divided_id", posseses.Divided_Id);
                 command.Parameters.AddWithValue("@quantity", posseses.Quantity);
@@ -1204,10 +1196,9 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO PROJECT VALUES (@id_project, @id_client, @id_engineer, @location, @name);";
+                String query = "SELECT insert_Project(@id_client, @id_engineer, @location, @name);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
-                command.Parameters.AddWithValue("@id_project", project.Id_Proyect);
                 command.Parameters.AddWithValue("@id_client", project.Id_Client);
                 command.Parameters.AddWithValue("@id_engineer", project.Id_Enginner);
                 command.Parameters.AddWithValue("@location", project.Location);
@@ -1400,7 +1391,7 @@ namespace ConstruTec
             {
                 connection.Open();
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "INSERT INTO STAGE VALUES (@stage_id, @name, @description);";
+                String query = "SELECT insert_Stage(@name, @description);";
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 //Adds the parameter of the command
                 command.Parameters.AddWithValue("@stage_id", stage.Stage_Id);
