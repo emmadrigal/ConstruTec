@@ -22,6 +22,30 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        [Route("{Usuario}/{id}")]
+        [HttpGet]
+        public IHttpActionResult getProjectByClient(long id)
+        {
+            var dato = ConnectionDB.Instance.get_Project_By_Client(id);
+            if (dato == null)
+            {
+                return NotFound();
+            }
+            return Ok(dato);
+        }
+
+        [Route("{Proximos_dias}")]
+        [HttpGet]
+        public IHttpActionResult nextProjectdias()
+        {
+            var dato = ConnectionDB.Instance.nextProject();
+            if (dato == null)
+            {
+                return NotFound();
+            }
+            return Ok(dato);
+        }
+
         [Route("~/getAllProject")]
         [HttpGet]
         public IHttpActionResult getAllProject()

@@ -22,6 +22,18 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        [Route("{Project}/{id}")]
+        [HttpGet]
+        public IHttpActionResult getDividedByProject(long id)
+        {
+            var dato = ConnectionDB.Instance.get_Divided_By_Project(id);
+            if (dato==null)
+            {
+                return NotFound();
+            }
+            return Ok(dato);
+        }
+
         [Route("~/getAllDivided_in")]
         [HttpGet]
         public IHttpActionResult getAllDivided_in()
