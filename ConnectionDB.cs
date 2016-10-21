@@ -810,6 +810,58 @@ namespace ConstruTec
         }//End of
 
 
+        /// <summary>
+        /// This method return the divided_in associated to a specific project
+        /// </summary>
+        /// <param name="id_project">The id of the project of interest</param>
+        /// <returns>Return a list with the divided_in</returns>
+        public List<Divided_in> get_Divided_By_Project(long id_project)
+        {
+            //The output object 
+            List<Divided_in> list = new List<Divided_in>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM DIVIDED_IN WHERE ID_PROJECT = @id;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //The id is added to the command
+                command.Parameters.AddWithValue("@id", id_project);
+                //Executes the command
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Divided_in div = new Divided_in();
+                    //The values of the attributes are recovered
+                    div.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                    div.Id_Project = Int64.Parse(reader["id_project"].ToString());
+                    div.Stage_Id = Int64.Parse(reader["stage_id"].ToString());
+                    NpgsqlTypes.NpgsqlDate start_date = reader.GetDate(3);
+                    NpgsqlTypes.NpgsqlDate end_date = reader.GetDate(4);
+                    div.Start_Date = start_date.ToString();
+                    div.End_Date = end_date.ToString();
+                    div.Status = Boolean.Parse(reader["status"].ToString());
+                    //The div is added to the list
+                    list.Add(div);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allDivided_in: " + e.Message);
+            }//End catch
+            return list;
+        }//End of the method
+
+
         //#######  MATERIAL METHODS #########
 
         /// <summary>
@@ -1180,6 +1232,52 @@ namespace ConstruTec
             return list;
         }//End of
 
+        /// <summary>
+        /// Return the Posseses associated to a divided_in.
+        /// </summary>
+        /// <param name="divided_id">The id of the divided of interest</param>
+        /// <returns>The list of posseses</returns>
+        public List<Posseses> get_Posseses_By_Divided(long divided_id)
+        {
+            //The output object 
+            List<Posseses> list = new List<Posseses>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM POSSESES WHERE divided_id = @id;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the parameter and executes the command
+                command.Parameters.AddWithValue("@id", divided_id);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Posseses posseses = new Posseses();
+                    //The values of the attributes are recovered
+                    posseses.Posseses_Id = Int64.Parse(reader["posseses_id"].ToString());
+                    posseses.Id_Material = Int64.Parse(reader["id_material"].ToString());
+                    posseses.Divided_Id = Int64.Parse(reader["divided_id"].ToString());
+                    posseses.Quantity = Int32.Parse(reader["quantity"].ToString());
+                    //The object is added to the list
+                    list.Add(posseses);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allPosseses: " + e.Message);
+            }//End catch
+            return list;
+
+        }//End of the method
 
         //#######  PROJECT METHODS #########
 
@@ -1375,6 +1473,100 @@ namespace ConstruTec
             return list;
         }//End of
 
+
+        /// <summary>
+        /// This method recovers all the projects that belong to a specific user
+        /// </summary>
+        /// <param name="id_cliente">The id of the client whose projects they are wanted recovered</param>
+        /// <returns>Return the list of the projects of the client</returns>
+        public List<Project> get_Project_By_Client(long id_cliente)
+        {
+            //The output object 
+            List<Project> list = new List<Project>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM PROJECT WHERE id_client = @id;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the id to the query
+                command.Parameters.AddWithValue("@id", id_cliente);
+                //Executes the command
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Project project = new Project();
+                    //The values of the attributes are recovered
+                    project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
+                    project.Id_Client = Int64.Parse(reader["id_client"].ToString());
+                    project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
+                    project.Location = reader["location"].ToString();
+                    project.Name = reader["name"].ToString();
+                    //The object is added to the list
+                    list.Add(project);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allProjectClient: " + e.Message);
+            }//End catch
+            return list;
+        }//End of the method
+
+
+        /// <summary>
+        /// Returns all projects that have a stage that begins on the next 15 days
+        /// </summary>
+        /// <returns>List of projects</returns>
+        public List<Project> nextProject()
+        {
+            //The output object 
+            List<Project> list = new List<Project>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT nextProject();";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Project project = new Project();
+                    //The values of the attributes are recovered
+                    project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
+                    project.Id_Client = Int64.Parse(reader["id_client"].ToString());
+                    project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
+                    project.Location = reader["location"].ToString();
+                    project.Name = reader["name"].ToString();
+                    //The object is added to the list
+                    list.Add(project);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allProject: " + e.Message);
+            }//End catch
+            return list;
+
+        }//End of the method
 
         //#######  STAGE METHODS #########
 

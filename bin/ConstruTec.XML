@@ -145,6 +145,13 @@
             </summary>
             <returns>List of divided_in</returns>
         </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Divided_By_Project(System.Int64)">
+            <summary>
+            This method return the divided_in associated to a specific project
+            </summary>
+            <param name="id_project">The id of the project of interest</param>
+            <returns>Return a list with the divided_in</returns>
+        </member>
         <member name="M:ConstruTec.ConnectionDB.crear_Material(ConstruTec.Models.Material)">
             <summary>
             This method add the material in the ConstruTec database.
@@ -211,6 +218,13 @@
             </summary>
             <returns>List of posseses</returns>
         </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Posseses_By_Divided(System.Int64)">
+            <summary>
+            Return the Posseses associated to a divided_in.
+            </summary>
+            <param name="divided_id">The id of the divided of interest</param>
+            <returns>The list of posseses</returns>
+        </member>
         <member name="M:ConstruTec.ConnectionDB.crear_Project(ConstruTec.Models.Project)">
             <summary>
             This method add the project in the ConstruTec database.
@@ -241,6 +255,19 @@
         <member name="M:ConstruTec.ConnectionDB.get_allProject">
             <summary>
             Method return all the projects in the database ConstruTec.
+            </summary>
+            <returns>List of projects</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Project_By_Client(System.Int64)">
+            <summary>
+            This method recovers all the projects that belong to a specific user
+            </summary>
+            <param name="id_cliente">The id of the client whose projects they are wanted recovered</param>
+            <returns>Return the list of the projects of the client</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.nextProject">
+            <summary>
+            Returns all projects that have a stage that begins on the next 15 days
             </summary>
             <returns>List of projects</returns>
         </member>
