@@ -1516,54 +1516,6 @@ namespace ConstruTec
             return list;
         }//End of
 
-        
-        /// <summary>
-        /// This method recovers all the projects that belong to a specific user
-        /// </summary>
-        /// <param name="id_cliente">The id of the client whose projects they are wanted recovered</param>
-        /// <returns>Return the list of the projects of the client</returns>
-        public List<Project> get_Project_By_Engineer(long id_cliente)
-        {
-            //The output object 
-            List<Project> list = new List<Project>();
-            //The object responsible of the connection is created 
-            NpgsqlConnection connection = new NpgsqlConnection();
-            connection.ConnectionString = connectionString;
-            try
-            {
-                connection.Open();
-                //Write in the output window
-                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "SELECT * FROM PROJECT WHERE Id_Engineer = @id;";
-                //The query is executed
-                NpgsqlCommand command = new NpgsqlCommand(query, connection);
-                //Adds the id to the query
-                command.Parameters.AddWithValue("@id", id_cliente);
-                //Executes the command
-                var reader = command.ExecuteReader();
-                //The roles are recovered from the reader object
-                while (reader.Read())
-                {
-                    Project project = new Project();
-                    //The values of the attributes are recovered
-                    project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
-                    project.Id_Client = Int64.Parse(reader["id_client"].ToString());
-                    project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
-                    project.Location = reader["location"].ToString();
-                    project.Name = reader["name"].ToString();
-                    //The object is added to the list
-                    list.Add(project);
-                }// end of while
-                //The connection is closed
-                connection.Close();
-            }
-            catch (Exception e)
-            {
-                //It is notified in the output that the connection failed 
-                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allProjectClient: " + e.Message);
-            }//End catch
-            return list;
-        }//End of the method
 
         /// <summary>
         /// This method recovers all the projects that belong to a specific user
@@ -1613,6 +1565,49 @@ namespace ConstruTec
             return list;
         }//End of the method
 
+        public List<Project> get_Project_By_Engineer(long id_cliente)
+        {
+            //The output object 
+            List<Project> list = new List<Project>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM PROJECT WHERE Id_Engineer = @id;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the id to the query
+                command.Parameters.AddWithValue("@id", id_cliente);
+                //Executes the command
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Project project = new Project();
+                    //The values of the attributes are recovered
+                    project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
+                    project.Id_Client = Int64.Parse(reader["id_client"].ToString());
+                    project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
+                    project.Location = reader["location"].ToString();
+                    project.Name = reader["name"].ToString();
+                    //The object is added to the list
+                    list.Add(project);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allProjectClient: " + e.Message);
+            }//End catch
+            return list;
+        }//End of the method
+
 
         /// <summary>
         /// Returns all projects that have a stage that begins on the next 15 days
@@ -1630,7 +1625,7 @@ namespace ConstruTec
                 connection.Open();
                 //Write in the output window
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "SELECT * FROM nextProject();";
+                String query = "SELECT * FROM nextProyect();";
                 //The query is executed
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 var reader = command.ExecuteReader();
@@ -1677,7 +1672,7 @@ namespace ConstruTec
                 connection.Open();
                 //Write in the output window
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "SELECT * FROM nextProjectMaterial(@nombre);";
+                String query = "SELECT * FROM nextProyectMaterial(@nombre);";
                 //The query is executed
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 command.Parameters.AddWithValue("@nombre", name_material);
@@ -1713,7 +1708,7 @@ namespace ConstruTec
         /// </summary>
         /// <param name="name_project">Name of the project of interest</param>
         /// <returns>A list with the cost of every stage of the project</returns>
-        public List<Presupuesto> get_Presupuesto(string name_project)
+        public List<Presupuesto> get_Presupuesto(long name_project)
         {
             //The output object 
             List<Presupuesto> list = new List<Presupuesto>();
@@ -1725,7 +1720,7 @@ namespace ConstruTec
                 connection.Open();
                 //Write in the output window
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "SELECT budget(@name_project);";
+                String query = "SELECT * FROM budget(@name_project);";
                 //The query is executed
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 command.Parameters.AddWithValue("@name_project", name_project);
@@ -1737,13 +1732,14 @@ namespace ConstruTec
                 {
                     Presupuesto pre = new Presupuesto();
                     //The values of the attributes are recovered
-                    String budget = reader["budget"].ToString();
-                    budget = budget.Replace("(", "");
-                    budget = budget.Replace(")", "");
-                    String[] s = budget.Split(',');
-                    pre.Name_Stage = s[0];
-                    pre.costo = long.Parse(s[1]);
-                    //pre.costo = Int64.Parse(reader["Price"].ToString());
+                    pre.Name_Stage = reader["stageName"].ToString();
+                    try
+                    {
+                        pre.costo = Int64.Parse(reader["Price"].ToString());
+                    }catch (Exception e)//Postgres returns an empty space instead of 0
+                    {
+                        pre.costo = 0;
+                    }
                     //The object is added to the list
                     list.Add(pre);
                 }// end of while
