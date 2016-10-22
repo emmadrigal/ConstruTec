@@ -26,7 +26,7 @@ CREATE TABLE USUARIO(
 
 CREATE TABLE PROJECT(
 	Id_Project  bigserial    PRIMARY KEY,
-	Id_Client   bigint       REFERENCES USUARIO(Id_Number),
+	Id_Client   bigint       REFERENCES USUARIO(Id_Number) ON DELETE CASCADE,
 	Id_Engineer bigint       REFERENCES USUARIO(Id_Number), 
 	Location    varchar(255) NOT NULL,
 	Name        varchar      NOT NULL UNIQUE
@@ -40,8 +40,8 @@ CREATE TABLE STAGE(
 
 CREATE TABLE DIVIDED_IN(
 	Divided_Id  bigserial PRIMARY KEY,
-	Id_Project  bigint    REFERENCES PROJECT(Id_Project),
-	Stage_Id    bigint    REFERENCES STAGE(Stage_Id),
+	Id_Project  bigint    REFERENCES PROJECT(Id_Project) ON DELETE CASCADE,
+	Stage_Id    bigint    REFERENCES STAGE(Stage_Id) ON DELETE CASCADE,
 	Start_Date  date      NOT NULL,
 	End_Date    date      NOT NULL,
 	Status      boolean   NOT NULL
@@ -49,7 +49,7 @@ CREATE TABLE DIVIDED_IN(
 
 CREATE TABLE COMMENTARY(
 	Comment_Id bigserial PRIMARY KEY,
-	Divided_Id bigint    REFERENCES DIVIDED_IN(Divided_Id),
+	ID_PROJECT bigint    REFERENCES PROJECT(ID_PROJECT) ON DELETE CASCADE,
 	Commentary text
 );
 
@@ -62,8 +62,8 @@ CREATE TABLE MATERIAL(
 
 CREATE TABLE POSSESES(
 	Posseses_Id bigserial PRIMARY KEY,
-	Id_Material bigint    REFERENCES MATERIAL(Id_Material),
-	Divided_Id  bigint    REFERENCES DIVIDED_IN(Divided_Id),
+	Id_Material bigint    REFERENCES MATERIAL(Id_Material) ON DELETE CASCADE,
+	Divided_Id  bigint    REFERENCES DIVIDED_IN(Divided_Id) ON DELETE CASCADE,
 	Quantity    integer   NOT NULL CHECK (Quantity > 0)
 );
 
@@ -106,23 +106,23 @@ CREATE TRIGGER stageOrder
   EXECUTE PROCEDURE stageOrder();
 
   --Procedure that returns the budget for each stage 
-CREATE OR REPLACE FUNCTION budget(IN ProjectName varchar(50)) RETURNS TABLE(
+CREATE OR REPLACE FUNCTION budget(IN ProjectId bigint) RETURNS TABLE(
 	StageName varchar(255),
 	Price     bigint
 )
 AS $BODY$
-		SELECT s.Name, sum(mat.price)
+		SELECT s.Name, sum(mat.price * pos.quantity)
 		FROM
 		Stage as s
 		NATURAL JOIN DIVIDED_IN as d
         RIGHT JOIN PROJECT as p ON p.Id_Project = d.Id_Project
         LEFT JOIN POSSESES as pos ON pos.Divided_Id = d.Divided_Id
         LEFT JOIN MATERIAL as mat ON mat.Id_Material = pos.Id_Material
-        WHERE p.Name = ProjectName Group By s.Name;
+        WHERE p.Id_Project = ProjectId Group By s.Name;
 $BODY$ LANGUAGE sql;
   
 --Procedure that returns all projects that have a stage that begins on the next 15 days
-CREATE OR REPLACE FUNCTION nextProyect() RETURNS SETOF PROJECT 
+CREATE OR REPLACE FUNCTION nextProject() RETURNS SETOF PROJECT 
 AS $BODY$     
 		SELECT p.Id_Project, p.Id_Client, p.Id_Engineer, p.Location, p.Name
 		FROM PROJECT AS p NATURAL JOIN DIVIDED_IN as d
@@ -132,13 +132,10 @@ AS $BODY$
 $BODY$ LANGUAGE sql;
 
 
-CREATE OR REPLACE FUNCTION nextProyectMaterial(IN material varchar(50)) RETURNS SETOF PROJECT
-AS $$        
-		WHERE
-		d.Start_Date > current_date + interval '15' day
-		
+CREATE OR REPLACE FUNCTION nextProjectMaterial(IN material varchar(50)) RETURNS SETOF PROJECT
+AS $$       
 		SELECT p.Id_Project, p.Id_Client, p.Id_Engineer, p.Location, p.Name
-		FROM PROJECT
+		FROM PROJECT as p
 		NATURAL JOIN DIVIDED_IN as d
         LEFT JOIN POSSESES as pos ON pos.Divided_Id = d.Divided_Id
         LEFT JOIN MATERIAL as mat ON mat.Id_Material = pos.Id_Material
@@ -188,3 +185,89 @@ CREATE FUNCTION deleteEngineer(IN Id bigint) RETURNS void AS $$
 		DELETE FROM ENGINEER WHERE Id_Number = Id;
     END;
 $$ LANGUAGE sql;
+
+
+
+--Procedure is used to insert roles in the database
+CREATE OR REPLACE FUNCTION insert_Roles(IN role_name varchar(50)) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM ROLES)) THEN
+               	INSERT INTO ROLES VALUES ((SELECT MAX(ROLE_ID) FROM ROLES)+1, role_name );
+           ELSE
+                INSERT INTO ROLES VALUES (0, role_name);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
+
+
+--Procedure is used to insert commentaries in the database
+CREATE OR REPLACE FUNCTION insert_Commentary(IN divided_id bigint, IN commentary text) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM COMMENTARY)) THEN
+               	INSERT INTO COMMENTARY VALUES ((SELECT MAX(COMMENT_ID) FROM COMMENTARY)+1, divided_id, commentary);
+           ELSE
+                INSERT INTO COMMENTARY VALUES (0, divided_id, commentary);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
+
+
+--Procedure is used to insert projects in the database
+CREATE OR REPLACE FUNCTION insert_Project(IN id_client bigint, IN id_engineer bigint, IN location1 varchar(255), IN name varchar) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM PROJECT)) THEN
+               	INSERT INTO PROJECT VALUES ((SELECT MAX(ID_PROJECT) FROM PROJECT)+1, id_client, id_engineer, location1, name);
+           ELSE
+                INSERT INTO PROJECT VALUES (0, id_client, id_engineer, location1, name);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
+
+
+
+--Procedure used to insert divided_in into the database
+CREATE OR REPLACE FUNCTION insert_Divided_in(IN id_project bigint, IN stage_id bigint, IN start_date date, IN end_date date,IN status boolean) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM DIVIDED_IN)) THEN
+               	INSERT INTO DIVIDED_IN VALUES ((SELECT MAX(DIVIDED_ID) FROM DIVIDED_IN)+1, id_project, stage_id, start_date, end_date, status);
+           ELSE
+                INSERT INTO DIVIDED_IN VALUES (0, id_project, stage_id, start_date, end_date, status);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
+
+
+--Procedure used to insert material into the database
+CREATE OR REPLACE FUNCTION insert_Material(IN name varchar(50), IN price integer, IN description varchar(255)) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM MATERIAL)) THEN
+               	INSERT INTO MATERIAL VALUES ((SELECT MAX(ID_MATERIAL) FROM MATERIAL)+1, name, price, description);
+           ELSE
+                INSERT INTO MATERIAL VALUES (0, name, price, description);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
+
+
+--Procedure used to insert posseses into the database
+CREATE OR REPLACE FUNCTION insert_Posseses(IN id_material bigint, IN divided_id bigint, IN quantity integer) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM POSSESES)) THEN
+               	INSERT INTO POSSESES VALUES ((SELECT MAX(POSSESES_ID) FROM POSSESES)+1, id_material, divided_id, quantity);
+           ELSE
+                INSERT INTO POSSESES VALUES (0, id_material, divided_id, quantity);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
+
+
+--Procedure used to insert stages into the database
+CREATE OR REPLACE FUNCTION insert_Stage(IN name varchar(255), IN description varchar(255)) RETURNS VOID AS $$
+        BEGIN
+           IF (EXISTS (SELECT 1 FROM STAGE)) THEN
+               	INSERT INTO STAGE VALUES ((SELECT MAX(STAGE_ID) FROM STAGE)+1, name, description);
+           ELSE
+                INSERT INTO STAGE VALUES (0, name, description);
+           END IF;
+   	    END;
+$$ LANGUAGE plpgsql;
