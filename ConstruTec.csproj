@@ -126,6 +126,7 @@
     <Compile Include="Controllers\Divided_inController.cs" />
     <Compile Include="Controllers\MaterialController.cs" />
     <Compile Include="Controllers\PossesesController.cs" />
+    <Compile Include="Controllers\PresupuestoController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\StageController.cs" />
