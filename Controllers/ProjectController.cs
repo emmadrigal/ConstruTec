@@ -22,16 +22,29 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
-        [Route("Usuario/{id}")]
+        [Route("{Usuario}/{id}")]
         [HttpGet]
-        public IHttpActionResult getProjectByClient(long id)
+        public IHttpActionResult getProjectByUsuario(string Usuario, long id)
         {
-            var dato = ConnectionDB.Instance.get_Project_By_Client(id);
-            if (dato == null)
+            if (Usuario== "Client")
             {
-                return NotFound();
+                var dato = ConnectionDB.Instance.get_Project_By_Client(id);
+                if (dato == null)
+                {
+                    return NotFound();
+                }
+                return Ok(dato);
             }
-            return Ok(dato);
+            else if (Usuario == "Engineer")
+            {
+                var dato = ConnectionDB.Instance.get_Project_By_Engineer(id);
+                if (dato == null)
+                {
+                    return NotFound();
+                }
+                return Ok(dato);
+            }
+            return NotFound();
         }
 
         [Route("Proximos_dias")]

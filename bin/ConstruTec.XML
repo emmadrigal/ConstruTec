@@ -265,6 +265,13 @@
             </summary>
             <returns>List of projects</returns>
         </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Project_By_Engineer(System.Int64)">
+            <summary>
+            This method recovers all the projects that belong to a specific user
+            </summary>
+            <param name="id_cliente">The id of the client whose projects they are wanted recovered</param>
+            <returns>Return the list of the projects of the client</returns>
+        </member>
         <member name="M:ConstruTec.ConnectionDB.get_Project_By_Client(System.Int64)">
             <summary>
             This method recovers all the projects that belong to a specific user
