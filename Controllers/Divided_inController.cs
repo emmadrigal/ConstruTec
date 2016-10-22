@@ -22,7 +22,7 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
-        [Route("{Project}/{id}")]
+        [Route("Project/{id}")]
         [HttpGet]
         public IHttpActionResult getDividedByProject(long id)
         {

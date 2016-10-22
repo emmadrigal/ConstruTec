@@ -22,7 +22,7 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
-        [Route("{Usuario}/{id}")]
+        [Route("Usuario/{id}")]
         [HttpGet]
         public IHttpActionResult getProjectByClient(long id)
         {
@@ -34,7 +34,7 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
-        [Route("{Proximos_dias}")]
+        [Route("Proximos_dias")]
         [HttpGet]
         public IHttpActionResult nextProjectdias()
         {

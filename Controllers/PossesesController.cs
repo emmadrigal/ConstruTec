@@ -22,7 +22,7 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
-        [Route("{Divided_in}/{id}")]
+        [Route("Divided_in/{id}")]
         [HttpGet]
         public IHttpActionResult getPossesesByDivided(long id)
         {
