@@ -7,7 +7,7 @@ namespace ConstruTec.Models
 {
     public class Presupuesto
     {
-        public string Name_Satge { get; set; }
-        public int costo { get; set; }
+        public string Name_Stage { get; set; }
+        public long costo { get; set; }
     }
 }

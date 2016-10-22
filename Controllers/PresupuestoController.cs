@@ -10,7 +10,17 @@ namespace ConstruTec.Controllers
     [RoutePrefix("Presupuesto")]
     public class PresupuestoController : ApiController
     {
-
+        [Route("{namep}")]
+        [HttpGet]
+        public IHttpActionResult getPresupuesto(String namep)
+        {
+            var dato = ConnectionDB.Instance.get_Presupuesto(namep);
+            if(dato == null)
+            {
+                return NotFound();
+            }
+            return Ok(dato);
+        }
 
     }
 }

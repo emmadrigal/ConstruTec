@@ -30,6 +30,20 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+
+        [Route("Proyecto/{id}")]
+        [HttpGet]
+        public IHttpActionResult getCommentaryByProject(long id)
+        {
+            var dato = ConnectionDB.Instance.get_Commentary_By_Project(id);
+            if (dato == null)
+            {
+                return NotFound();
+            }
+            return Ok(dato);
+        }
+
+
         [Route("{id}/{campo}/{newValue}")]
         [HttpPut]
         public IHttpActionResult PutCommentary(long id, string campo, string newValue)

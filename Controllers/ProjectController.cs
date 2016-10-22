@@ -46,6 +46,19 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+
+        [Route("Proximos_dias_material/{material}")]
+        [HttpGet]
+        public IHttpActionResult nextProjectMaterial(String material)
+        {
+            var dato = ConnectionDB.Instance.nextProjectMaterial(material);
+            if (dato == null)
+            {
+                return NotFound();
+            }
+            return Ok(dato);
+        }
+
         [Route("~/getAllProject")]
         [HttpGet]
         public IHttpActionResult getAllProject()

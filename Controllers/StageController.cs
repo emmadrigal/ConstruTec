@@ -34,11 +34,10 @@ namespace ConstruTec.Controllers
         [HttpPut]
         public IHttpActionResult PutStage(long id, string campo, string newValue)
         {
-            System.Diagnostics.Debug.WriteLine("PASA 1");
+            
             if (campo == "Description")
             {
 
-                System.Diagnostics.Debug.WriteLine("PASA 2");
                 ConnectionDB.Instance.update_Stage(id, campo, newValue);
             }
             return Ok();

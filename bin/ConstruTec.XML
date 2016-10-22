@@ -112,6 +112,13 @@
             </summary>
             <returns>List of commentaries</returns>
         </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Commentary_By_Project(System.Int64)">
+            <summary>
+            This method recovers the commentaries of a project
+            </summary>
+            <param name="id_project">The id of the project of interes</param>
+            <returns>The list of commentaries of the project</returns>
+        </member>
         <member name="M:ConstruTec.ConnectionDB.crear_Divided_in(ConstruTec.Models.Divided_in)">
             <summary>
             This method add the divided_in in the ConstruTec database.
@@ -270,6 +277,20 @@
             Returns all projects that have a stage that begins on the next 15 days
             </summary>
             <returns>List of projects</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.nextProjectMaterial(System.String)">
+            <summary>
+            Returns all projects that have a stage that begins on the next 15 days and need
+            the material whose name is name_material
+            </summary>
+            <returns>List of projects</returns>
+        </member>
+        <member name="M:ConstruTec.ConnectionDB.get_Presupuesto(System.String)">
+            <summary>
+            This method returns the budget of a project.
+            </summary>
+            <param name="name_project">Name of the project of interest</param>
+            <returns>A list with the cost of every stage of the project</returns>
         </member>
         <member name="M:ConstruTec.ConnectionDB.crear_Stage(ConstruTec.Models.Stage)">
             <summary>
