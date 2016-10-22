@@ -34,7 +34,7 @@ namespace ConstruTec
         private ConnectionDB()
         {
             //They are set the details of the connection with the database
-            connectionString = "Server=localhost;Port=5432;User id=postgres; Password=andres96;Database=ConstruTec1;";
+            connectionString = "Server=localhost;Port=5432;User id=postgres; Password=andres96;Database=ConstruTec;";
         }//End of constructor  method
 
         //##### ROLES METHODS #######
@@ -1516,6 +1516,54 @@ namespace ConstruTec
             return list;
         }//End of
 
+        
+        /// <summary>
+        /// This method recovers all the projects that belong to a specific user
+        /// </summary>
+        /// <param name="id_cliente">The id of the client whose projects they are wanted recovered</param>
+        /// <returns>Return the list of the projects of the client</returns>
+        public List<Project> get_Project_By_Engineer(long id_cliente)
+        {
+            //The output object 
+            List<Project> list = new List<Project>();
+            //The object responsible of the connection is created 
+            NpgsqlConnection connection = new NpgsqlConnection();
+            connection.ConnectionString = connectionString;
+            try
+            {
+                connection.Open();
+                //Write in the output window
+                System.Diagnostics.Debug.WriteLine("Sucessful Connection");
+                String query = "SELECT * FROM PROJECT WHERE Id_Engineer = @id;";
+                //The query is executed
+                NpgsqlCommand command = new NpgsqlCommand(query, connection);
+                //Adds the id to the query
+                command.Parameters.AddWithValue("@id", id_cliente);
+                //Executes the command
+                var reader = command.ExecuteReader();
+                //The roles are recovered from the reader object
+                while (reader.Read())
+                {
+                    Project project = new Project();
+                    //The values of the attributes are recovered
+                    project.Id_Proyect = Int64.Parse(reader["id_project"].ToString());
+                    project.Id_Client = Int64.Parse(reader["id_client"].ToString());
+                    project.Id_Enginner = Int64.Parse(reader["id_engineer"].ToString());
+                    project.Location = reader["location"].ToString();
+                    project.Name = reader["name"].ToString();
+                    //The object is added to the list
+                    list.Add(project);
+                }// end of while
+                //The connection is closed
+                connection.Close();
+            }
+            catch (Exception e)
+            {
+                //It is notified in the output that the connection failed 
+                System.Diagnostics.Debug.WriteLine("Failed Connection in get_allProjectClient: " + e.Message);
+            }//End catch
+            return list;
+        }//End of the method
 
         /// <summary>
         /// This method recovers all the projects that belong to a specific user
