@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -25,22 +26,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Shows a screen
  */
 public class ProjectInformation extends AppCompatActivity {
+    private static String ProjectId;
     private static String currentProject;
     private static String currentUser;
     private static String role;
-    private static ArrayAdapter<String> arrayAdapter;
+    private static SimpleAdapter arrayAdapter;
 
     private static String clientId;
     private static String engineerId;
     private static String Location;
 
     private static String newValue;
+
+    private static JSONArray listOfStages;
+    private static List<String> listOfDivided = new ArrayList<>();
+
+    private static List<Map<String, String>> stageList = new ArrayList<>();
 
     /**
      * Populates the screen
@@ -55,11 +64,13 @@ public class ProjectInformation extends AppCompatActivity {
         currentProject = intent.getStringExtra("projectName");
         currentUser = intent.getStringExtra("currentUser");
         role = intent.getStringExtra("role");
+        ProjectId = intent.getStringExtra("projectId");
 
-        arrayAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                getStages(currentProject) );
+        arrayAdapter = new SimpleAdapter(this, stageList,
+                android.R.layout.simple_list_item_2,
+                new String[] {"Name", "Description"},
+                new int[] {android.R.id.text1,
+                        android.R.id.text2});
 
         String role = intent.getStringExtra("role");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addStage);
@@ -76,18 +87,32 @@ public class ProjectInformation extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //Updates this users list
+        getStages();
+        arrayAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Call to the Webservice to get project Information
      */
     static private void setProjectInfo(){
-        //TODO make call to the webService to retrieve project Data
+        String json = httpConnection.getConnection().sendGet("Project/" + ProjectId);
 
-        clientId = "304960478";
-        engineerId = "1793566";
-        Location = "Ubicado en el Tecnológico de Costa Rica, Sede San Carlos, 18 kilómetros al norte de Ciudad Quesada, carretera a Fortuna, Santa Clara, San Carlos";
+        try {
+            JSONObject obj = new JSONObject(json);
+
+            clientId = obj.getString("Id_Client");
+            engineerId = obj.getString("Id_Enginner");
+            Location = obj.getString("Location");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    //TODO on return to this screen data should be refreshed
 
     /**
      * A view containing a list of all the stages for the selected project
@@ -128,13 +153,14 @@ public class ProjectInformation extends AppCompatActivity {
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-                    String data = (String) list.getItemAtPosition(position);
+                    Map<String, String> data = (Map<String, String>) list.getItemAtPosition(position);
                     // create intent to start another activity
                     Intent intent = new Intent(view.getContext(), StageInformation.class);
                     // add the selected text item to our intent.
+                    intent.putExtra("dividedId", listOfDivided.get((int) id));
                     intent.putExtra("projectName", currentProject);
                     intent.putExtra("currentUser", currentUser);
-                    intent.putExtra("stageName", data);
+                    intent.putExtra("stageName", data.get("Name"));
                     intent.putExtra("role", role);
                     startActivity(intent);
                 }
@@ -174,7 +200,7 @@ public class ProjectInformation extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.project_details, container, false);
-            TextView name  = (TextView) rootView.findViewById(R.id.projectName);
+            final TextView name  = (TextView) rootView.findViewById(R.id.projectName);
             TextView client = (TextView) rootView.findViewById(R.id.clientId);
             TextView engineer = (TextView) rootView.findViewById(R.id.engineerId);
             final TextView location = (TextView) rootView.findViewById(R.id.location);
@@ -195,7 +221,39 @@ public class ProjectInformation extends AppCompatActivity {
                         public void onClick(View v) {
                             newValue = np.getText().toString();
                             location.setText(newValue);
-                            //TODO make a call to the database to update the value
+                            httpConnection.getConnection().sendPut("Project", currentProject, "Location", newValue);
+                            // create intent to start another activity
+                            d.dismiss();
+                        }
+                    });
+                    cancelAction.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            d.dismiss();
+                        }
+                    });
+                    d.show();
+                }
+            };
+
+            View.OnClickListener updateName = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog d = new Dialog(getContext());
+                    d.setContentView(R.layout.text_popup);
+                    Button setValue = (Button) d.findViewById(R.id.set);
+                    Button cancelAction = (Button) d.findViewById(R.id.cancel);
+
+                    final EditText np = (EditText) d.findViewById(R.id.newValue);
+
+                    setValue.setOnClickListener(new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v) {
+                            newValue = np.getText().toString();
+                            name.setText(newValue);
+                            httpConnection.getConnection().sendPut("Project", currentProject, "Name", newValue);
                             // create intent to start another activity
                             d.dismiss();
                         }
@@ -264,33 +322,44 @@ public class ProjectInformation extends AppCompatActivity {
 
     /**
      * Gets a list of the current stages associated to this projct
-     * @param Project that is currently on view
      * @return list of stages associated to this project
      */
-    private List<String> getStages(String Project){
-        String nameId = "Nombre";
+    private void getStages(){
+        String json = httpConnection.getConnection().sendGet("Divided_in/Project/" + ProjectId);
 
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        String json = "[{\"Nombre\":\"Escaleras\"}, {\"Nombre\":\"Cimientos\"}, {\"Nombre\":\"Ventanas\"}, {\"Nombre\":\"Muebles de Cocina\"}]";
-
-        List<String> stages = new ArrayList<>();
+        listOfDivided.clear();
+        stageList.clear();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
-            JSONArray jsonArray = new JSONArray(json);
+            listOfStages = new JSONArray(json);
 
             //Iterate the jsonArray and print the info of JSONObjects
+            String idStage;
+            String idDivided;
             String nombre;
-            for(int i=0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                nombre = jsonObject.getString(nameId);
-                stages.add(nombre);
+            for(int i=0; i < listOfStages.length(); i++){
+                JSONObject jsonObject = listOfStages.getJSONObject(i);
+
+                //Retrieves both values
+                idDivided = jsonObject.getString("Divided_Id");
+                idStage = jsonObject.getString("Stage_Id");
+
+                //Makes a call to the Stage table to look at the name
+                String stageJson = httpConnection.getConnection().sendGet("Stage/" + idStage);
+                JSONObject obj = new JSONObject(stageJson);
+
+                Map<String, String> stage = new HashMap<>(2);
+                stage.put("Name", obj.getString("Name"));
+                stage.put("Description", obj.getString("Description"));
+
+                listOfDivided.add(idDivided);
+                stageList.add(stage);
             }
         }
         catch (JSONException e) {
             Log.d("error", "incorrect json recieved");
         }
-        return stages;
     }
 
     /**
@@ -301,9 +370,7 @@ public class ProjectInformation extends AppCompatActivity {
         // create intent to start another activity
         Intent intent = new Intent(view.getContext(), AddStageToProject.class);
         // add the selected text item to our intent.
-        intent.putExtra("userID", currentUser);
-        intent.putExtra("projectName", currentProject);
-        intent.putExtra("role", role);
+        intent.putExtra("projectID", ProjectId);
 
         startActivity(intent);
     }
@@ -313,7 +380,7 @@ public class ProjectInformation extends AppCompatActivity {
      * @param view that called this method
      */
     public void delete(View view){
-        //TODO make call to the web service to delete the current project
+        httpConnection.getConnection().sendDelete("Project", ProjectId);
         //TODO confirmation before deleting
         finish();
     }
@@ -324,7 +391,7 @@ public class ProjectInformation extends AppCompatActivity {
      */
     public void budget(View view){
         Intent intent = new Intent(ProjectInformation.this, budget.class);
-        intent.putExtra("projectName", currentProject);
+        intent.putExtra("projectID", ProjectId);
 
         startActivity(intent);
     }

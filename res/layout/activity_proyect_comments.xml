@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="construtec.mobile.ProyectComments">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.v4.view.PagerTitleStrip
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_gravity="top"
+            android:background="@color/material_deep_teal_500"
+            android:id="@+id/tabtitle">
+        </android.support.v4.view.PagerTitleStrip>
+    </android.support.v4.view.ViewPager>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addMaterial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:scaleType="center"
+        android:onClick="addComment"
+        app:fabSize="auto"
+        app:srcCompat="@mipmap/ic_add"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="450dp"/>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

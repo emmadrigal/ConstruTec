@@ -25,7 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 
@@ -41,10 +43,14 @@ public class UserInformation extends AppCompatActivity {
     private static String phone;
 
     private static List<String> projectList = new ArrayList<>();
+    private static List<String> nextProjectList = new ArrayList<>();
 
     private static ArrayAdapter myProjectAdapter;
     private static ArrayAdapter projectsAdapter;
 
+    private static Map<String, String> dictionary = new HashMap<String, String>();
+
+    private static List<String> idProyectos = new ArrayList<>();
     /**
      * Called when a new screen is created, it intializes the values
      * @param savedInstanceState required by Android
@@ -54,6 +60,7 @@ public class UserInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
+        dictionary.clear();
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("UserId");
@@ -63,7 +70,7 @@ public class UserInformation extends AppCompatActivity {
         phone = intent.getStringExtra("phone");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addProject);
-        if(!role.equals("1")) {
+        if(!role.equals("1") || !role.equals("3")) {
             fab.setVisibility(View.GONE);
         }else{
             fab.setVisibility(View.VISIBLE);
@@ -72,12 +79,12 @@ public class UserInformation extends AppCompatActivity {
         myProjectAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                getProjects(userId) );
-        getNextProjects();
+                projectList );
         projectsAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                projectList);
+                nextProjectList);
+        getNextProjects();
 
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -86,7 +93,13 @@ public class UserInformation extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
-    //TODO on return to this screen data should be refreshed
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //Updates this users list
+        getProjects();
+        getNextProjects();
+    }
 
     /**
      * A view containing a list of all the projects for the logged in user
@@ -116,7 +129,7 @@ public class UserInformation extends AppCompatActivity {
         }
 
         /**
-         * If a view of the stage list is created this is called
+         * If a view of the project list is created this is called
          * @param inflater required by Android
          * @param container required by Android
          * @param savedInstanceState required by Android
@@ -138,10 +151,11 @@ public class UserInformation extends AppCompatActivity {
 
                     Intent intent = new Intent(view.getContext(), ProjectInformation.class);
 
+                    Log.i("Project ID", idProyectos.get((int) id));
+                    intent.putExtra("projectId", idProyectos.get((int) id));
                     intent.putExtra("projectName", data);
                     intent.putExtra("userID", userId);
                     intent.putExtra("role", role);
-
                     startActivity(intent);
                 }
             });
@@ -193,6 +207,14 @@ public class UserInformation extends AppCompatActivity {
             final TextView phoneNumber = (TextView) rootView.findViewById(R.id.phoneNumber);
             final TextView rol = (TextView) rootView.findViewById(R.id.role);
             final TextView code = (TextView) rootView.findViewById(R.id.code);
+
+            Button admin = (Button) rootView.findViewById(R.id.populateMaterials);
+            if(role.equals("3")){
+                admin.setVisibility(View.VISIBLE);
+            }
+            else{
+                admin.setVisibility(View.GONE);
+            }
 
             View.OnClickListener updateName = new View.OnClickListener() {
                 @Override
@@ -291,7 +313,6 @@ public class UserInformation extends AppCompatActivity {
                 }
             };
 
-            getUserInfo();
             name.setText(userName);
             name.setOnClickListener(updateName);
             id.setText(userId);
@@ -342,7 +363,7 @@ public class UserInformation extends AppCompatActivity {
         }
 
         /**
-         * If a view of the stage list is created this is called
+         * If a view of for tracking of other projects is created this is called
          * @param inflater required by Android
          * @param container required by Android
          * @param savedInstanceState required by Android
@@ -359,7 +380,13 @@ public class UserInformation extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     String data = (String) list.getItemAtPosition(position);
-                    //TODO change to project view list
+
+                    Intent intent = new Intent(getContext(), ProyectComments.class);
+
+                    intent.putExtra("projectID", dictionary.get(data));
+
+                    startActivity(intent);
+
                 }
             });
 
@@ -371,8 +398,7 @@ public class UserInformation extends AppCompatActivity {
                     if(material.getText().toString().equals("")){
                         getNextProjects();
                     }else{
-                        getNextProjectsByMaterial("");
-                        //TODO change instead of choosing material, give list of options
+                        getNextProjectsByMaterial(material.getText().toString());
                     }
                     projectsAdapter.notifyDataSetChanged();
                 }
@@ -380,12 +406,6 @@ public class UserInformation extends AppCompatActivity {
 
             return rootView;
         }
-    }
-
-
-
-    private static void getUserInfo(){
-        //TODO make call to the database
     }
 
     /**
@@ -434,44 +454,47 @@ public class UserInformation extends AppCompatActivity {
 
     /**
      * Returns a list of strings that indicate the stages currently associated with this project
-     * @param id of the user asking for its projects
      * @return List of strings containing the list of all current names
      */
-    private List<String> getProjects(String id){
-        String nameId = "Nombre";
+    private void getProjects(){
+        String json;
+        if(role.equals("1")){
+            json = httpConnection.getConnection().sendGet("Project/Ingeniero/" + userId);
+        }else{
+            json = httpConnection.getConnection().sendGet("Project/Cliente/" + userId);
+        }
 
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        String json = "[{\"Nombre\": \"Casa de Marco\"}, {\"Nombre\": \"Carretera a Cartago\"},{\"Nombre\": \"Libero Consulting\"},{\"Nombre\": \"Consequat Incorporated\"},{\"Nombre\": \"Vitae Industries\"},{\"Nombre\": \"Nulla LLP\"},{\"Nombre\": \"Ffringilla Euismod Enim Consulting\"},{\"Nombre\": \"Yut Mi Foundation\"},{\"Nombre\": \"Tempor Diam Foundation\"},{\"Nombre\": \"Ipsum Corp\"}]";
-
-        List<String> projects = new ArrayList<>();
+        projectList.clear();
+        idProyectos.clear();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
-            JSONArray jsonArray = new JSONArray(json);
+            JSONArray proyectosDeUsuario = new JSONArray(json);
 
             //Iterate the jsonArray and print the info of JSONObjects
             String nombre;
-            for(int i=0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                nombre = jsonObject.getString(nameId);
-                projects.add(nombre);
+            String iden;
+            for(int i=0; i < proyectosDeUsuario.length(); i++){
+                JSONObject jsonObject = proyectosDeUsuario.getJSONObject(i);
+                iden = jsonObject.getString("Id_Proyect");
+                nombre = jsonObject.getString("Name");
+                projectList.add(nombre);
+                idProyectos.add(iden);
             }
         }
         catch (JSONException e) {
-            Log.d("error", "incorrect json recieved");}
-        return projects;
+            Log.d("error", "incorrect json recieved");
+        }
+        myProjectAdapter.notifyDataSetChanged();
     }
 
     /**
      *
      */
     private static void getNextProjects(){
-        String nameId = "Nombre";
+        String json = httpConnection.getConnection().sendGet("Project/Proximos_dias/");
 
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        String json = "[{\"Nombre\": \"Casa de Marco\"}, {\"Nombre\": \"Carretera a Cartago\"},{\"Nombre\": \"Libero Consulting\"},{\"Nombre\": \"Consequat Incorporated\"},{\"Nombre\": \"Vitae Industries\"},{\"Nombre\": \"Nulla LLP\"},{\"Nombre\": \"Ffringilla Euismod Enim Consulting\"},{\"Nombre\": \"Yut Mi Foundation\"},{\"Nombre\": \"Tempor Diam Foundation\"},{\"Nombre\": \"Ipsum Corp\"}]";
-
-        projectList.clear();
+        nextProjectList.clear();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
@@ -481,13 +504,15 @@ public class UserInformation extends AppCompatActivity {
             String nombre;
             for(int i=0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                nombre = jsonObject.getString(nameId);
-                projectList.add(nombre);
+                nombre = jsonObject.getString("Name");
+                nextProjectList.add(nombre);
+                dictionary.put(nombre, jsonObject.getString("Id_Proyect"));
             }
         }
         catch (JSONException e) {
             Log.d("error", "incorrect json recieved");
         }
+        projectsAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -497,10 +522,9 @@ public class UserInformation extends AppCompatActivity {
     private static void getNextProjectsByMaterial(String materialName) {
         String nameId = "Nombre";
 
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        String json = "[{\"Nombre\": \"Consequat Incorporated\"},{\"Nombre\": \"Vitae Industries\"},{\"Nombre\": \"Nulla LLP\"},{\"Nombre\": \"Ffringilla Euismod Enim Consulting\"},{\"Nombre\": \"Yut Mi Foundation\"}]";
+        String json = httpConnection.getConnection().sendGet("Project/Proximos_dias_material/"+ materialName);
 
-        projectList.clear();
+        nextProjectList.clear();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
@@ -511,11 +535,13 @@ public class UserInformation extends AppCompatActivity {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 nombre = jsonObject.getString(nameId);
-                projectList.add(nombre);
+                nextProjectList.add(nombre);
+                dictionary.put(nombre, jsonObject.getString("Id_Proyect"));
             }
         } catch (JSONException e) {
             Log.d("error", "incorrect json recieved");
         }
+        projectsAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -536,5 +562,9 @@ public class UserInformation extends AppCompatActivity {
     public void delete(View view){
         httpConnection.getConnection().sendDelete("Usuario", userId);
         finish();
+    }
+
+    public void populate(View view){
+        //TODO make call to the database to populate the materials view
     }
 }

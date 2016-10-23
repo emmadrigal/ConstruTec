@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/ipAdress"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:onClick="IP"
+        android:text="i"
+        android:layout_marginStart="335dp"
+        android:layout_marginTop="350dp">
+    </Button>
 
     <!-- Login progress -->
     <LinearLayout
@@ -51,15 +61,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.design.widget.TextInputLayout>
-    </android.support.design.widget.TextInputLayout>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

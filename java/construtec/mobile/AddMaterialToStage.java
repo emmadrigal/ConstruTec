@@ -1,6 +1,7 @@
 package construtec.mobile;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -19,7 +20,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Screen that allows a user to add a new material to a stage
@@ -28,9 +31,9 @@ public class AddMaterialToStage extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
 
-    private String userID;
-    private String projectName;
-    static Dialog d ;
+    Map<String, String> dictionary = new HashMap<>();
+
+    private String dividedID;
 
     private String selectedMaterial;
 
@@ -43,6 +46,8 @@ public class AddMaterialToStage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_material_to_stage);
 
+        Intent intent = getIntent();
+        dividedID = intent.getStringExtra("dividedID");
 
         list = (ListView) findViewById(R.id.List);
         EditText filter = (EditText) findViewById(R.id.filter);
@@ -80,22 +85,13 @@ public class AddMaterialToStage extends AppCompatActivity {
         });
     }
 
-    /**
-     * Calls the web service to return all of the values
-     * @return json from the WebService
-     */
-    private String getAllMaterials(){
-        return httpConnection.getConnection().sendGet("getAllMaterial");
-    }
 
     /**
      * Calls to get a formated list of materials to be shown
      * @return list of strings indicating a list of available materials
      */
     private List<String> getMaterials(){
-        String nameId = "Name";
-
-        String json = getAllMaterials();
+        String json = httpConnection.getConnection().sendGet("getAllMaterial");
 
         List<String> stages = new ArrayList<>();
 
@@ -107,7 +103,9 @@ public class AddMaterialToStage extends AppCompatActivity {
             String nombre;
             for(int i=0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                nombre = jsonObject.getString(nameId);
+                nombre = jsonObject.getString("Name");
+                dictionary.put(nombre, jsonObject.getString("Id_Material"));
+
                 stages.add(nombre);
             }
         }
@@ -119,11 +117,19 @@ public class AddMaterialToStage extends AppCompatActivity {
 
     /**
      * Call to the WebService to perform call to the webService
-     * @param data name of the material
      * @param value quantity of the material
      */
-    private void addMaterialToStage(String data, int value){
-        //TODO add call to the web service
+    private void addMaterialToStage(int value){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("Id_Material", dictionary.get(selectedMaterial));
+            json.put("Divided_Id", dividedID);
+            json.put("Quantity", Integer.toString(value));
+            httpConnection.getConnection().sendPost("Posseses", json.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -138,7 +144,7 @@ public class AddMaterialToStage extends AppCompatActivity {
         Button cancelAction = (Button) d.findViewById(R.id.cancel);
 
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
-        np.setMinValue(0);
+        np.setMinValue(1);
         np.setMaxValue(Integer.MAX_VALUE);
         np.setWrapSelectorWheel(false);
 
@@ -146,7 +152,7 @@ public class AddMaterialToStage extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                addMaterialToStage(selectedMaterial, np.getValue());
+                addMaterialToStage(np.getValue());
 
                 d.dismiss();
                 finish();

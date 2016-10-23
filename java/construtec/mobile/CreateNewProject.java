@@ -33,16 +33,9 @@ public class CreateNewProject extends AppCompatActivity {
      * @param view that calls this method
      */
     public void createProject(View view){
-        EditText name = (EditText) findViewById(R.id.name);
-
         addProject();
 
-        //TODO check if add is succesfull before proceding
-        Intent intent = new Intent(getBaseContext(), ProjectInformation.class);
-        intent.putExtra("projectName", name.getText().toString());
-        intent.putExtra("userID", engineerID);
-        intent.putExtra("role", "1");
-        startActivity(intent);
+        finish();
     }
 
     /**

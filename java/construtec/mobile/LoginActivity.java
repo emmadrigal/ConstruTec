@@ -1,11 +1,13 @@
 package construtec.mobile;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.json.*;
@@ -83,7 +85,6 @@ public class LoginActivity extends AppCompatActivity{
      * @param userId of the user that wishes to login
      * @return boolean indicating if the user exists on the Database
      */
-    //TODO: Checkear el tipo de usario y segun eso avanzar la interfaz
     private boolean userExists(String name, int userId){
         String json = httpConnection.getConnection().sendGet("Usuario/" + Integer.toString(userId));
         Log.i("recieved Jason", json);
@@ -109,6 +110,36 @@ public class LoginActivity extends AppCompatActivity{
             return false;
         }
         return false;
+    }
+
+    public void IP(View view){
+        final Dialog d = new Dialog(LoginActivity.this);
+        d.setContentView(R.layout.ip_address);
+        Button create = (Button) d.findViewById(R.id.create);
+        Button cancelAction = (Button) d.findViewById(R.id.cancel);
+
+        final EditText ipadress = (EditText) d.findViewById(R.id.ipAdress);
+        final EditText port = (EditText) d.findViewById(R.id.port);
+
+
+        create.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                httpConnection.serviceIp = ipadress.getText().toString();
+                httpConnection.port = port.getText().toString();
+
+                d.dismiss();
+            }
+        });
+        cancelAction.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+        d.show();
     }
 }
 

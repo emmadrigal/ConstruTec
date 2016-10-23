@@ -25,7 +25,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Screen that show the available stages to be shwon to the project
@@ -35,12 +37,15 @@ public class AddStageToProject extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapter;
     final Context context = this;
 
-    private String userID;
-    private String projectName;
+    Map<String, String> dictionary = new HashMap<String, String>();
+
+    private String selectedItem;
+    private String projectID;
 
     private static String startDate = "";
     private static String endDate = "";
-    private String data;
+
+    private static List<String> stageList = new ArrayList<>();
 
     /**
      * Called to initialize values inside the view
@@ -60,8 +65,7 @@ public class AddStageToProject extends AppCompatActivity {
         int año = cal.get(Calendar.YEAR);
 
         Intent intent = getIntent();
-        projectName = intent.getStringExtra("projectName");
-        userID = intent.getStringExtra("userID");
+        projectID = intent.getStringExtra("projectID");
 
         list = (ListView) findViewById(R.id.List);
         EditText filter = (EditText) findViewById(R.id.filter);
@@ -71,24 +75,19 @@ public class AddStageToProject extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
-                getStages() );
+                stageList);
 
         list.setAdapter(arrayAdapter);
 
         final DatePickerDialog endDatePicker = new DatePickerDialog(AddStageToProject.this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                endDate = selectedmonth + "-" + selectedday + "-" + selectedyear;
+                selectedmonth = selectedmonth + 1;
+                endDate = selectedyear + "-"  + selectedmonth + "-" + selectedday;
 
-                addStageToProject(data, startDate, endDate, projectName);
+                addStageToProject(startDate, endDate, projectID);
 
-                //TODO check if add is succesfull before proceding
-                Intent intent = new Intent(getBaseContext(), StageInformation.class);
-                intent.putExtra("stageName",   data);
-                intent.putExtra("projectName", projectName);
-                intent.putExtra("userID",      userID);
-                intent.putExtra("role", "1");
-                startActivity(intent);
+                finish();
             }
         },
                 año, mes, dia);
@@ -98,7 +97,8 @@ public class AddStageToProject extends AppCompatActivity {
         final DatePickerDialog startDatePicker = new DatePickerDialog(AddStageToProject.this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                startDate = selectedmonth + "-" + selectedday + "-" + selectedyear;
+                selectedmonth = selectedmonth + 1;
+                startDate = selectedyear + "-"  + selectedmonth + "-" + selectedday;
                 endDatePicker.show();
             }
 
@@ -111,7 +111,7 @@ public class AddStageToProject extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 startDatePicker.show();
-                data = (String) list.getItemAtPosition(position);
+                selectedItem = (String) list.getItemAtPosition(position);
             }
         });
 
@@ -132,8 +132,19 @@ public class AddStageToProject extends AppCompatActivity {
                 {
                     @Override
                     public void onClick(View v) {
-                        //TODO make a call to the database to create new stage
-                        //TODO refresh stage list after creation
+                        JSONObject json = new JSONObject();
+                        try {
+                            json.put("Name", stageName.getText());
+                            json.put("Description", description.getText());
+                            httpConnection.getConnection().sendPost("Stage", json.toString());
+
+                            getStages();
+                            arrayAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         d.dismiss();
                     }
                 });
@@ -148,10 +159,6 @@ public class AddStageToProject extends AppCompatActivity {
             }
         });
 
-
-
-
-
         filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -164,58 +171,65 @@ public class AddStageToProject extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable arg0){}
         });
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
 
-
-
+        getStages();
+        arrayAdapter.notifyDataSetChanged();
     }
 
     /**
      * Call to the webservice to get the acailable stages to be added
-     * @param stageName name of the stage to be added
      * @param startDate start date of the stage
      * @param endDate endDate of the stage
-     * @param projectName name of the project that is going to get a new stage
      */
-    private void addStageToProject(String stageName, String startDate, String endDate, String projectName){
-        //TODO make call to web service
-    }
+    private void addStageToProject(String startDate, String endDate, String projectID){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("Id_Project", projectID);
+            json.put("Stage_Id", dictionary.get(selectedItem));
+            json.put("Start_Date", startDate);
+            json.put("End_Date", endDate);
+            json.put("Status", "false");
+            httpConnection.getConnection().sendPost("Divided_in", json.toString());
 
-    /**
-     * Called to the database
-     * @return json with the information from the database
-     */
-    private String getAllStages(){
-        return httpConnection.getConnection().sendGet("getAllStage");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
+    //TODO update on refresh
 
     /**
      * Called to populate the stage list
      * @return list of stage names that are available to be added to the project
      */
-    private List<String> getStages(){
-        String nameId = "Nombre";
+    private void getStages(){
+        String json = httpConnection.getConnection().sendGet("getAllStage");
 
-        String json = getAllStages();
-
-        List<String> stages = new ArrayList<>();
+        stageList.clear();
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
             JSONArray jsonArray = new JSONArray(json);
 
             //Iterate the jsonArray and print the info of JSONObjects
+            String stageId;
             String nombre;
             for(int i=0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                nombre = jsonObject.getString(nameId);
-                stages.add(nombre);
+                nombre = jsonObject.getString("Name");
+                stageId = jsonObject.getString("Stage_Id");
+
+                dictionary.put(nombre, stageId);
+                stageList.add(nombre);
             }
         }
         catch (JSONException e) {
             Log.d("error", "incorrect json recieved");
         }
-        return stages;
     }
 
 }

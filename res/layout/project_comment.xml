@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,81 +17,9 @@
             android:gravity="center_vertical"
             android:drawablePadding="5dp"
             android:layout_weight="1"
-            android:text="User Name: " />
+            android:text="Project Name: " />
         <TextView
-            android:id="@+id/userName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
-        android:gravity="center">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp"
-            android:layout_weight="1"
-            android:text="User Id: " />
-        <TextView
-            android:id="@+id/userId"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
-        android:gravity="center">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp"
-            android:layout_weight="1"
-            android:text="Phone Number: " />
-        <TextView
-            android:id="@+id/phoneNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
-        android:gravity="center">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="5dp"
-            android:layout_weight="1"
-            android:text="Role: " />
-        <TextView
-            android:id="@+id/role"
+            android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="15sp"
@@ -106,42 +35,95 @@
         android:layout_margin="20dp"
         android:gravity="center">
         <TextView
-            android:id="@+id/codeTag"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:gravity="center_vertical"
             android:drawablePadding="5dp"
             android:layout_weight="1"
-            android:text="Code: " />
+            android:text="Client Name: " />
         <TextView
-            android:id="@+id/code"
+            android:id="@+id/client"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:drawablePadding="5dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:orientation="vertical"
-        android:gravity="bottom">
-        <Button
-            android:id="@+id/populateMaterials"
-            android:layout_width="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="populate"
-            android:text="Call materials from epatec"/>
-        <Button
-            android:id="@+id/delete"
-            android:layout_width="match_parent"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:layout_weight="1"
+            android:text="Client Phone Number: " />
+        <TextView
+            android:id="@+id/clientNumber"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="delete"
-            android:text="Delete Account"/>
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:layout_weight="1"
+            android:text="Engineer Name: " />
+        <TextView
+            android:id="@+id/engineer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp"
+            android:layout_weight="1"
+            android:text="Engineer Phone Number: " />
+        <TextView
+            android:id="@+id/engineerNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:drawablePadding="5dp" />
+    </LinearLayout>
+
+
 
 </LinearLayout>

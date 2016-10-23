@@ -1,6 +1,7 @@
 package construtec.mobile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,11 +24,17 @@ import java.util.Map;
 
 public class budget extends AppCompatActivity {
     private ListView listview;
+    protected static String project;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
+
+        Intent intent = getIntent();
+
+        project = intent.getStringExtra("projectID");
+
         listview = (ListView) findViewById(R.id.List);
         listview.setAdapter(new yourAdapter(this));
     }
@@ -78,8 +85,8 @@ class yourAdapter extends BaseAdapter {
     }
 
     private List<Map<String, String>> getMaterials(){
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        String json = "[{\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Cimientos\", \"Price\": 123}, {\"StageName\": \"Escaleras\", \"Price\": 1654}, {\"StageName\": \"Muebles de Cocina\", \"Price\": 4568}, {\"StageName\": \"Pintura\", \"Price\": 50}, {\"StageName\": \"Pisos\", \"Price\": 165}, {\"StageName\": \"Cimientos\", \"Price\": 123}]";
+        int totalCost = 0;
+        String json = httpConnection.getConnection().sendGet("Presupuesto/" + budget.project);
 
         List<Map<String, String>> allMaterials = new ArrayList<>();
 
@@ -92,10 +99,15 @@ class yourAdapter extends BaseAdapter {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                 Map<String, String> material = new HashMap<>(2);
-                material.put(stageName, jsonObject.getString(stageName));
-                material.put(stagePrice, jsonObject.getString(stagePrice));
+                material.put(stageName, jsonObject.getString("Name_Stage"));
+                material.put(stagePrice, jsonObject.getString("costo"));
+                totalCost = totalCost + Integer.parseInt(jsonObject.getString("costo"));
                 allMaterials.add(material);
             }
+            Map<String, String> material = new HashMap<>(2);
+            material.put(stageName, "Total");
+            material.put(stagePrice, Integer.toString(totalCost));
+            allMaterials.add(material);
         }
         catch (JSONException e) {
             Log.d("error", "incorrect json recieved");

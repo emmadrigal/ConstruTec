@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Screen used to display the information of a stage
@@ -40,15 +41,19 @@ public class StageInformation extends AppCompatActivity {
     private static String currentProject;
     private static String currentUser;
     private static String currentStage;
+    private static String dividedId;
     private static SimpleAdapter adapter;
 
     private static String startDate;
     private static String endDate;
+    private static String status;
 
     final private static String nameId = "Nombre";
     final private static String quantityID = "Cantidad";
 
     private static String selectedMaterial;
+    private static List<String> possesesID = new ArrayList<>();
+    private static List<Map<String, String>> materialList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +64,9 @@ public class StageInformation extends AppCompatActivity {
         currentProject = intent.getStringExtra("projectName");
         currentUser = intent.getStringExtra("currentUser");
         currentStage = intent.getStringExtra("stageName");
+        dividedId = intent.getStringExtra("dividedId");
 
-        adapter = new SimpleAdapter(this, getMaterials(),
+        adapter = new SimpleAdapter(this, materialList,
                 android.R.layout.simple_list_item_2,
                 new String[] {nameId, quantityID},
                 new int[] {android.R.id.text1,
@@ -74,8 +80,6 @@ public class StageInformation extends AppCompatActivity {
             fab.setVisibility(View.VISIBLE);
         }
 
-        //TODO disable pay button when stage is already payed
-
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -83,16 +87,29 @@ public class StageInformation extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
-    //TODO on return to this screen data should be refreshed
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        getMaterials();
+        adapter.notifyDataSetChanged();
+    }
 
     /**
      * Makes a call to the database that gives the current stage information
      */
     static private void setStageInfo(){
-        //TODO make call to the webService to retrieve project Data
+        String json = httpConnection.getConnection().sendGet("Divided_in/" + dividedId);
 
-        startDate = "31/oct/2016";
-        endDate = "1/nov/2016";
+        JSONObject obj;
+        try {
+            obj = new JSONObject(json);
+            startDate = obj.getString("Start_Date");
+            endDate = obj.getString("End_Date");
+            status = obj.getString("Status");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -142,11 +159,8 @@ public class StageInformation extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
                     HashMap<String, Object> obj = (HashMap<String, Object>) adapter.getItem(position);
-                    selectedMaterial = (String) obj.get(nameId);
+                    selectedMaterial = possesesID.get(position);
                     String initialValue = (String) obj.get(quantityID);
-
-                    Log.d("selectedMaterial", selectedMaterial);
-                    Log.d("initialValue", initialValue);
 
                     show(Integer.parseInt(initialValue));
                 }
@@ -173,7 +187,7 @@ public class StageInformation extends AppCompatActivity {
             {
                 @Override
                 public void onClick(View v) {
-                    deleteMaterialStage(selectedMaterial);
+                    deleteMaterialStage();
                     // create intent to start another activity
                     d.dismiss();
                 }
@@ -183,7 +197,7 @@ public class StageInformation extends AppCompatActivity {
             {
                 @Override
                 public void onClick(View v) {
-                    updateMaterialStage(selectedMaterial, np.getValue());
+                    updateMaterialStage(np.getValue());
                     // create intent to start another activity
                     d.dismiss();
                 }
@@ -199,12 +213,18 @@ public class StageInformation extends AppCompatActivity {
         }
     }
 
-    private static void updateMaterialStage(String material, int newValue){
-        //TODO call the database to update the value of the material
+    private static void updateMaterialStage(int newValue){
+        httpConnection.getConnection().sendPut("Posseses", selectedMaterial, "Quantity", Integer.toString(newValue));
+
+        getMaterials();
+        adapter.notifyDataSetChanged();
     }
 
-    private static void deleteMaterialStage(String material){
-        //TODO call the database to delete the material from this stage
+    private static void deleteMaterialStage(){
+        httpConnection.getConnection().sendDelete("Posseses", selectedMaterial);
+
+        getMaterials();
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -243,6 +263,9 @@ public class StageInformation extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            setStageInfo();
+
+
             Date date = new Date();
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
@@ -257,6 +280,14 @@ public class StageInformation extends AppCompatActivity {
             final TextView startDate = (TextView) rootView.findViewById(R.id.startDate);
             final TextView endDate = (TextView) rootView.findViewById(R.id.endDate);
 
+            Button pay = (Button) rootView.findViewById(R.id.pay);
+
+            if(status.equals("false")){
+                pay.setVisibility(View.VISIBLE);
+            }
+            else{
+                pay.setVisibility(View.GONE);
+            }
 
 
             //Controls the click for the date
@@ -267,34 +298,9 @@ public class StageInformation extends AppCompatActivity {
                     DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
 
                         public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                            String newDate = "";
-                            switch(selectedmonth){
-                                case 0 : newDate = Integer.toString(selectedday) +  "/jan/" + Integer.toString(selectedyear);
-                                    break;
-                                case 1 : newDate = Integer.toString(selectedday) +  "/feb/" + Integer.toString(selectedyear);
-                                    break;
-                                case 2 : newDate = Integer.toString(selectedday) +  "/mar/" + Integer.toString(selectedyear);
-                                    break;
-                                case 3 : newDate = Integer.toString(selectedday) +  "/apr/" + Integer.toString(selectedyear);
-                                    break;
-                                case 4 : newDate = Integer.toString(selectedday) +  "/may/" + Integer.toString(selectedyear);
-                                    break;
-                                case 5 : newDate = Integer.toString(selectedday) +  "/jun/" + Integer.toString(selectedyear);
-                                    break;
-                                case 6 : newDate = Integer.toString(selectedday) +  "/jul/" + Integer.toString(selectedyear);
-                                    break;
-                                case 7 : newDate = Integer.toString(selectedday) +  "/aug/" + Integer.toString(selectedyear);
-                                    break;
-                                case 8 : newDate = Integer.toString(selectedday) +  "/sep/" + Integer.toString(selectedyear);
-                                    break;
-                                case 9 : newDate = Integer.toString(selectedday) +  "/oct/" + Integer.toString(selectedyear);
-                                    break;
-                                case 10 : newDate = Integer.toString(selectedday) +  "/nov/" + Integer.toString(selectedyear);
-                                    break;
-                                case 11 : newDate = Integer.toString(selectedday) +  "/dec/" + Integer.toString(selectedyear);
-                                    break;
-                            }
-                            //TODO make call to the database to perform update
+                            selectedmonth = selectedmonth + 1;
+                            String newDate = Integer.toString(selectedyear) +"-" +   Integer.toString(selectedmonth) +"-" + Integer.toString(selectedday);
+                            httpConnection.getConnection().sendPut("Divided_in", dividedId, "Start_Date", newDate);
                             startDate.setText(newDate);
                         }
 
@@ -310,34 +316,9 @@ public class StageInformation extends AppCompatActivity {
                     DatePickerDialog mDatePicker = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
 
                         public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                            String newDate = "";
-                            switch(selectedmonth){
-                                case 0 : newDate = Integer.toString(selectedday) +  "/jan/" + Integer.toString(selectedyear);
-                                    break;
-                                case 1 : newDate = Integer.toString(selectedday) +  "/feb/" + Integer.toString(selectedyear);
-                                    break;
-                                case 2 : newDate = Integer.toString(selectedday) +  "/mar/" + Integer.toString(selectedyear);
-                                    break;
-                                case 3 : newDate = Integer.toString(selectedday) +  "/apr/" + Integer.toString(selectedyear);
-                                    break;
-                                case 4 : newDate = Integer.toString(selectedday) +  "/may/" + Integer.toString(selectedyear);
-                                    break;
-                                case 5 : newDate = Integer.toString(selectedday) +  "/jun/" + Integer.toString(selectedyear);
-                                    break;
-                                case 6 : newDate = Integer.toString(selectedday) +  "/jul/" + Integer.toString(selectedyear);
-                                    break;
-                                case 7 : newDate = Integer.toString(selectedday) +  "/aug/" + Integer.toString(selectedyear);
-                                    break;
-                                case 8 : newDate = Integer.toString(selectedday) +  "/sep/" + Integer.toString(selectedyear);
-                                    break;
-                                case 9 : newDate = Integer.toString(selectedday) +  "/oct/" + Integer.toString(selectedyear);
-                                    break;
-                                case 10 : newDate = Integer.toString(selectedday) +  "/nov/" + Integer.toString(selectedyear);
-                                    break;
-                                case 11 : newDate = Integer.toString(selectedday) +  "/dec/" + Integer.toString(selectedyear);
-                                    break;
-                            }
-                            //TODO make call to the database to perform update
+                            selectedmonth = selectedmonth + 1;
+                            String newDate = Integer.toString(selectedyear) +"-" +   Integer.toString(selectedmonth) +"-" + Integer.toString(selectedday);
+                            httpConnection.getConnection().sendPut("Divided_in", dividedId, "End_Date", newDate);
                             endDate.setText(newDate);
                         }
 
@@ -346,7 +327,6 @@ public class StageInformation extends AppCompatActivity {
                     mDatePicker.show();  }
             };
 
-            setStageInfo();
             name.setText(currentProject);
             stage.setText(currentStage);
             startDate.setText(StageInformation.startDate);
@@ -402,12 +382,13 @@ public class StageInformation extends AppCompatActivity {
      * Retrieves the materials associated with this screen, since it is both material and quantity it has to allow for both to be desplayed
      * @return list of materials associated with this stage
      */
-    private List<Map<String, String>> getMaterials(){
-        //TODO: realizar la llamada a la base de datos para obtener esta informacion
-        String json = "[{\"Nombre\":\"Varillas\", \"Cantidad\" : 15}, {\"Nombre\":\"Cemento\", \"Cantidad\" : 4}, {\"Nombre\":\"Cerámica\", \"Cantidad\" : 200}, {\"Nombre\":\"Clavos\", \"Cantidad\" : 8000}, {\"Nombre\":\"Puertas\", \"Cantidad\" : 1}]";
+    private static void getMaterials(){
+        String json = httpConnection.getConnection().sendGet("Posseses/Divided_in/" + dividedId);
+        materialList.clear();
+        possesesID.clear();
 
-        List<Map<String, String>> allMaterials = new ArrayList<>();
-
+        String idPosseses;
+        String nombre;
         try {
             //Get the instance of JSONArray that contains JSONObjects
             JSONArray jsonArray = new JSONArray(json);
@@ -417,15 +398,23 @@ public class StageInformation extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                 Map<String, String> material = new HashMap<>(2);
-                material.put(nameId, jsonObject.getString(nameId));
-                material.put(quantityID, jsonObject.getString(quantityID));
-                allMaterials.add(material);
+                material.put(quantityID, jsonObject.getString("Quantity"));
+
+                //Makes a call to the Material table to look at the name
+                idPosseses = jsonObject.getString("Posseses_Id");
+                String stageJson = httpConnection.getConnection().sendGet("Material/" + jsonObject.getString("Id_Material"));
+                JSONObject obj = new JSONObject(stageJson);
+                nombre = obj.getString("Name");
+
+                material.put(nameId, nombre);
+
+                possesesID.add(idPosseses);
+                materialList.add(material);
             }
         }
         catch (JSONException e) {
             Log.d("error", "incorrect json recieved");
         }
-        return allMaterials;
     }
 
     /**
@@ -436,8 +425,7 @@ public class StageInformation extends AppCompatActivity {
         // create intent to start another activity
         Intent intent = new Intent(StageInformation.this, AddMaterialToStage.class);
         // add the selected text item to our intent.
-        intent.putExtra("userID", currentUser);
-        intent.putExtra("projectName", currentProject);
+        intent.putExtra("dividedID", dividedId);
         startActivity(intent);
     }
 
@@ -446,8 +434,8 @@ public class StageInformation extends AppCompatActivity {
      * @param view to be shown
      */
     public void delete(View view){
-        //TODO make call to the web service to delete the current stage
-        //TODO ask for confirmation before deleting
+        httpConnection.getConnection().sendDelete("Divided_in", dividedId);
+        //TODO ask for confirmation before paying
         finish();
     }
 
@@ -456,7 +444,7 @@ public class StageInformation extends AppCompatActivity {
      * @param view to be shown
      */
     public void pay(View view){
-        //TODO make call to the web service to delete the current stage
+        //TODO make call to the web service to perform this action
         //TODO ask for confirmation before deleting
         finish();
     }

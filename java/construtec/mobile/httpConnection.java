@@ -11,7 +11,7 @@ import okhttp3.Response;
 public class httpConnection {
     private static httpConnection singleton;
     //TODO get this information from user
-    public static String serviceIp = "192.168.43.163";
+    public static String serviceIp = "192.168.1.3";
     public static  String port      = "62801";
     OkHttpClient client = new OkHttpClient();
 
@@ -45,6 +45,7 @@ public class httpConnection {
      */
     public String sendGet(String url){
         url = "http://" + serviceIp + ":" + port + "/" + url;
+        Log.i("http", url);
         String respuesta = "";
         try {
             Request request = new Request.Builder()
@@ -56,6 +57,7 @@ public class httpConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.i("Response", respuesta);
         return respuesta;
     }
 
@@ -66,6 +68,8 @@ public class httpConnection {
      */
     public void sendPost(String url, String json){
         url = "http://" + serviceIp + ":" + port + "/" + url;
+        Log.i("http", url);
+        Log.i("http", json);
         try {
             RequestBody body = RequestBody.create(JSON, json);
             Request request = new Request.Builder()
@@ -88,6 +92,7 @@ public class httpConnection {
      */
     public void sendPut(String url, String id, String campo, String newValue){
         url = "http://" + serviceIp + ":" + port + "/" + url + "/" + id + "/" + campo + "/" + newValue;
+        Log.i("http", url);
         try {
             RequestBody body = RequestBody.create(null, new byte[0]);
             Request request = new Request.Builder()
@@ -103,6 +108,7 @@ public class httpConnection {
 
     public void sendDelete(String url, String id){
         url  = "http://" + serviceIp + ":" + port + "/" + url + "/" + id;
+        Log.i("http", url);
         try {
             Request request = new Request.Builder()
                     .url(url)
