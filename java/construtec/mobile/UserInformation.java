@@ -70,7 +70,7 @@ public class UserInformation extends AppCompatActivity {
         phone = intent.getStringExtra("phone");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addProject);
-        if(!role.equals("1") || !role.equals("3")) {
+        if(!role.equals("1") && !role.equals("3")) {
             fab.setVisibility(View.GONE);
         }else{
             fab.setVisibility(View.VISIBLE);
@@ -520,8 +520,6 @@ public class UserInformation extends AppCompatActivity {
      * @param materialName of the next projects
      */
     private static void getNextProjectsByMaterial(String materialName) {
-        String nameId = "Nombre";
-
         String json = httpConnection.getConnection().sendGet("Project/Proximos_dias_material/"+ materialName);
 
         nextProjectList.clear();
@@ -534,7 +532,7 @@ public class UserInformation extends AppCompatActivity {
             String nombre;
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                nombre = jsonObject.getString(nameId);
+                nombre = jsonObject.getString("Name");
                 nextProjectList.add(nombre);
                 dictionary.put(nombre, jsonObject.getString("Id_Proyect"));
             }
@@ -565,6 +563,6 @@ public class UserInformation extends AppCompatActivity {
     }
 
     public void populate(View view){
-        //TODO make call to the database to populate the materials view
+        httpConnection.getConnection().sendGet("populateMaterials/");
     }
 }

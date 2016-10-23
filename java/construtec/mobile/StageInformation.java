@@ -336,6 +336,7 @@ public class StageInformation extends AppCompatActivity {
 
             return rootView;
         }
+
     }
 
     /**
@@ -444,8 +445,6 @@ public class StageInformation extends AppCompatActivity {
      * @param view to be shown
      */
     public void pay(View view){
-        //TODO make call to the web service to perform this action
-        //TODO ask for confirmation before deleting
-        finish();
+        httpConnection.getConnection().sendGet("payDivided/" + dividedId);
     }
 }

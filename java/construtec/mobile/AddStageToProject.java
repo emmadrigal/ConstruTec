@@ -200,7 +200,6 @@ public class AddStageToProject extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    //TODO update on refresh
 
     /**
      * Called to populate the stage list

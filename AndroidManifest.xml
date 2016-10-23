@@ -48,8 +48,6 @@
         <activity android:name=".CreateNewStage"/>
         <activity android:name=".budget"/>
         <activity android:name=".nextProjects"/>
-        <activity android:name=".admin_screen">
-        </activity>
         <activity android:name=".ProyectComments">
         </activity>
     </application>
