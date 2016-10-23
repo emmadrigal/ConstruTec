@@ -42,15 +42,15 @@ public class UserInformation extends AppCompatActivity {
     private static String codigo;
     private static String phone;
 
-    private static List<String> projectList = new ArrayList<>();
-    private static List<String> nextProjectList = new ArrayList<>();
+    private static final List<String> projectList = new ArrayList<>();
+    private static final List<String> nextProjectList = new ArrayList<>();
 
     private static ArrayAdapter myProjectAdapter;
     private static ArrayAdapter projectsAdapter;
 
-    private static Map<String, String> dictionary = new HashMap<String, String>();
+    private static final Map<String, String> dictionary = new HashMap<>();
 
-    private static List<String> idProyectos = new ArrayList<>();
+    private static final List<String> idProyectos = new ArrayList<>();
     /**
      * Called when a new screen is created, it intializes the values
      * @param savedInstanceState required by Android
@@ -454,7 +454,6 @@ public class UserInformation extends AppCompatActivity {
 
     /**
      * Returns a list of strings that indicate the stages currently associated with this project
-     * @return List of strings containing the list of all current names
      */
     private void getProjects(){
         String json;

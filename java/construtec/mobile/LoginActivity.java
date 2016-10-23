@@ -12,13 +12,6 @@ import android.widget.EditText;
 
 import org.json.*;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 
 /**
  * A login screen that recieves name and ID

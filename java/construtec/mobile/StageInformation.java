@@ -32,14 +32,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Screen used to display the information of a stage
  */
 public class StageInformation extends AppCompatActivity {
     private static String currentProject;
-    private static String currentUser;
     private static String currentStage;
     private static String dividedId;
     private static SimpleAdapter adapter;
@@ -52,8 +50,8 @@ public class StageInformation extends AppCompatActivity {
     final private static String quantityID = "Cantidad";
 
     private static String selectedMaterial;
-    private static List<String> possesesID = new ArrayList<>();
-    private static List<Map<String, String>> materialList = new ArrayList<>();
+    private static final List<String> possesesID = new ArrayList<>();
+    private static final List<Map<String, String>> materialList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,7 @@ public class StageInformation extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentProject = intent.getStringExtra("projectName");
-        currentUser = intent.getStringExtra("currentUser");
+        String currentUser = intent.getStringExtra("currentUser");
         currentStage = intent.getStringExtra("stageName");
         dividedId = intent.getStringExtra("dividedId");
 
@@ -381,7 +379,6 @@ public class StageInformation extends AppCompatActivity {
 
     /**
      * Retrieves the materials associated with this screen, since it is both material and quantity it has to allow for both to be desplayed
-     * @return list of materials associated with this stage
      */
     private static void getMaterials(){
         String json = httpConnection.getConnection().sendGet("Posseses/Divided_in/" + dividedId);

@@ -35,9 +35,9 @@ import java.util.Map;
 public class AddStageToProject extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
-    final Context context = this;
+    private final Context context = this;
 
-    Map<String, String> dictionary = new HashMap<String, String>();
+    private final Map<String, String> dictionary = new HashMap<>();
 
     private String selectedItem;
     private String projectID;
@@ -45,7 +45,7 @@ public class AddStageToProject extends AppCompatActivity {
     private static String startDate = "";
     private static String endDate = "";
 
-    private static List<String> stageList = new ArrayList<>();
+    private static final List<String> stageList = new ArrayList<>();
 
     /**
      * Called to initialize values inside the view
@@ -203,7 +203,6 @@ public class AddStageToProject extends AppCompatActivity {
 
     /**
      * Called to populate the stage list
-     * @return list of stage names that are available to be added to the project
      */
     private void getStages(){
         String json = httpConnection.getConnection().sendGet("getAllStage");

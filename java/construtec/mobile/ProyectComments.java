@@ -27,11 +27,8 @@ import java.util.List;
 
 public class ProyectComments extends AppCompatActivity {
     private static String projectId;
-    private static String projectName;
-    private static String userName;
-    private static String phone;
 
-    private static List<String> Comments = new ArrayList<>();
+    private static final List<String> Comments = new ArrayList<>();
     private static ArrayAdapter commentAdapter;
 
     @Override

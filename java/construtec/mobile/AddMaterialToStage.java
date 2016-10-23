@@ -31,7 +31,7 @@ public class AddMaterialToStage extends AppCompatActivity {
     private ListView list;
     private ArrayAdapter<String> arrayAdapter;
 
-    Map<String, String> dictionary = new HashMap<>();
+    private final Map<String, String> dictionary = new HashMap<>();
 
     private String dividedID;
 

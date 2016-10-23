@@ -23,8 +23,7 @@ import java.util.Map;
 
 
 public class budget extends AppCompatActivity {
-    private ListView listview;
-    protected static String project;
+    static String project;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,7 @@ public class budget extends AppCompatActivity {
 
         project = intent.getStringExtra("projectID");
 
-        listview = (ListView) findViewById(R.id.List);
+        ListView listview = (ListView) findViewById(R.id.List);
         listview.setAdapter(new yourAdapter(this));
     }
 }
@@ -45,10 +44,10 @@ class yourAdapter extends BaseAdapter {
     final private String stagePrice = "Price";
 
     private Context context;
-    private List<Map<String, String>> data;
+    private final List<Map<String, String>> data;
     private static LayoutInflater inflater = null;
 
-    public yourAdapter(Context context) {
+    yourAdapter(Context context) {
         data = getMaterials();
         this.context = context;
         inflater = (LayoutInflater) context

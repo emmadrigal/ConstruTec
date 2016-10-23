@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,10 +45,9 @@ public class ProjectInformation extends AppCompatActivity {
 
     private static String newValue;
 
-    private static JSONArray listOfStages;
-    private static List<String> listOfDivided = new ArrayList<>();
+    private static final List<String> listOfDivided = new ArrayList<>();
 
-    private static List<Map<String, String>> stageList = new ArrayList<>();
+    private static final List<Map<String, String>> stageList = new ArrayList<>();
 
     /**
      * Populates the screen
@@ -271,6 +269,7 @@ public class ProjectInformation extends AppCompatActivity {
 
             setProjectInfo();
             name.setText(currentProject);
+            name.setOnClickListener(updateName);
             client.setText(clientId);
             engineer.setText(engineerId);
             location.setText(Location);
@@ -322,7 +321,6 @@ public class ProjectInformation extends AppCompatActivity {
 
     /**
      * Gets a list of the current stages associated to this projct
-     * @return list of stages associated to this project
      */
     private void getStages(){
         String json = httpConnection.getConnection().sendGet("Divided_in/Project/" + ProjectId);
@@ -332,13 +330,12 @@ public class ProjectInformation extends AppCompatActivity {
 
         try {
             //Get the instance of JSONArray that contains JSONObjects
-            listOfStages = new JSONArray(json);
+            JSONArray listOfStages = new JSONArray(json);
 
             //Iterate the jsonArray and print the info of JSONObjects
             String idStage;
             String idDivided;
-            String nombre;
-            for(int i=0; i < listOfStages.length(); i++){
+            for(int i = 0; i < listOfStages.length(); i++){
                 JSONObject jsonObject = listOfStages.getJSONObject(i);
 
                 //Retrieves both values

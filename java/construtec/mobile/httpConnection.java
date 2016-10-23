@@ -13,9 +13,9 @@ public class httpConnection {
     //TODO get this information from user
     public static String serviceIp = "192.168.1.3";
     public static  String port      = "62801";
-    OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient();
 
-    public static final MediaType JSON
+    private static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
 
@@ -41,7 +41,6 @@ public class httpConnection {
      * Makes an GET request based on an url, returns the WebService Responce
      * @param url  where request is going to be made
      * @return String with the response
-     * @throws Exception
      */
     public String sendGet(String url){
         url = "http://" + serviceIp + ":" + port + "/" + url;
