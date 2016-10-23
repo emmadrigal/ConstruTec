@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace ConstruTec.Controllers
 {
@@ -22,10 +17,18 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        [Route("~/populateMaterials")]
+        [HttpGet]
+        public IHttpActionResult populateMaterials()
+        {
+            EPATECConnection.populateMaterials();
+            return Ok();
+        }
+
         [Route("~/getAllMaterial")]
         [HttpGet]
         public IHttpActionResult getAllMaterial()
-        {
+        {            
             var dato = ConnectionDB.Instance.get_allMaterial();
             return Ok(dato);
         }
