@@ -1625,7 +1625,7 @@ namespace ConstruTec
                 connection.Open();
                 //Write in the output window
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "SELECT * FROM nextProyect();";
+                String query = "SELECT * FROM nextProject();";
                 //The query is executed
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 var reader = command.ExecuteReader();
@@ -1672,7 +1672,7 @@ namespace ConstruTec
                 connection.Open();
                 //Write in the output window
                 System.Diagnostics.Debug.WriteLine("Sucessful Connection");
-                String query = "SELECT * FROM nextProyectMaterial(@nombre);";
+                String query = "SELECT * FROM nextProjectMaterial(@nombre);";
                 //The query is executed
                 NpgsqlCommand command = new NpgsqlCommand(query, connection);
                 command.Parameters.AddWithValue("@nombre", name_material);
