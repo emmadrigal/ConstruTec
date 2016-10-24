@@ -265,13 +265,6 @@
             </summary>
             <returns>List of projects</returns>
         </member>
-        <member name="M:ConstruTec.ConnectionDB.get_Project_By_Engineer(System.Int64)">
-            <summary>
-            This method recovers all the projects that belong to a specific user
-            </summary>
-            <param name="id_cliente">The id of the client whose projects they are wanted recovered</param>
-            <returns>Return the list of the projects of the client</returns>
-        </member>
         <member name="M:ConstruTec.ConnectionDB.get_Project_By_Client(System.Int64)">
             <summary>
             This method recovers all the projects that belong to a specific user
@@ -292,7 +285,7 @@
             </summary>
             <returns>List of projects</returns>
         </member>
-        <member name="M:ConstruTec.ConnectionDB.get_Presupuesto(System.String)">
+        <member name="M:ConstruTec.ConnectionDB.get_Presupuesto(System.Int64)">
             <summary>
             This method returns the budget of a project.
             </summary>
@@ -331,6 +324,21 @@
             Method return all the stages in the database.
             </summary>
             <returns>List of stages</returns>
+        </member>
+        <member name="P:ConstruTec.EPATECPedido.id_Pedido">
+            Propiedad de Cedula
+        </member>
+        <member name="P:ConstruTec.EPATECPedido.Cedula_Cliente">
+            Propiedad de Nombre
+        </member>
+        <member name="P:ConstruTec.EPATECPedido.id_Sucursal">
+            Propiedad de Apellidos
+        </member>
+        <member name="P:ConstruTec.EPATECPedido.Telefono">
+            Propiedad de Nombre
+        </member>
+        <member name="P:ConstruTec.EPATECPedido.Hora">
+            Propiedad de Nombre
         </member>
     </members>
 </doc>

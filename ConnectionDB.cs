@@ -34,7 +34,7 @@ namespace ConstruTec
         private ConnectionDB()
         {
             //They are set the details of the connection with the database
-            connectionString = "Server=localhost;Port=5432;User id=postgres; Password=andres96;Database=ConstruTec;";
+            connectionString = "Server=localhost;Port=5432;User id=postgres; Password=fisica24;Database=ConstruTec;";
         }//End of constructor  method
 
         //##### ROLES METHODS #######

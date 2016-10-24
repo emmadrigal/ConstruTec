@@ -12,7 +12,7 @@ namespace ConstruTec.Controllers
     {
         [Route("{namep}")]
         [HttpGet]
-        public IHttpActionResult getPresupuesto(String namep)
+        public IHttpActionResult getPresupuesto(long namep)
         {
             var dato = ConnectionDB.Instance.get_Presupuesto(namep);
             if(dato == null)

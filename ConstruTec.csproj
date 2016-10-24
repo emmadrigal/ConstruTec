@@ -9,7 +9,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{62204275-DEE4-425B-A32F-AB002FC0DD33}</ProjectGuid>
+    <ProjectGuid>{0D9845DD-5937-49BE-A77A-BF6F64CEFE33}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -131,6 +131,7 @@
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="EPATECConnection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
