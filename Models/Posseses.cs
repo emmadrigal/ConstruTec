@@ -5,6 +5,9 @@ using System.Web;
 
 namespace ConstruTec.Models
 {
+    /// <summary>
+    /// Function that handles table Posseses simulate its functions to obtain and or save the data.
+    /// </summary>
     public class Posseses
     {
         public long Posseses_Id { get; set; }

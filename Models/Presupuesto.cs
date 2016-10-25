@@ -5,6 +5,9 @@ using System.Web;
 
 namespace ConstruTec.Models
 {
+    /// <summary>
+    /// Function that handles Presupuesto simulate its functions to obtain and or save the data.
+    /// </summary>
     public class Presupuesto
     {
         public string Name_Stage { get; set; }

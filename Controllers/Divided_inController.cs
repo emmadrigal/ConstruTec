@@ -5,6 +5,16 @@ namespace ConstruTec.Controllers
     [RoutePrefix("Divided_in")]
     public class Divided_inController : ApiController
     {
+        /// <summary>
+        /// Gets a divided_in regarding her id.
+        /// </summary>
+        /// <param name="id">
+        /// Value of the id associated to a one divided_in.
+        /// </param>
+        /// <returns>
+        /// Json with parameters of Divided_in: Divided_Id, Id_Project,  
+        /// Stage_Id, Start_Date, End_Date, Status. 
+        /// </returns>
         [Route("{id}")]
         [HttpGet]
         public IHttpActionResult getDivided_in(long id)
@@ -17,6 +27,15 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">
+        /// 
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         [Route("Project/{id}")]
         [HttpGet]
         public IHttpActionResult getDividedByProject(long id)

@@ -5,6 +5,9 @@ using System.Web;
 
 namespace ConstruTec.Models
 {
+    /// <summary>
+    /// Function that handles table Usuario simulate its functions to obtain and or save the data.
+    /// </summary>
     public class Usuario
     {
         public long Id_Number { get; set; }

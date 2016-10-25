@@ -5,6 +5,9 @@ using System.Web;
 
 namespace ConstruTec.Models
 {
+    /// <summary>
+    /// Function that handles table Project simulate its functions to obtain and or save the data.
+    /// </summary>
     public class Project
     {
         public long Id_Proyect { get; set; }
