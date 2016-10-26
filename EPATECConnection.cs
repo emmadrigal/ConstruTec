@@ -82,6 +82,7 @@ namespace ConstruTec
                         Encoding.UTF8, "application/json"))
                         .Result;
             }
+            ConnectionDB.Instance.update_Divided_in(dividedID, "Status", "true");
         }
     }
 
