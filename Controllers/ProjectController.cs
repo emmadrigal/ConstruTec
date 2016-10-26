@@ -10,6 +10,15 @@ namespace ConstruTec.Controllers
     [RoutePrefix("Project")]
     public class ProjectController : ApiController
     {
+        /// <summary>
+        /// Gets a Project regarding her id.
+        /// </summary>
+        /// <param name="id">
+        /// Value of the id associated to a one Project.
+        /// </param>
+        /// <returns>
+        /// Json with parameters of Project
+        /// </returns>
         [Route("{id}")]
         [HttpGet]
         public IHttpActionResult getProject(long id)
@@ -22,6 +31,15 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        /// <summary>
+        /// Gets a Project for each the Client id
+        /// </summary>
+        /// <param name="id">
+        /// Value of the id associated to a one Client.
+        /// </param>
+        /// <returns>
+        ///  Json with parameters of Project
+        /// </returns>
         [Route("Cliente/{id}")]
         [HttpGet]
         public IHttpActionResult getProjectByClient(long id)
@@ -34,6 +52,15 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        /// <summary>
+        /// Gets a Project for each the Engineer id
+        /// </summary>
+        /// <param name="id">
+        /// Value of the id associated to a one Enginner.
+        /// </param>
+        /// <returns>
+        /// Json with parameters of Project
+        /// </returns>
         [Route("Ingeniero/{id}")]
         [HttpGet]
         public IHttpActionResult getProjectByEngineer(long id)
@@ -46,6 +73,12 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        /// <summary>
+        /// Function for obtain the project that have a stage that starts in the next for 15 days
+        /// </summary>
+        /// <returns>
+        /// Returns a list of the Projects
+        /// </returns>
         [Route("Proximos_dias")]
         [HttpGet]
         public IHttpActionResult nextProjectdias()
@@ -59,6 +92,15 @@ namespace ConstruTec.Controllers
         }
 
 
+        /// <summary>
+        ///  Function for obtain the project that have a stage that starts in the next for 15 days by material
+        /// </summary>
+        /// <param name="material">
+        /// The name of the material
+        /// </param>
+        /// <returns>
+        /// Returns a list of the Projects
+        /// </returns>
         [Route("Proximos_dias_material/{material}")]
         [HttpGet]
         public IHttpActionResult nextProjectMaterial(String material)
@@ -71,6 +113,12 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        /// <summary>
+        /// Function for obtain all the Projects
+        /// </summary>
+        /// <returns>
+        ///  Returns a list of all the Projects
+        /// </returns>
         [Route("~/getAllProject")]
         [HttpGet]
         public IHttpActionResult getAllProject()
@@ -79,6 +127,21 @@ namespace ConstruTec.Controllers
             return Ok(dato);
         }
 
+        /// <summary>
+        /// Function for change a one specific value of one Project
+        /// </summary>
+        /// <param name="id">
+        /// Value of the id associated to a one Project.
+        /// </param>
+        /// <param name="campo">
+        /// The parameter that be changed
+        /// </param>
+        /// <param name="newValue">
+        /// The new value of the specific parameter
+        /// </param>
+        /// <returns>
+        ///  returns a correct if the parameter puts in the correct way
+        /// </returns>
         [Route("{id}/{campo}/{newValue}")]
         [HttpPut]
         public IHttpActionResult PutProject(long id, string campo, string newValue)
@@ -90,6 +153,15 @@ namespace ConstruTec.Controllers
             return Ok();
         }
 
+        /// <summary>
+        ///  Function for create a new Project in the database
+        /// </summary>
+        /// <param name="project">
+        /// Json with all the caracteristics of a Project for the database
+        /// </param>
+        /// <returns>
+        /// returns a correct if the Project it is create in the correct way
+        /// </returns>
         [Route("")]
         [HttpPost]
         public IHttpActionResult postProject([FromBody] Models.Project project)
@@ -98,6 +170,15 @@ namespace ConstruTec.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Function for delete one specific Project
+        /// </summary>
+        /// <param name="id">
+        /// Id value of one of existing Project
+        /// </param>
+        /// <returns>
+        /// returns a correct if the Project it is deleted in the correct way
+        /// </returns>
         [Route("{id}")]
         [HttpDelete]
         public IHttpActionResult deleteProject(long id)

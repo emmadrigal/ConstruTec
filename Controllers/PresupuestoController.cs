@@ -10,6 +10,15 @@ namespace ConstruTec.Controllers
     [RoutePrefix("Presupuesto")]
     public class PresupuestoController : ApiController
     {
+        /// <summary>
+        /// Gets a Presupuesto regarding her id.
+        /// </summary>
+        /// <param name="namep">
+        /// Value of the id associated to a one Presupuesto.
+        /// </param>
+        /// <returns>
+        /// Json with parameters of Presupuesto
+        /// </returns>
         [Route("{namep}")]
         [HttpGet]
         public IHttpActionResult getPresupuesto(long namep)
