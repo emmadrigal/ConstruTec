@@ -1,0 +1,40 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+    	<div class="navbar-header">
+      		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
+    	</div>
+    	<div class="collapse navbar-collapse" id="myNavbar">
+	      	<ul class="nav navbar-nav navbar-right">
+	      		<li><a ng-click="openRegisterForm(0)">Register</a></li>
+	      	</ul>
+	    </div>
+  	</div>
+</nav>
+<div class="jumbotron container text-center">
+	<div class="modal-header">
+	    <h4 class="modal-title" id="myModalLabel"> LOGIN INFORMATION </h4>
+    </div> 
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+  		<form class="form-horizontal">
+    		<div class="form-group">
+      			<label class="control-label col-sm-2"">Name:</label>
+      			<div class="col-sm-10">
+        			<input type="text" class="form-control" ng-model="loginName" placeholder="Enter name">
+      			</div>
+    		</div>
+    		<div class="form-group">
+      			<label class="control-label col-sm-2">ID:</label>
+      			<div class="col-sm-10">
+        			<input type="password" class="form-control" ng-model="loginID" placeholder="Enter Identification Number">
+      			</div>
+    		</div>
+  		</form>
+	</div>
+	        
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="validate()"> SUBMIT </button>
+    </div>
+</div>

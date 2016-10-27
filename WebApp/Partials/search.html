@@ -1,47 +1,72 @@
-<nav class="navbar navbar-default navbar-fixed-top">
-		    <div class="container">
-		    	<div class="navbar-header">
-		      		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
-		    	</div>
-			    <div class="collapse navbar-collapse" id="myNavbar">
-			      	<ul class="nav navbar-nav navbar-right">
-				        <li><a ng-click="openRegisterForm()">REGISTER</a></li>
-				        <li><a ng-click="openLoginForm()">LOGIN</a></li>
-			      	</ul>
-			    </div>
-		  	</div>
-		</nav>
+<nav ng-init="getProjectsByDay()" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+    	<div class="navbar-header">
+      		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
+    	</div>
+    	<div class="collapse navbar-collapse" id="myNavbar">
+	      	<ul class="nav navbar-nav navbar-right">
+	      		<li><a ng-click="goTo('/admin')">ADMIN</a></li>
+	      		<li><a ng-click="goTo('/client')">CLIENT</a></li>
+		        <li><a ng-click="goTo('/architect')">ARCHITECT</a></li>
+	      	</ul>
+	    </div>
+  	</div>
+</nav>
 <div id="search" class="jumbotron text-center">
 	<h1>CONSTRU-TEC</h1>
 
 	<div>
 		<form class="form-inline">
-			<input input class="form-control" type="text" ng-model="userSearch" placeholder="Search...">
+			<input input class="form-control" type="text" ng-model="userSearch" placeholder="Search by material...">
 		</form>
-		<br>
-		<button class="btn btn-default">Search Option 1</button>
-		<button class="btn btn-default">Search Option 2</button>
-		<br><br>
 	</div>
 
     <div class="container">
   		<table class="table table-hover">
-    		<thead>
-		    	<tr>
-		    		<th>ID</th>
-		    		<th>Firstname</th>
-			        <th>Lastname</th>
-			        <th>Address</th>
-		        </tr>
-            </thead>
+    		 <thead style="background-color: lightgray;">
+	          	<tr>
+		            <th>ID</th>
+		            <th>Name</th>
+					<th>LOCATION</th>
+			        <th>CLIENT ID</th>
+			        <th>ARCHITECT ID</th>
+			        <th>COMMENTS</th>
+	          	</tr>  
+	        </thead>
             <tbody>
-			    <tr ng-repeat="cust in customers | filter: userSearch">
-			    	<td>{{cust.ID}}</td>
-			    	<td>{{cust.name}}</td>
-			    	<td>{{cust.lastName}}</td>
-			    	<td>{{cust.address}}</td>
-			    </tr>
-			</tbody>
+	            <tr ng-repeat-start="(projIndex, proj) in projects">
+	            	<td>{{proj.Id_Proyect}}</td>
+				    <td>{{proj.Name}}</td>
+				    <td>{{proj.Location}}</td>
+				    <td>{{proj.Id_Client}}</td>
+					<td>{{proj.Id_Client}}</td>				    
+					<td>
+	              		<button ng-if="proj.expanded" ng-click="proj.expanded = false">-</button>
+	              		<button ng-if="!proj.expanded" ng-click="proj.expanded = true; getComments(proj.Id_Proyect)">+</button>
+	            	</td>
+	            </tr>
+	            <tr ng-if="proj.expanded" ng-repeat-end="">
+	          		<td colspan="5" >
+	            		<div>
+	            			<table  ng-init="" class="table table-hover">
+						        <thead>
+						          	<tr>
+							            <th>COMMENT</th>
+						          	</tr>  
+						        </thead>
+						        <tbody>
+						            <tr ng-repeat="c in info">
+						            	<td>{{c.Comentary}}</td>
+						          	</tr>
+						        </tbody>
+						    </table>
+						    <button type="button" class="btn btn-default" ng-click="openCommentForm(proj.Id_Proyect)">
+								<span class="glyphicon glyphicon-plus"></span> ADD COMMENT
+							</button>
+	            		</div>
+	            	</td>
+	          	</tr>
+	        </tbody>
   		</table>
 	</div>
 </div>

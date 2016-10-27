@@ -6,6 +6,7 @@
 		<script src="Scripts/angular-route.js"></script>
 		<script src="Scripts/app.js"></script>
 		<script src="Scripts/ui-bootstrap-tpls-2.2.0.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
 
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -71,7 +72,7 @@
 						<label class="control-label col-sm-2">Phase:</label>
 	                	<div class="col-sm-10">
 		                	<select class="form-control" ng-model="newPhaseName">
-						        <option ng-repeat="phase in listPhases">{{phase.name}}</option>
+						        <option ng-repeat="phase in info">{{phase.Name}}</option>
 	      					</select>
 	                	</div>
 	            	</div>
@@ -106,7 +107,7 @@
 	            	<div class="form-group">
 	                	<div class="col-sm-4">
 		                	<select class="form-control" ng-model="newMaterialName">
-						        <option ng-repeat="mat in listMaterials">{{mat.name}}</option>
+						        <option ng-repeat="mat in info">{{mat.Name}}</option>
 	      					</select>
 	                	</div>
 	            	</div>
@@ -122,6 +123,28 @@
 	        <!-- Modal Footer -->
 	        <div class="modal-footer">
 	            <button type="button" class="btn btn-primary" ng-click="addNewMaterial()"> SAVE MATERIAL </button>
+	        </div>
+		</script>
+
+		<script type="text/ng-template" id="NewCommentForm.html">
+			<div class="modal-header">
+			    <h4 class="modal-title" id="myModalLabel"> NEW COMMENT INFORMATION </h4>
+	        </div>  
+	        <!-- Modal Body -->
+	        <div class="modal-body">
+	            <form class="form-horizontal" role="form">
+	                <div class="form-group">
+	                	<label  class="col-sm-2 control-label" for="newComment"> COMMENT </label>
+	                    <div class="col-sm-10">
+	                        <input type="text" class="form-control" id="newComment" ng-model="newComment" placeholder="New Comment"/>
+	                    </div>
+	                </div>
+	            </form>
+	        </div>
+	            
+	        <!-- Modal Footer -->
+	        <div class="modal-footer">
+	            <button type="button" class="btn btn-primary" ng-click="addNewComment()"> SAVE COMMENT </button>
 	        </div>
 		</script>
 
@@ -175,37 +198,25 @@
 		    		<div class="form-group">
 		      			<label class="control-label col-sm-2">Name:</label>
 		      			<div class="col-sm-10">
-		        			<input type="text" class="form-control" id="newClientName" placeholder="Enter name">
+		        			<input type="text" class="form-control" id="newClientName" ng-model="newClientName" placeholder="Enter name">
 		      			</div>
 		    		</div>
 		    		<div class="form-group">
 		      			<label class="control-label col-sm-2">ID:</label>
 		      			<div class="col-sm-10">
-		        			<input type="text" class="form-control" id="newClientID" placeholder="Enter Identification Number">
+		        			<input type="text" class="form-control" id="newClientID" ng-model="newClientID" placeholder="Enter Identification Number">
 		      			</div>
 		    		</div>
 		    		<div class="form-group">
-		      			<label class="control-label col-sm-2">Last Name:</label>
+		      			<label class="control-label col-sm-2">Code:</label>
 		      			<div class="col-sm-10">
-		        			<input type="text" class="form-control" id="newClientLastName" placeholder="Enter Last Name">
-		      			</div>
-		    		</div>
-		    		<div class="form-group">
-		      			<label class="control-label col-sm-2">Address:</label>
-		      			<div class="col-sm-10">
-		        			<input type="text" class="form-control" id="newClientAddress" placeholder="Enter Address">
+		        			<input type="text" class="form-control" id="newClientCode" ng-model="newClientCode" placeholder="Enter Code">
 		      			</div>
 		    		</div>
 		    		<div class="form-group">
 		      			<label class="control-label col-sm-2">Phone Number:</label>
 		      			<div class="col-sm-10">
-		        			<input type="text" class="form-control" id="newClientPhoneNumber" placeholder="Enter Phone Number">
-		      			</div>
-		    		</div>
-		    		<div class="form-group">
-		    			<label class="control-label col-sm-2">Birthday:</label>
-		    			<div class="col-sm-10">
-		        			<input type="date" class="form-control" ng-model="BDate">
+		        			<input type="text" class="form-control" id="newClientPhoneNumber" ng-model="newClientPhoneNumber" placeholder="Enter Phone Number">
 		      			</div>
 		    		</div>
 		  		</form>
@@ -213,7 +224,7 @@
 	        
 	        <!-- Modal Footer -->
 	        <div class="modal-footer">
-	            <button type="button" class="btn btn-primary" ng-click="goToClient('/client')"> SUBMIT </button>
+	            <button type="button" class="btn btn-primary" ng-click="addNewUser()"> SUBMIT </button>
 	        </div>
 		</script>
 

@@ -1,11 +1,13 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav ng-init="getProjects('Cliente/')" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
     	<div class="navbar-header">
       		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
     	</div>
 	    <div class="collapse navbar-collapse" id="myNavbar">
 	      	<ul class="nav navbar-nav navbar-right">
-		        <li><a href="#search">LOGOUT</a></li>
+	      		<li><a ng-click="goTo('/search')">SEARCH</a></li>
+	      		<li><a ng-click="openRegisterForm(0)">NEW CLIENT</a></li>
+		        <li><a ng-click="goTo('/login')">LOGOUT</a></li>
 	      	</ul>
 	    </div>
   	</div>
@@ -20,18 +22,20 @@
 					<th>LOCATION</th>
 			        <th>ARCHITECT ID</th>
 			        <th>SHOW PHASES</th>
+			        <th>BUDGET</th>
 	          	</tr>  
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat-start="proj in projects">
-	            	<td>{{proj.ID}}</td>
-				    <td>{{proj.name}}</td>
-				    <td>{{proj.address}}</td>
-				    <td>{{proj.architectID}}</td>
+	            	<td>{{proj.Id_Proyect}}</td>
+				    <td>{{proj.Name}}</td>
+				    <td>{{proj.Location}}</td>
+				    <td>{{proj.Id_Enginner}}</td>
 				    <td>
 	              		<button ng-if="proj.expanded" ng-click="proj.expanded = false">-</button>
-	              		<button ng-if="!proj.expanded" ng-click="proj.expanded = true">+</button>
+	              		<button ng-if="!proj.expanded" ng-click="proj.expanded = true; loadProjectPhases(proj.Id_Proyect)">+</button>
 	            	</td>
+	            	<td><button ng-click="">o</button></td>
 	          	</tr>
 	          	<tr ng-if="proj.expanded" ng-repeat-end="">
 	            	<td colspan="5" >
@@ -47,12 +51,12 @@
 						        </thead>
 						        <tbody>
 						            <tr ng-repeat-start="p in phases">
-						            	<td>{{p.name}}</td>
-									    <td>{{p.start}}</td>
-									    <td>{{p.finish}}</td>
+						            	<td>{{p.Stage_Id}}</td>
+									    <td>{{p.Start_Date}}</td>
+									    <td>{{p.End_Date}}</td>
 									    <td>
 						              		<button ng-if="p.expanded" ng-click="p.expanded = false">-</button>
-						              		<button ng-if="!p.expanded" ng-click="p.expanded = true">+</button>
+						              		<button ng-if="!p.expanded" ng-click="p.expanded = true; loadPhaseMaterials(p.Divided_Id)">+</button>
 						            	</td>
 						          	</tr>
 						          	<tr ng-if="p.expanded" ng-repeat-end="">
@@ -67,8 +71,8 @@
 											        </thead>
 											        <tbody>
 											            <tr ng-repeat="mat in materials">
-											            	<td>{{mat.name}}</td>
-														    <td>{{mat.quantity}}</td>
+											            	<td>{{mat.Id_Material}}</td>
+														    <td>{{mat.Quantity}}</td>
 											          	</tr>
 											        </tbody>
 											    </table>

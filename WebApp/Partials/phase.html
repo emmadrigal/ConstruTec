@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav ng-init="getContent('getAllStage')" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
     	<div class="navbar-header">
       		<a class="navbar-brand" href="#myPage">ConstruTEC</a>
@@ -23,18 +23,18 @@
 	          	</tr>  
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat-start="phases in listPhases">
-	            	<td>{{phases.name}}</td>
+	            <tr ng-repeat-start="phases in info">
+	            	<td>{{phases.Name}}</td>
 	            	<td>
 	              		<button ng-if="phases.expanded" ng-click="phases.expanded = false">-</button>
 	              		<button ng-if="!phases.expanded" ng-click="phases.expanded = true">+</button>
 	            	</td>
-	            	<td><button ng-click="deletePhaseList('$index')">-</button></td>
+	            	<td><button ng-click="deletePhaseList(phases.Stage_Id)">-</button></td>
 	            </tr>
 	            <tr ng-if="phases.expanded" ng-repeat-end="">
 	            	<td colspan="1" >
 	            		<div>
-	            			{{phases.description}}
+	            			{{phases.Description}}
 	            		</div>
 	            	</td>
 	            </tr>
